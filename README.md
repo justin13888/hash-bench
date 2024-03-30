@@ -32,17 +32,40 @@ The following algorithms are benchmarked:
 
 ## Results
 
-The following results were obtained on a 2019 MacBook Pro with a 2.6 GHz 6-Core Intel Core i7 processor and 16 GB of RAM.
+The following results were obtained on a desktop with the following specifications:
+
+- **OS**: Fedora 39 Workstation (x86_64) (Linux 6.7.9)
+- **CPU**: AMD Ryzen 7 7800X3D
+- **RAM**: 32 GB DDR5 6400 MHZ CL32
+
+![Single-threaded Hashing Performance](results/desktop/1-threaded%20Hashing/report/lines.svg)
+
+![Multi-threaded (64) Hashing Performance](results/desktop/64-threaded%20Hashing/report/lines.svg)
 
 <!-- TODO: Insert -->
 
+For more detailed results, see the [results](results/) directory.
+
 ## Running the benchmark
+
+### Prerequisites
+
+- [Rust](https://www.rust-lang.org/tools/install) and Cargo
+- `gnuplot` (optional, for plotting the results)
+
+### Starting the benchmark
 
 To run the benchmark, clone the repository and run the following command:
 
 ```bash
 cargo bench
 ```
+
+The specific parameters for the benchmark can be adjusted in the `benches/hashmark.rs` file.
+
+## Contributions
+
+Feel free to run the benchmark on your own machine to obtain results for your specific setup. Open to PRs for additional hashing algorithms.
 
 ## License
 

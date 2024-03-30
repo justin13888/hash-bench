@@ -2,7 +2,25 @@
 name = "hash-bench"
 version = "0.1.0"
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+authors = ["Justin Chung"]
+description = "Benchmark for hashing algorithms in Rust"
+license = "MIT"
 
 [dependencies]
+blake2 = "0.10.6"
+blake3 = { version = "1.5.1", features = ["rayon", "digest", "prefer_intrinsics"] }
+crc32fast = "1.4.0"
+criterion = { version = "0.5.1", features = ["csv", "html_reports"] }
+hex-literal = "0.4.1"
+humansize = { version = "2.1.3", features = ["impl_style"] }
+md-5 = "0.10.6"
+rand = "0.8.5"
+rayon = "1.10.0"
+sha2 = "0.10.8"
+sha3 = "0.10.8"
+tiger = "0.2.1"
+whirlpool = "0.10.4"
+
+[[bench]]
+name = "hashmark"
+harness = false

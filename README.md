@@ -56,7 +56,7 @@ This graphs shows the performance of each hashing algorithm when run in 64 threa
     <img src="results/desktop/64-threaded%20Hashing/report/lines.svg" alt="Multi-threaded (64) Hashing Performance" style="width: 100%;"/>
 </div>
 
-For more detailed results, see the [results](results/) directory.
+For more detailed results, see the [results](results/) directory. The reports saved as `index.html` files are particularly useful as summaries of the different metrics.
 
 ## Running the benchmark
 

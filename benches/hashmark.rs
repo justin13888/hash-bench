@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criterion};
 use humansize::{FormatSize, BINARY};
 use rand::{rngs::OsRng, RngCore};
@@ -81,21 +83,14 @@ fn hash_crc32(data: &[u8]) {
     let _result: u32 = hasher.finalize();
 }
 
-
 fn hashmark(c: &mut Criterion) {
     // Sizes of files from 1KiB to 10GiB
     // e.g. [1024, 1024 * 1024, 10 * 1024 * 1024, 100 * 1024 * 1024, 1024 * 1024 * 1024, 10 * 1024 * 1024 * 1024];
-    let sizes = [
-        1024,
-        1024 * 1024,
-        10 * 1024 * 1024,
-        100 * 1024 * 1024,
-        1024 * 1024 * 1024,
-    ];
+    let sizes = [1024, 10 * 1024 * 1024, 100 * 1024 * 1024];
 
     // Number of files to hash in parallel
     // e.g. [1, 2, 4, 8, 16, 32, 64, 128];
-    let parallel_iterationss = [1, 4, 64];
+    let parallel_iterationss = [1, 16, 64];
 
     // Hashing algorithms to benchmark
     #[allow(clippy::type_complexity)]
@@ -122,27 +117,12 @@ fn hashmark(c: &mut Criterion) {
 /// * `parallel_iterationss` - Number of files to hash in parallel
 /// * `hash_algs` - Hashing algorithms to benchmark
 #[allow(clippy::type_complexity)]
-fn add_benchmarks(c: &mut Criterion, sizes: &[usize], parallel_iterationss: &[u16], hash_algs: &[(String, fn(&[u8]))]) {
-    // // Number of threads to use for parallel hashing
-    // let threads = [1, 2, 4, 8, 16];
-    // rayon::ThreadPoolBuilder::new().num_threads(4).build_global().unwrap();
-
-    let mut single_threaded_group = c.benchmark_group("Single-threaded Hashing");
-    for size in sizes.iter() {
-        let size_str = size.format_size(BINARY);
-        let data = generate_data(*size);
-        single_threaded_group.throughput(criterion::Throughput::Bytes(*size as u64));
-
-        hash_algs.iter().for_each(|(hash_name, hash_alg)| {
-            single_threaded_group.bench_with_input(
-                BenchmarkId::new(hash_name, &size_str),
-                &data,
-                |b, data| b.iter(|| hash_alg(black_box(data))),
-            );
-        });
-    }
-    single_threaded_group.finish();
-
+fn add_benchmarks(
+    c: &mut Criterion,
+    sizes: &[usize],
+    parallel_iterationss: &[u16],
+    hash_algs: &[(String, fn(&[u8]))],
+) {
     let mut parallel_group_template = |parallel_iterations: u16| {
         let mut parallel_group =
             c.benchmark_group(format!("{}-threaded Hashing", parallel_iterations));
@@ -177,7 +157,7 @@ fn add_benchmarks(c: &mut Criterion, sizes: &[usize], parallel_iterationss: &[u1
 // criterion_group!(benches, bench_hashes);
 criterion_group! {
     name = benches;
-    config = Criterion::default().sample_size(10);
+    config = Criterion::default().measurement_time(Duration::from_secs(10)).sample_size(10);
     targets = hashmark
 }
 criterion_main!(benches);

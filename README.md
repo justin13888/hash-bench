@@ -42,7 +42,7 @@ IMPORTANT: When we say "single-threaded" we man that the algorithm is ran on a s
 
 ### Single-threaded Hashing Performance
 
-This graph shows the performance of each hashing algorithm when run in a single thread. We see algorithms such as BLAKE3 and SHA-256 outperforming the other algorithms. CRC32 is the fastest (about 2x faster than BLAKE3), but it is not cryptographic. It's important to notes that BLAKE3 utilizes all cores
+This graph shows the performance of each hashing algorithm when run in a single thread. We see algorithms such as BLAKE3 and SHA-256 outperforming the other algorithms. CRC32 is the fastest (about 2x faster than BLAKE3), but it is non-cryptographic.
 
 <div style="background-color: white;">
     <img src="results/desktop/1-threaded%20Hashing/report/lines.svg" alt="Multi-threaded (64) Hashing Performance" style="width: 100%;"/>

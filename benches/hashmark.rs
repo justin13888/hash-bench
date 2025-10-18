@@ -127,7 +127,8 @@ fn hashmark(c: &mut Criterion) {
     );
 
     // Number of files to hash in parallel
-    let parallel_iterationss = [1, physical_cpus, logical_cpus];
+    let mut parallel_iterationss = vec![1, physical_cpus, logical_cpus];
+    parallel_iterationss.dedup();
     println!(
         "Benchmarking parallel iterations: {:?}",
         parallel_iterationss
@@ -151,6 +152,13 @@ fn hashmark(c: &mut Criterion) {
         ("XXH3_64".to_string(), hash_xxh3_64),
         ("XXH3_128".to_string(), hash_xxh3_128),
     ];
+    println!(
+        "Benchmarking hashing algorithms: {:?}",
+        hash_algs
+            .iter()
+            .map(|(name, _)| name)
+            .collect::<Vec<&String>>()
+    );
 
     add_benchmarks(c, &sizes, &parallel_iterationss, &hash_algs);
 }

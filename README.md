@@ -62,7 +62,7 @@ For more detailed results, see the [results](results/) directory. The reports sa
 
 ### Prerequisites
 
-- [Rust](https://www.rust-lang.org/tools/install) and Cargo
+- Rust installed via rustup
 - `gnuplot` (optional, for plotting the results)
 
 ### Starting the benchmark

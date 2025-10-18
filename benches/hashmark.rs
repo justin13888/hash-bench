@@ -112,9 +112,12 @@ fn hashmark(c: &mut Criterion) {
     let logical_cpus = num_cpus::get();
     println!("Detected {logical_cpus} logical CPU cores.");
 
-    // Sizes of files from 1KiB to 10GiB
-    // e.g. [1024, 1024 * 1024, 10 * 1024 * 1024, 100 * 1024 * 1024, 1024 * 1024 * 1024, 10 * 1024 * 1024 * 1024];
-    let sizes = [1024, 10 * 1024 * 1024, 100 * 1024 * 1024]; //
+    // Sizes of files to hash
+    let sizes = [
+        1024,              // 1 KiB
+        10 * 1024 * 1024,  // 10 MiB
+        100 * 1024 * 1024, // 100 MiB
+    ];
     println!(
         "Benchmarking file sizes: {:?}",
         sizes
@@ -124,7 +127,6 @@ fn hashmark(c: &mut Criterion) {
     );
 
     // Number of files to hash in parallel
-    // e.g. [1, 2, 4, 8, 16, 32, 64, 128];
     let parallel_iterationss = [1, physical_cpus, logical_cpus];
     println!(
         "Benchmarking parallel iterations: {:?}",
@@ -200,7 +202,7 @@ fn add_benchmarks(
 // criterion_group!(benches, bench_hashes);
 criterion_group! {
     name = benches;
-    config = Criterion::default().measurement_time(Duration::from_secs(10)).sample_size(10);
+    config = Criterion::default().measurement_time(Duration::from_secs(10)).sample_size(20);
     targets = hashmark
 }
 criterion_main!(benches);

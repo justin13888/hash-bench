@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Index - Criterion.rs</title>
+    <style type="text/css">
+        body {
+            font: 14px Helvetica Neue;
+            text-rendering: optimizelegibility;
+        }
+
+        .body {
+            width: 960px;
+            margin: auto;
+        }
+
+        a:link {
+            color: #1F78B4;
+            text-decoration: none;
+        }
+
+        h2 {
+            font-size: 36px;
+            font-weight: 300;
+        }
+
+        h3 {
+            font-size: 24px;
+            font-weight: 300;
+        }
+
+        #footer {
+            height: 40px;
+            background: #888;
+            color: white;
+            font-size: larger;
+            font-weight: 300;
+        }
+
+        #footer a {
+            color: white;
+            text-decoration: underline;
+        }
+
+        #footer p {
+            text-align: center
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #888;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="body">
+        <h2>Criterion.rs Benchmark Index</h2>
+        See individual benchmark pages below for more details.
+        <ul>
+            <li><a href="../1-threaded Hashing/report/index.html">1-threaded Hashing</a></li>
+            
+            <ul>
+                <li>
+                    <table>
+                        <tr>
+                            <th></th>
+                            <th><a href="../1-threaded Hashing/BLAKE2b/report/index.html">BLAKE2b</a></th>
+                            <th><a href="../1-threaded Hashing/BLAKE3/report/index.html">BLAKE3</a></th>
+                            <th><a href="../1-threaded Hashing/CRC32/report/index.html">CRC32</a></th>
+                            <th><a href="../1-threaded Hashing/MD5/report/index.html">MD5</a></th>
+                            <th><a href="../1-threaded Hashing/SHA-256/report/index.html">SHA-256</a></th>
+                            <th><a href="../1-threaded Hashing/SHA-512/report/index.html">SHA-512</a></th>
+                            <th><a href="../1-threaded Hashing/SHA3-256/report/index.html">SHA3-256</a></th>
+                            <th><a href="../1-threaded Hashing/SHA3-512/report/index.html">SHA3-512</a></th>
+                            <th><a href="../1-threaded Hashing/Tiger2/report/index.html">Tiger2</a></th>
+                            <th><a href="../1-threaded Hashing/Whirlpool/report/index.html">Whirlpool</a></th>
+                            <th><a href="../1-threaded Hashing/XXH32/report/index.html">XXH32</a></th>
+                            <th><a href="../1-threaded Hashing/XXH3_128/report/index.html">XXH3_128</a></th>
+                            <th><a href="../1-threaded Hashing/XXH3_64/report/index.html">XXH3_64</a></th>
+                            <th><a href="../1-threaded Hashing/XXH64/report/index.html">XXH64</a></th>
+                        </tr>
+                        <tr>
+                            <th><a href="../1-threaded Hashing/1 KiB/report/index.html">1 KiB</a></th>
+                            <td><a href="../1-threaded Hashing/BLAKE2b/1 KiB/report/index.html">1-threaded Hashing/BLAKE2b/1 KiB</a></td>
+                            <td><a href="../1-threaded Hashing/BLAKE3/1 KiB/report/index.html">1-threaded Hashing/BLAKE3/1 KiB</a></td>
+                            <td><a href="../1-threaded Hashing/CRC32/1 KiB/report/index.html">1-threaded Hashing/CRC32/1 KiB</a></td>
+                            <td><a href="../1-threaded Hashing/MD5/1 KiB/report/index.html">1-threaded Hashing/MD5/1 KiB</a></td>
+                            <td><a href="../1-threaded Hashing/SHA-256/1 KiB/report/index.html">1-threaded Hashing/SHA-256/1 KiB</a></td>
+                            <td><a href="../1-threaded Hashing/SHA-512/1 KiB/report/index.html">1-threaded Hashing/SHA-512/1 KiB</a></td>
+                            <td><a href="../1-threaded Hashing/SHA3-256/1 KiB/report/index.html">1-threaded Hashing/SHA3-256/1 KiB</a></td>
+                            <td><a href="../1-threaded Hashing/SHA3-512/1 KiB/report/index.html">1-threaded Hashing/SHA3-512/1 KiB</a></td>
+                            <td><a href="../1-threaded Hashing/Tiger2/1 KiB/report/index.html">1-threaded Hashing/Tiger2/1 KiB</a></td>
+                            <td><a href="../1-threaded Hashing/Whirlpool/1 KiB/report/index.html">1-threaded Hashing/Whirlpool/1 KiB</a></td>
+                            <td><a href="../1-threaded Hashing/XXH32/1 KiB/report/index.html">1-threaded Hashing/XXH32/1 KiB</a></td>
+                            <td><a href="../1-threaded Hashing/XXH3_128/1 KiB/report/index.html">1-threaded Hashing/XXH3_128/1 KiB</a></td>
+                            <td><a href="../1-threaded Hashing/XXH3_64/1 KiB/report/index.html">1-threaded Hashing/XXH3_64/1 KiB</a></td>
+                            <td><a href="../1-threaded Hashing/XXH64/1 KiB/report/index.html">1-threaded Hashing/XXH64/1 KiB</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../1-threaded Hashing/10 MiB/report/index.html">10 MiB</a></th>
+                            <td><a href="../1-threaded Hashing/BLAKE2b/10 MiB/report/index.html">1-threaded Hashing/BLAKE2b/10 MiB</a></td>
+                            <td><a href="../1-threaded Hashing/BLAKE3/10 MiB/report/index.html">1-threaded Hashing/BLAKE3/10 MiB</a></td>
+                            <td><a href="../1-threaded Hashing/CRC32/10 MiB/report/index.html">1-threaded Hashing/CRC32/10 MiB</a></td>
+                            <td><a href="../1-threaded Hashing/MD5/10 MiB/report/index.html">1-threaded Hashing/MD5/10 MiB</a></td>
+                            <td><a href="../1-threaded Hashing/SHA-256/10 MiB/report/index.html">1-threaded Hashing/SHA-256/10 MiB</a></td>
+                            <td><a href="../1-threaded Hashing/SHA-512/10 MiB/report/index.html">1-threaded Hashing/SHA-512/10 MiB</a></td>
+                            <td><a href="../1-threaded Hashing/SHA3-256/10 MiB/report/index.html">1-threaded Hashing/SHA3-256/10 MiB</a></td>
+                            <td><a href="../1-threaded Hashing/SHA3-512/10 MiB/report/index.html">1-threaded Hashing/SHA3-512/10 MiB</a></td>
+                            <td><a href="../1-threaded Hashing/Tiger2/10 MiB/report/index.html">1-threaded Hashing/Tiger2/10 MiB</a></td>
+                            <td><a href="../1-threaded Hashing/Whirlpool/10 MiB/report/index.html">1-threaded Hashing/Whirlpool/10 MiB</a></td>
+                            <td><a href="../1-threaded Hashing/XXH32/10 MiB/report/index.html">1-threaded Hashing/XXH32/10 MiB</a></td>
+                            <td><a href="../1-threaded Hashing/XXH3_128/10 MiB/report/index.html">1-threaded Hashing/XXH3_128/10 MiB</a></td>
+                            <td><a href="../1-threaded Hashing/XXH3_64/10 MiB/report/index.html">1-threaded Hashing/XXH3_64/10 MiB</a></td>
+                            <td><a href="../1-threaded Hashing/XXH64/10 MiB/report/index.html">1-threaded Hashing/XXH64/10 MiB</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../1-threaded Hashing/100 MiB/report/index.html">100 MiB</a></th>
+                            <td><a href="../1-threaded Hashing/BLAKE2b/100 MiB/report/index.html">1-threaded Hashing/BLAKE2b/100 MiB</a></td>
+                            <td><a href="../1-threaded Hashing/BLAKE3/100 MiB/report/index.html">1-threaded Hashing/BLAKE3/100 MiB</a></td>
+                            <td><a href="../1-threaded Hashing/CRC32/100 MiB/report/index.html">1-threaded Hashing/CRC32/100 MiB</a></td>
+                            <td><a href="../1-threaded Hashing/MD5/100 MiB/report/index.html">1-threaded Hashing/MD5/100 MiB</a></td>
+                            <td><a href="../1-threaded Hashing/SHA-256/100 MiB/report/index.html">1-threaded Hashing/SHA-256/100 MiB</a></td>
+                            <td><a href="../1-threaded Hashing/SHA-512/100 MiB/report/index.html">1-threaded Hashing/SHA-512/100 MiB</a></td>
+                            <td><a href="../1-threaded Hashing/SHA3-256/100 MiB/report/index.html">1-threaded Hashing/SHA3-256/100 MiB</a></td>
+                            <td><a href="../1-threaded Hashing/SHA3-512/100 MiB/report/index.html">1-threaded Hashing/SHA3-512/100 MiB</a></td>
+                            <td><a href="../1-threaded Hashing/Tiger2/100 MiB/report/index.html">1-threaded Hashing/Tiger2/100 MiB</a></td>
+                            <td><a href="../1-threaded Hashing/Whirlpool/100 MiB/report/index.html">1-threaded Hashing/Whirlpool/100 MiB</a></td>
+                            <td><a href="../1-threaded Hashing/XXH32/100 MiB/report/index.html">1-threaded Hashing/XXH32/100 MiB</a></td>
+                            <td><a href="../1-threaded Hashing/XXH3_128/100 MiB/report/index.html">1-threaded Hashing/XXH3_128/100 MiB</a></td>
+                            <td><a href="../1-threaded Hashing/XXH3_64/100 MiB/report/index.html">1-threaded Hashing/XXH3_64/100 MiB</a></td>
+                            <td><a href="../1-threaded Hashing/XXH64/100 MiB/report/index.html">1-threaded Hashing/XXH64/100 MiB</a></td>
+                        </tr>
+                    </table>
+                </li>
+            </ul>
+            <li><a href="../12-threaded Hashing/report/index.html">12-threaded Hashing</a></li>
+            
+            <ul>
+                <li>
+                    <table>
+                        <tr>
+                            <th></th>
+                            <th><a href="../12-threaded Hashing/BLAKE2b/report/index.html">BLAKE2b</a></th>
+                            <th><a href="../12-threaded Hashing/BLAKE3/report/index.html">BLAKE3</a></th>
+                            <th><a href="../12-threaded Hashing/CRC32/report/index.html">CRC32</a></th>
+                            <th><a href="../12-threaded Hashing/MD5/report/index.html">MD5</a></th>
+                            <th><a href="../12-threaded Hashing/SHA-256/report/index.html">SHA-256</a></th>
+                            <th><a href="../12-threaded Hashing/SHA-512/report/index.html">SHA-512</a></th>
+                            <th><a href="../12-threaded Hashing/SHA3-256/report/index.html">SHA3-256</a></th>
+                            <th><a href="../12-threaded Hashing/SHA3-512/report/index.html">SHA3-512</a></th>
+                            <th><a href="../12-threaded Hashing/Tiger2/report/index.html">Tiger2</a></th>
+                            <th><a href="../12-threaded Hashing/Whirlpool/report/index.html">Whirlpool</a></th>
+                            <th><a href="../12-threaded Hashing/XXH32/report/index.html">XXH32</a></th>
+                            <th><a href="../12-threaded Hashing/XXH3_128/report/index.html">XXH3_128</a></th>
+                            <th><a href="../12-threaded Hashing/XXH3_64/report/index.html">XXH3_64</a></th>
+                            <th><a href="../12-threaded Hashing/XXH64/report/index.html">XXH64</a></th>
+                        </tr>
+                        <tr>
+                            <th><a href="../12-threaded Hashing/1 KiB/report/index.html">1 KiB</a></th>
+                            <td><a href="../12-threaded Hashing/BLAKE2b/1 KiB/report/index.html">12-threaded Hashing/BLAKE2b/1 KiB</a></td>
+                            <td><a href="../12-threaded Hashing/BLAKE3/1 KiB/report/index.html">12-threaded Hashing/BLAKE3/1 KiB</a></td>
+                            <td><a href="../12-threaded Hashing/CRC32/1 KiB/report/index.html">12-threaded Hashing/CRC32/1 KiB</a></td>
+                            <td><a href="../12-threaded Hashing/MD5/1 KiB/report/index.html">12-threaded Hashing/MD5/1 KiB</a></td>
+                            <td><a href="../12-threaded Hashing/SHA-256/1 KiB/report/index.html">12-threaded Hashing/SHA-256/1 KiB</a></td>
+                            <td><a href="../12-threaded Hashing/SHA-512/1 KiB/report/index.html">12-threaded Hashing/SHA-512/1 KiB</a></td>
+                            <td><a href="../12-threaded Hashing/SHA3-256/1 KiB/report/index.html">12-threaded Hashing/SHA3-256/1 KiB</a></td>
+                            <td><a href="../12-threaded Hashing/SHA3-512/1 KiB/report/index.html">12-threaded Hashing/SHA3-512/1 KiB</a></td>
+                            <td><a href="../12-threaded Hashing/Tiger2/1 KiB/report/index.html">12-threaded Hashing/Tiger2/1 KiB</a></td>
+                            <td><a href="../12-threaded Hashing/Whirlpool/1 KiB/report/index.html">12-threaded Hashing/Whirlpool/1 KiB</a></td>
+                            <td><a href="../12-threaded Hashing/XXH32/1 KiB/report/index.html">12-threaded Hashing/XXH32/1 KiB</a></td>
+                            <td><a href="../12-threaded Hashing/XXH3_128/1 KiB/report/index.html">12-threaded Hashing/XXH3_128/1 KiB</a></td>
+                            <td><a href="../12-threaded Hashing/XXH3_64/1 KiB/report/index.html">12-threaded Hashing/XXH3_64/1 KiB</a></td>
+                            <td><a href="../12-threaded Hashing/XXH64/1 KiB/report/index.html">12-threaded Hashing/XXH64/1 KiB</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../12-threaded Hashing/10 MiB/report/index.html">10 MiB</a></th>
+                            <td><a href="../12-threaded Hashing/BLAKE2b/10 MiB/report/index.html">12-threaded Hashing/BLAKE2b/10 MiB</a></td>
+                            <td><a href="../12-threaded Hashing/BLAKE3/10 MiB/report/index.html">12-threaded Hashing/BLAKE3/10 MiB</a></td>
+                            <td><a href="../12-threaded Hashing/CRC32/10 MiB/report/index.html">12-threaded Hashing/CRC32/10 MiB</a></td>
+                            <td><a href="../12-threaded Hashing/MD5/10 MiB/report/index.html">12-threaded Hashing/MD5/10 MiB</a></td>
+                            <td><a href="../12-threaded Hashing/SHA-256/10 MiB/report/index.html">12-threaded Hashing/SHA-256/10 MiB</a></td>
+                            <td><a href="../12-threaded Hashing/SHA-512/10 MiB/report/index.html">12-threaded Hashing/SHA-512/10 MiB</a></td>
+                            <td><a href="../12-threaded Hashing/SHA3-256/10 MiB/report/index.html">12-threaded Hashing/SHA3-256/10 MiB</a></td>
+                            <td><a href="../12-threaded Hashing/SHA3-512/10 MiB/report/index.html">12-threaded Hashing/SHA3-512/10 MiB</a></td>
+                            <td><a href="../12-threaded Hashing/Tiger2/10 MiB/report/index.html">12-threaded Hashing/Tiger2/10 MiB</a></td>
+                            <td><a href="../12-threaded Hashing/Whirlpool/10 MiB/report/index.html">12-threaded Hashing/Whirlpool/10 MiB</a></td>
+                            <td><a href="../12-threaded Hashing/XXH32/10 MiB/report/index.html">12-threaded Hashing/XXH32/10 MiB</a></td>
+                            <td><a href="../12-threaded Hashing/XXH3_128/10 MiB/report/index.html">12-threaded Hashing/XXH3_128/10 MiB</a></td>
+                            <td><a href="../12-threaded Hashing/XXH3_64/10 MiB/report/index.html">12-threaded Hashing/XXH3_64/10 MiB</a></td>
+                            <td><a href="../12-threaded Hashing/XXH64/10 MiB/report/index.html">12-threaded Hashing/XXH64/10 MiB</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../12-threaded Hashing/100 MiB/report/index.html">100 MiB</a></th>
+                            <td><a href="../12-threaded Hashing/BLAKE2b/100 MiB/report/index.html">12-threaded Hashing/BLAKE2b/100 MiB</a></td>
+                            <td><a href="../12-threaded Hashing/BLAKE3/100 MiB/report/index.html">12-threaded Hashing/BLAKE3/100 MiB</a></td>
+                            <td><a href="../12-threaded Hashing/CRC32/100 MiB/report/index.html">12-threaded Hashing/CRC32/100 MiB</a></td>
+                            <td><a href="../12-threaded Hashing/MD5/100 MiB/report/index.html">12-threaded Hashing/MD5/100 MiB</a></td>
+                            <td><a href="../12-threaded Hashing/SHA-256/100 MiB/report/index.html">12-threaded Hashing/SHA-256/100 MiB</a></td>
+                            <td><a href="../12-threaded Hashing/SHA-512/100 MiB/report/index.html">12-threaded Hashing/SHA-512/100 MiB</a></td>
+                            <td><a href="../12-threaded Hashing/SHA3-256/100 MiB/report/index.html">12-threaded Hashing/SHA3-256/100 MiB</a></td>
+                            <td><a href="../12-threaded Hashing/SHA3-512/100 MiB/report/index.html">12-threaded Hashing/SHA3-512/100 MiB</a></td>
+                            <td><a href="../12-threaded Hashing/Tiger2/100 MiB/report/index.html">12-threaded Hashing/Tiger2/100 MiB</a></td>
+                            <td><a href="../12-threaded Hashing/Whirlpool/100 MiB/report/index.html">12-threaded Hashing/Whirlpool/100 MiB</a></td>
+                            <td><a href="../12-threaded Hashing/XXH32/100 MiB/report/index.html">12-threaded Hashing/XXH32/100 MiB</a></td>
+                            <td><a href="../12-threaded Hashing/XXH3_128/100 MiB/report/index.html">12-threaded Hashing/XXH3_128/100 MiB</a></td>
+                            <td><a href="../12-threaded Hashing/XXH3_64/100 MiB/report/index.html">12-threaded Hashing/XXH3_64/100 MiB</a></td>
+                            <td><a href="../12-threaded Hashing/XXH64/100 MiB/report/index.html">12-threaded Hashing/XXH64/100 MiB</a></td>
+                        </tr>
+                    </table>
+                </li>
+            </ul>
+            <li><a href="../24-threaded Hashing/report/index.html">24-threaded Hashing</a></li>
+            
+            <ul>
+                <li>
+                    <table>
+                        <tr>
+                            <th></th>
+                            <th><a href="../24-threaded Hashing/BLAKE2b/report/index.html">BLAKE2b</a></th>
+                            <th><a href="../24-threaded Hashing/BLAKE3/report/index.html">BLAKE3</a></th>
+                            <th><a href="../24-threaded Hashing/CRC32/report/index.html">CRC32</a></th>
+                            <th><a href="../24-threaded Hashing/MD5/report/index.html">MD5</a></th>
+                            <th><a href="../24-threaded Hashing/SHA-256/report/index.html">SHA-256</a></th>
+                            <th><a href="../24-threaded Hashing/SHA-512/report/index.html">SHA-512</a></th>
+                            <th><a href="../24-threaded Hashing/SHA3-256/report/index.html">SHA3-256</a></th>
+                            <th><a href="../24-threaded Hashing/SHA3-512/report/index.html">SHA3-512</a></th>
+                            <th><a href="../24-threaded Hashing/Tiger2/report/index.html">Tiger2</a></th>
+                            <th><a href="../24-threaded Hashing/Whirlpool/report/index.html">Whirlpool</a></th>
+                            <th><a href="../24-threaded Hashing/XXH32/report/index.html">XXH32</a></th>
+                            <th><a href="../24-threaded Hashing/XXH3_128/report/index.html">XXH3_128</a></th>
+                            <th><a href="../24-threaded Hashing/XXH3_64/report/index.html">XXH3_64</a></th>
+                            <th><a href="../24-threaded Hashing/XXH64/report/index.html">XXH64</a></th>
+                        </tr>
+                        <tr>
+                            <th><a href="../24-threaded Hashing/1 KiB/report/index.html">1 KiB</a></th>
+                            <td><a href="../24-threaded Hashing/BLAKE2b/1 KiB/report/index.html">24-threaded Hashing/BLAKE2b/1 KiB</a></td>
+                            <td><a href="../24-threaded Hashing/BLAKE3/1 KiB/report/index.html">24-threaded Hashing/BLAKE3/1 KiB</a></td>
+                            <td><a href="../24-threaded Hashing/CRC32/1 KiB/report/index.html">24-threaded Hashing/CRC32/1 KiB</a></td>
+                            <td><a href="../24-threaded Hashing/MD5/1 KiB/report/index.html">24-threaded Hashing/MD5/1 KiB</a></td>
+                            <td><a href="../24-threaded Hashing/SHA-256/1 KiB/report/index.html">24-threaded Hashing/SHA-256/1 KiB</a></td>
+                            <td><a href="../24-threaded Hashing/SHA-512/1 KiB/report/index.html">24-threaded Hashing/SHA-512/1 KiB</a></td>
+                            <td><a href="../24-threaded Hashing/SHA3-256/1 KiB/report/index.html">24-threaded Hashing/SHA3-256/1 KiB</a></td>
+                            <td><a href="../24-threaded Hashing/SHA3-512/1 KiB/report/index.html">24-threaded Hashing/SHA3-512/1 KiB</a></td>
+                            <td><a href="../24-threaded Hashing/Tiger2/1 KiB/report/index.html">24-threaded Hashing/Tiger2/1 KiB</a></td>
+                            <td><a href="../24-threaded Hashing/Whirlpool/1 KiB/report/index.html">24-threaded Hashing/Whirlpool/1 KiB</a></td>
+                            <td><a href="../24-threaded Hashing/XXH32/1 KiB/report/index.html">24-threaded Hashing/XXH32/1 KiB</a></td>
+                            <td><a href="../24-threaded Hashing/XXH3_128/1 KiB/report/index.html">24-threaded Hashing/XXH3_128/1 KiB</a></td>
+                            <td><a href="../24-threaded Hashing/XXH3_64/1 KiB/report/index.html">24-threaded Hashing/XXH3_64/1 KiB</a></td>
+                            <td><a href="../24-threaded Hashing/XXH64/1 KiB/report/index.html">24-threaded Hashing/XXH64/1 KiB</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../24-threaded Hashing/10 MiB/report/index.html">10 MiB</a></th>
+                            <td><a href="../24-threaded Hashing/BLAKE2b/10 MiB/report/index.html">24-threaded Hashing/BLAKE2b/10 MiB</a></td>
+                            <td><a href="../24-threaded Hashing/BLAKE3/10 MiB/report/index.html">24-threaded Hashing/BLAKE3/10 MiB</a></td>
+                            <td><a href="../24-threaded Hashing/CRC32/10 MiB/report/index.html">24-threaded Hashing/CRC32/10 MiB</a></td>
+                            <td><a href="../24-threaded Hashing/MD5/10 MiB/report/index.html">24-threaded Hashing/MD5/10 MiB</a></td>
+                            <td><a href="../24-threaded Hashing/SHA-256/10 MiB/report/index.html">24-threaded Hashing/SHA-256/10 MiB</a></td>
+                            <td><a href="../24-threaded Hashing/SHA-512/10 MiB/report/index.html">24-threaded Hashing/SHA-512/10 MiB</a></td>
+                            <td><a href="../24-threaded Hashing/SHA3-256/10 MiB/report/index.html">24-threaded Hashing/SHA3-256/10 MiB</a></td>
+                            <td><a href="../24-threaded Hashing/SHA3-512/10 MiB/report/index.html">24-threaded Hashing/SHA3-512/10 MiB</a></td>
+                            <td><a href="../24-threaded Hashing/Tiger2/10 MiB/report/index.html">24-threaded Hashing/Tiger2/10 MiB</a></td>
+                            <td><a href="../24-threaded Hashing/Whirlpool/10 MiB/report/index.html">24-threaded Hashing/Whirlpool/10 MiB</a></td>
+                            <td><a href="../24-threaded Hashing/XXH32/10 MiB/report/index.html">24-threaded Hashing/XXH32/10 MiB</a></td>
+                            <td><a href="../24-threaded Hashing/XXH3_128/10 MiB/report/index.html">24-threaded Hashing/XXH3_128/10 MiB</a></td>
+                            <td><a href="../24-threaded Hashing/XXH3_64/10 MiB/report/index.html">24-threaded Hashing/XXH3_64/10 MiB</a></td>
+                            <td><a href="../24-threaded Hashing/XXH64/10 MiB/report/index.html">24-threaded Hashing/XXH64/10 MiB</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../24-threaded Hashing/100 MiB/report/index.html">100 MiB</a></th>
+                            <td><a href="../24-threaded Hashing/BLAKE2b/100 MiB/report/index.html">24-threaded Hashing/BLAKE2b/100 MiB</a></td>
+                            <td><a href="../24-threaded Hashing/BLAKE3/100 MiB/report/index.html">24-threaded Hashing/BLAKE3/100 MiB</a></td>
+                            <td><a href="../24-threaded Hashing/CRC32/100 MiB/report/index.html">24-threaded Hashing/CRC32/100 MiB</a></td>
+                            <td><a href="../24-threaded Hashing/MD5/100 MiB/report/index.html">24-threaded Hashing/MD5/100 MiB</a></td>
+                            <td><a href="../24-threaded Hashing/SHA-256/100 MiB/report/index.html">24-threaded Hashing/SHA-256/100 MiB</a></td>
+                            <td><a href="../24-threaded Hashing/SHA-512/100 MiB/report/index.html">24-threaded Hashing/SHA-512/100 MiB</a></td>
+                            <td><a href="../24-threaded Hashing/SHA3-256/100 MiB/report/index.html">24-threaded Hashing/SHA3-256/100 MiB</a></td>
+                            <td><a href="../24-threaded Hashing/SHA3-512/100 MiB/report/index.html">24-threaded Hashing/SHA3-512/100 MiB</a></td>
+                            <td><a href="../24-threaded Hashing/Tiger2/100 MiB/report/index.html">24-threaded Hashing/Tiger2/100 MiB</a></td>
+                            <td><a href="../24-threaded Hashing/Whirlpool/100 MiB/report/index.html">24-threaded Hashing/Whirlpool/100 MiB</a></td>
+                            <td><a href="../24-threaded Hashing/XXH32/100 MiB/report/index.html">24-threaded Hashing/XXH32/100 MiB</a></td>
+                            <td><a href="../24-threaded Hashing/XXH3_128/100 MiB/report/index.html">24-threaded Hashing/XXH3_128/100 MiB</a></td>
+                            <td><a href="../24-threaded Hashing/XXH3_64/100 MiB/report/index.html">24-threaded Hashing/XXH3_64/100 MiB</a></td>
+                            <td><a href="../24-threaded Hashing/XXH64/100 MiB/report/index.html">24-threaded Hashing/XXH64/100 MiB</a></td>
+                        </tr>
+                    </table>
+                </li>
+            </ul>
+        </ul>
+    </div>
+    <div id="footer">
+        <p>This report was generated by
+            <a href="https://github.com/bheisler/criterion.rs">Criterion.rs</a>, a statistics-driven benchmarking
+            library in Rust.</p>
+    </div>
+</body>
+</html>

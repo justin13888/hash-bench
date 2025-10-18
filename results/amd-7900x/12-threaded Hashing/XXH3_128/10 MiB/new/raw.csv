@@ -1,0 +1,21 @@
+group,function,value,throughput_num,throughput_type,sample_measured_value,unit,iteration_count
+12-threaded Hashing,XXH3_128,10 MiB,10485760,bytes,49349949.0,ns,365
+12-threaded Hashing,XXH3_128,10 MiB,10485760,bytes,101864135.0,ns,730
+12-threaded Hashing,XXH3_128,10 MiB,10485760,bytes,154912673.0,ns,1095
+12-threaded Hashing,XXH3_128,10 MiB,10485760,bytes,199831201.0,ns,1460
+12-threaded Hashing,XXH3_128,10 MiB,10485760,bytes,246854831.0,ns,1825
+12-threaded Hashing,XXH3_128,10 MiB,10485760,bytes,290160196.0,ns,2190
+12-threaded Hashing,XXH3_128,10 MiB,10485760,bytes,343485372.0,ns,2555
+12-threaded Hashing,XXH3_128,10 MiB,10485760,bytes,408052177.0,ns,2920
+12-threaded Hashing,XXH3_128,10 MiB,10485760,bytes,442236395.0,ns,3285
+12-threaded Hashing,XXH3_128,10 MiB,10485760,bytes,471567322.0,ns,3650
+12-threaded Hashing,XXH3_128,10 MiB,10485760,bytes,532507483.0,ns,4015
+12-threaded Hashing,XXH3_128,10 MiB,10485760,bytes,570407102.0,ns,4380
+12-threaded Hashing,XXH3_128,10 MiB,10485760,bytes,620082900.0,ns,4745
+12-threaded Hashing,XXH3_128,10 MiB,10485760,bytes,654136925.0,ns,5110
+12-threaded Hashing,XXH3_128,10 MiB,10485760,bytes,690556852.0,ns,5475
+12-threaded Hashing,XXH3_128,10 MiB,10485760,bytes,756926133.0,ns,5840
+12-threaded Hashing,XXH3_128,10 MiB,10485760,bytes,821065398.0,ns,6205
+12-threaded Hashing,XXH3_128,10 MiB,10485760,bytes,876119392.0,ns,6570
+12-threaded Hashing,XXH3_128,10 MiB,10485760,bytes,920362033.0,ns,6935
+12-threaded Hashing,XXH3_128,10 MiB,10485760,bytes,981616744.0,ns,7300

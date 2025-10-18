@@ -1,0 +1,21 @@
+group,function,value,throughput_num,throughput_type,sample_measured_value,unit,iteration_count
+12-threaded Hashing,Whirlpool,10 MiB,10485760,bytes,54631142.0,ns,1
+12-threaded Hashing,Whirlpool,10 MiB,10485760,bytes,97601881.0,ns,2
+12-threaded Hashing,Whirlpool,10 MiB,10485760,bytes,154008398.0,ns,3
+12-threaded Hashing,Whirlpool,10 MiB,10485760,bytes,216380261.0,ns,4
+12-threaded Hashing,Whirlpool,10 MiB,10485760,bytes,323983457.0,ns,5
+12-threaded Hashing,Whirlpool,10 MiB,10485760,bytes,344124218.0,ns,6
+12-threaded Hashing,Whirlpool,10 MiB,10485760,bytes,352653134.0,ns,7
+12-threaded Hashing,Whirlpool,10 MiB,10485760,bytes,454916268.0,ns,8
+12-threaded Hashing,Whirlpool,10 MiB,10485760,bytes,486550018.0,ns,9
+12-threaded Hashing,Whirlpool,10 MiB,10485760,bytes,502606407.0,ns,10
+12-threaded Hashing,Whirlpool,10 MiB,10485760,bytes,619207188.0,ns,11
+12-threaded Hashing,Whirlpool,10 MiB,10485760,bytes,678179893.0,ns,12
+12-threaded Hashing,Whirlpool,10 MiB,10485760,bytes,746683382.0,ns,13
+12-threaded Hashing,Whirlpool,10 MiB,10485760,bytes,791405232.0,ns,14
+12-threaded Hashing,Whirlpool,10 MiB,10485760,bytes,853086851.0,ns,15
+12-threaded Hashing,Whirlpool,10 MiB,10485760,bytes,902726673.0,ns,16
+12-threaded Hashing,Whirlpool,10 MiB,10485760,bytes,922724836.0,ns,17
+12-threaded Hashing,Whirlpool,10 MiB,10485760,bytes,989199145.0,ns,18
+12-threaded Hashing,Whirlpool,10 MiB,10485760,bytes,1013874280.0,ns,19
+12-threaded Hashing,Whirlpool,10 MiB,10485760,bytes,1075199692.0,ns,20

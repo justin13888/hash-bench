@@ -27,6 +27,7 @@ The following algorithms are benchmarked:
 - [MD5](https://crates.io/crates/md-5)
 - [Tiger2](https://crates.io/crates/tiger)
 - [whirlpool](https://crates.io/crates/whirlpool)
+- [XXH32/XXH64/XXH3](https://crates.io/crates/xxhash-rust)
 
 *We also included CRC32, which is not a cryptographic, but relevant for file integrity checks.*
 

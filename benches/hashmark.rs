@@ -83,6 +83,26 @@ fn hash_crc32(data: &[u8]) {
     let _result: u32 = hasher.finalize();
 }
 
+/// Hash data using XXH32
+fn hash_xxh32(data: &[u8]) {
+    let _result: u32 = xxhash_rust::xxh32::xxh32(data, 0);
+}
+
+/// Hash data using XXH64
+fn hash_xxh64(data: &[u8]) {
+    let _result: u64 = xxhash_rust::xxh64::xxh64(data, 0);
+}
+
+/// Hash data using XXH3_64
+fn hash_xxh3_64(data: &[u8]) {
+    let _result: u64 = xxhash_rust::xxh3::xxh3_64(data);
+}
+
+/// Hash data using XXH3_128
+fn hash_xxh3_128(data: &[u8]) {
+    let _result: u128 = xxhash_rust::xxh3::xxh3_128(data);
+}
+
 fn hashmark(c: &mut Criterion) {
     // Sizes of files from 1KiB to 10GiB
     // e.g. [1024, 1024 * 1024, 10 * 1024 * 1024, 100 * 1024 * 1024, 1024 * 1024 * 1024, 10 * 1024 * 1024 * 1024];
@@ -94,7 +114,7 @@ fn hashmark(c: &mut Criterion) {
 
     // Hashing algorithms to benchmark
     #[allow(clippy::type_complexity)]
-    let hash_algs: [(String, fn(&[u8])); 10] = [
+    let hash_algs: [(String, fn(&[u8])); _] = [
         ("BLAKE3".to_string(), hash_blake3),
         ("BLAKE2b".to_string(), hash_blake2b),
         ("SHA-256".to_string(), hash_sha256),
@@ -105,6 +125,10 @@ fn hashmark(c: &mut Criterion) {
         ("Tiger2".to_string(), hash_tiger2),
         ("Whirlpool".to_string(), hash_whirlpool),
         ("CRC32".to_string(), hash_crc32),
+        ("XXH32".to_string(), hash_xxh32),
+        ("XXH64".to_string(), hash_xxh64),
+        ("XXH3_64".to_string(), hash_xxh3_64),
+        ("XXH3_128".to_string(), hash_xxh3_128),
     ];
 
     add_benchmarks(c, &sizes, &parallel_iterationss, &hash_algs);

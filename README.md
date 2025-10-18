@@ -34,9 +34,9 @@ The following algorithms are benchmarked:
 
 The following results were obtained on a desktop with the following specifications:
 
-- **OS**: Fedora 39 Workstation (x86_64) (Linux 6.7.9)
-- **CPU**: AMD Ryzen 7 7800X3D
-- **RAM**: 32 GB DDR5 6400 MHZ CL32
+- **OS**: Ubuntu 24.04.3 LTS (x86_64) (Linux 6.8.0)
+- **CPU**: AMD Ryzen 9 7900X (24) @ 5.609GHz
+- **RAM**: 128 GB DDR5 5600 MHZ CL32
 
 IMPORTANT: When we say "single-threaded" we man that the algorithm is ran on a single data stream. Most hashing algorithms could only utilize a single core with the exception of BLAKE3, which is designed to run in parallel.
 
@@ -45,16 +45,15 @@ IMPORTANT: When we say "single-threaded" we man that the algorithm is ran on a s
 This graph shows the performance of each hashing algorithm when run in a single thread. We see algorithms such as BLAKE3 and SHA-256 outperforming the other algorithms. CRC32 is the fastest (about 2x faster than BLAKE3), but it is non-cryptographic.
 
 <div style="background-color: white;">
-    <img src="results/desktop/1-threaded%20Hashing/report/lines.svg" alt="Multi-threaded (64) Hashing Performance" style="width: 100%;"/>
+    <img src="results/amd-7900x/1-threaded%20Hashing/report/violin.svg" alt="Single-threaded Hashing Performance" style="width: 100%;"/>
 </div>
 
 ### Multi-threaded Hashing Performance
 
-This graphs shows the performance of each hashing algorithm when run in 64 threads. Results scaled similarly for all single-threaded algorithms when run in 64 threads. All algorithms (single-threaded ones in particular) utilized all cores simultaneously. However, if you exclude CRC32 (non-cryptographic unlike all others in this benchmark), BLAKE3 is still the fastest algorithm.
+This graphs shows the performance of each hashing algorithm when run in 12 threads on a system with 12 physical cores. Results scaled similarly for all single-threaded algorithms when run in 64 threads. All algorithms (single-threaded ones in particular) utilized all cores simultaneously on arbitrary bits (i.e., non-specific document types). Non-cryptographic algorithms like CRC32 and xxhash family performed noticeably better than the next-best which is BLAKE3 (cryptographic).
 
 <div style="background-color: white;">
-    <img src="results/desktop/64-threaded%20Hashing/report/lines.svg" alt="Multi-threaded (64) Hashing Performance" style="width: 100%;"/>
-</div>
+    <img src="results/amd-7900x/12-threaded%20Hashing/report/violin.svg" alt="Multi-threaded (12) Hashing Performance" style="width: 100%;"/>
 
 For more detailed results, see the [results](results/) directory. The reports saved as `index.html` files are particularly useful as summaries of the different metrics.
 

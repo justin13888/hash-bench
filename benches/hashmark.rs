@@ -104,13 +104,28 @@ fn hash_xxh3_128(data: &[u8]) {
 }
 
 fn hashmark(c: &mut Criterion) {
+    // Detect number of CPU cores
+    let num_cpus = num_cpus::get_physical();
+    println!("Detected {num_cpus} physical CPU cores.");
+
     // Sizes of files from 1KiB to 10GiB
     // e.g. [1024, 1024 * 1024, 10 * 1024 * 1024, 100 * 1024 * 1024, 1024 * 1024 * 1024, 10 * 1024 * 1024 * 1024];
-    let sizes = [1024, 10 * 1024 * 1024, 100 * 1024 * 1024];
+    let sizes = [1024, 10 * 1024 * 1024, 100 * 1024 * 1024]; //
+    println!(
+        "Benchmarking file sizes: {:?}",
+        sizes
+            .iter()
+            .map(|s| s.format_size(BINARY))
+            .collect::<Vec<String>>()
+    );
 
     // Number of files to hash in parallel
     // e.g. [1, 2, 4, 8, 16, 32, 64, 128];
-    let parallel_iterationss = [1, 16, 64];
+    let parallel_iterationss = [1, num_cpus];
+    println!(
+        "Benchmarking parallel iterations: {:?}",
+        parallel_iterationss
+    );
 
     // Hashing algorithms to benchmark
     #[allow(clippy::type_complexity)]
@@ -144,10 +159,10 @@ fn hashmark(c: &mut Criterion) {
 fn add_benchmarks(
     c: &mut Criterion,
     sizes: &[usize],
-    parallel_iterationss: &[u16],
+    parallel_iterationss: &[usize],
     hash_algs: &[(String, fn(&[u8]))],
 ) {
-    let mut parallel_group_template = |parallel_iterations: u16| {
+    let mut parallel_group_template = |parallel_iterations: usize| {
         let mut parallel_group =
             c.benchmark_group(format!("{}-threaded Hashing", parallel_iterations));
         parallel_group.throughput(criterion::Throughput::Elements(sizes.len() as u64));

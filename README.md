@@ -6,13 +6,12 @@ This benchmark compares the runtime performance of various hashing algorithms in
 
 The benchmark tests the runtime performance of each hashing algorithm with the following parameters:
 
-- **Algorithm**: The hashing algorithm to use.
 - **Input Size**: The size of the input data to hash.
 - **Iterations**: The number of times to hash the input data.
 - **Number of Threads**: The number of threads to use for hashing.
 - **Number of Simultaneous Hashes**: The number of simultaneous hashes to perform.
 
-The benchmark measures the time taken to hash the input data preloaded into heap memory. The benchmark is run multiple times to get a statistical average of the runtime performance. Algorithms with multithreading (e.g. BLAKE3) and/or when ran in parallel are ran in pools managed by [rayon](https://github.com/rayon-rs/rayon).
+The benchmark measures the time taken to hash the input data preloaded into heap memory. The benchmark is run multiple times to get a statistical average of the runtime performance. Algorithms with multithreading (e.g. BLAKE3) and/or when ran in parallel are ran in pools managed by [rayon](https://github.com/rayon-rs/rayon). For more detail, refer to the code in `benches`.
 
 ### Algorithms
 

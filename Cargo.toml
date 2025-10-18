@@ -30,3 +30,7 @@ xxhash-rust = { version = "0.8.12", features = ["xxh32", "xxh64", "xxh3"] }
 [[bench]]
 name = "hashmark"
 harness = false
+
+[profile.bench]
+lto = "fat"
+codegen-units = 1

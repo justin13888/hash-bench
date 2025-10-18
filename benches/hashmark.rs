@@ -1,15 +1,17 @@
-use std::time::Duration;
+use std::{hint::black_box, time::Duration};
 
-use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criterion};
+use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
 use humansize::{FormatSize, BINARY};
-use rand::{rngs::OsRng, RngCore};
+use rand::Rng;
 use rayon::prelude::*;
 use sha2::{Digest, Sha256};
 
 /// Generate arbitrary data of a given size
 fn generate_data(size: usize) -> Vec<u8> {
     let mut data = vec![0; size];
-    OsRng.fill_bytes(&mut data);
+    let mut rng = rand::rng();
+    rng.fill(&mut data[..]);
+
     data
 }
 
@@ -105,8 +107,10 @@ fn hash_xxh3_128(data: &[u8]) {
 
 fn hashmark(c: &mut Criterion) {
     // Detect number of CPU cores
-    let num_cpus = num_cpus::get_physical();
-    println!("Detected {num_cpus} physical CPU cores.");
+    let physical_cpus = num_cpus::get_physical();
+    println!("Detected {physical_cpus} physical CPU cores.");
+    let logical_cpus = num_cpus::get();
+    println!("Detected {logical_cpus} logical CPU cores.");
 
     // Sizes of files from 1KiB to 10GiB
     // e.g. [1024, 1024 * 1024, 10 * 1024 * 1024, 100 * 1024 * 1024, 1024 * 1024 * 1024, 10 * 1024 * 1024 * 1024];
@@ -121,7 +125,7 @@ fn hashmark(c: &mut Criterion) {
 
     // Number of files to hash in parallel
     // e.g. [1, 2, 4, 8, 16, 32, 64, 128];
-    let parallel_iterationss = [1, num_cpus];
+    let parallel_iterationss = [1, physical_cpus, logical_cpus];
     println!(
         "Benchmarking parallel iterations: {:?}",
         parallel_iterationss

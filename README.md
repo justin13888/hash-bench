@@ -54,6 +54,7 @@ This graphs shows the performance of each hashing algorithm when run in 12 threa
 
 <div style="background-color: white;">
     <img src="results/amd-7900x/12-threaded%20Hashing/report/violin.svg" alt="Multi-threaded (12) Hashing Performance" style="width: 100%;"/>
+</div>
 
 For more detailed results, see the [results](results/) directory. The reports saved as `index.html` files are particularly useful as summaries of the different metrics.
 

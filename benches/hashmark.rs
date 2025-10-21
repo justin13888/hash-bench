@@ -1,6 +1,8 @@
 use std::{hint::black_box, time::Duration};
 
-use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
+use criterion::{
+    criterion_group, criterion_main, BenchmarkId, Criterion, PlotConfiguration, PlottingBackend,
+};
 use humansize::{FormatSize, BINARY};
 use rand::Rng;
 use rayon::prelude::*;
@@ -179,7 +181,11 @@ fn add_benchmarks(
     let mut parallel_group_template = |parallel_iterations: usize| {
         let mut parallel_group =
             c.benchmark_group(format!("{}-threaded Hashing", parallel_iterations));
-        parallel_group.throughput(criterion::Throughput::Elements(sizes.len() as u64));
+        parallel_group
+            .throughput(criterion::Throughput::Elements(sizes.len() as u64))
+            .plot_config(
+                PlotConfiguration::default().summary_scale(criterion::AxisScale::Logarithmic),
+            );
         for size in sizes.iter() {
             let size_str = size.format_size(BINARY);
             let data = generate_data(*size);
@@ -210,7 +216,11 @@ fn add_benchmarks(
 // criterion_group!(benches, bench_hashes);
 criterion_group! {
     name = benches;
-    config = Criterion::default().measurement_time(Duration::from_secs(30)).sample_size(20);
+    config = Criterion::default()
+        .measurement_time(Duration::from_secs(30))
+        .sample_size(20)
+        .plotting_backend(PlottingBackend::Plotters)
+        .with_plots();
     targets = hashmark
 }
 criterion_main!(benches);

@@ -34,4 +34,3 @@ harness = false
 [profile.bench]
 lto = "fat"
 codegen-units = 1
-target-cpu = "native"

@@ -70,7 +70,7 @@ For more detailed results, see the [results](results/) directory. The reports sa
 To run the benchmark, clone the repository and run the following command:
 
 ```bash
-cargo bench
+RUSTFLAGS="-C target-cpu=native" cargo bench
 ```
 
 The specific parameters for the benchmark can be adjusted in the `benches/hashmark.rs` file.

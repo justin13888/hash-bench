@@ -1,0 +1,21 @@
+group,function,value,throughput_num,throughput_type,sample_measured_value,unit,iteration_count
+1-threaded Hashing,BLAKE3,10 MiB,10485760,bytes,150004500.0,ns,172
+1-threaded Hashing,BLAKE3,10 MiB,10485760,bytes,282441000.0,ns,344
+1-threaded Hashing,BLAKE3,10 MiB,10485760,bytes,449579542.0,ns,516
+1-threaded Hashing,BLAKE3,10 MiB,10485760,bytes,566204417.0,ns,688
+1-threaded Hashing,BLAKE3,10 MiB,10485760,bytes,704816417.0,ns,860
+1-threaded Hashing,BLAKE3,10 MiB,10485760,bytes,881311791.0,ns,1032
+1-threaded Hashing,BLAKE3,10 MiB,10485760,bytes,971651875.0,ns,1204
+1-threaded Hashing,BLAKE3,10 MiB,10485760,bytes,1182419834.0,ns,1376
+1-threaded Hashing,BLAKE3,10 MiB,10485760,bytes,1254530917.0,ns,1548
+1-threaded Hashing,BLAKE3,10 MiB,10485760,bytes,1321673875.0,ns,1720
+1-threaded Hashing,BLAKE3,10 MiB,10485760,bytes,1447208833.0,ns,1892
+1-threaded Hashing,BLAKE3,10 MiB,10485760,bytes,1647614125.0,ns,2064
+1-threaded Hashing,BLAKE3,10 MiB,10485760,bytes,1920944834.0,ns,2236
+1-threaded Hashing,BLAKE3,10 MiB,10485760,bytes,2126726709.0,ns,2408
+1-threaded Hashing,BLAKE3,10 MiB,10485760,bytes,2002913500.0,ns,2580
+1-threaded Hashing,BLAKE3,10 MiB,10485760,bytes,2112880541.0,ns,2752
+1-threaded Hashing,BLAKE3,10 MiB,10485760,bytes,2292807708.0,ns,2924
+1-threaded Hashing,BLAKE3,10 MiB,10485760,bytes,2937878833.0,ns,3096
+1-threaded Hashing,BLAKE3,10 MiB,10485760,bytes,2613363333.0,ns,3268
+1-threaded Hashing,BLAKE3,10 MiB,10485760,bytes,2834657291.0,ns,3440

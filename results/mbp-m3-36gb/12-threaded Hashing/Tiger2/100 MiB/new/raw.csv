@@ -1,0 +1,21 @@
+group,function,value,throughput_num,throughput_type,sample_measured_value,unit,iteration_count
+12-threaded Hashing,Tiger2,100 MiB,104857600,bytes,164389792.0,ns,151
+12-threaded Hashing,Tiger2,100 MiB,104857600,bytes,270461125.0,ns,302
+12-threaded Hashing,Tiger2,100 MiB,104857600,bytes,409389375.0,ns,453
+12-threaded Hashing,Tiger2,100 MiB,104857600,bytes,561049167.0,ns,604
+12-threaded Hashing,Tiger2,100 MiB,104857600,bytes,692765917.0,ns,755
+12-threaded Hashing,Tiger2,100 MiB,104857600,bytes,854655375.0,ns,906
+12-threaded Hashing,Tiger2,100 MiB,104857600,bytes,927114667.0,ns,1057
+12-threaded Hashing,Tiger2,100 MiB,104857600,bytes,1118693209.0,ns,1208
+12-threaded Hashing,Tiger2,100 MiB,104857600,bytes,1280700334.0,ns,1359
+12-threaded Hashing,Tiger2,100 MiB,104857600,bytes,1407333209.0,ns,1510
+12-threaded Hashing,Tiger2,100 MiB,104857600,bytes,1579744792.0,ns,1661
+12-threaded Hashing,Tiger2,100 MiB,104857600,bytes,1671966625.0,ns,1812
+12-threaded Hashing,Tiger2,100 MiB,104857600,bytes,1817144500.0,ns,1963
+12-threaded Hashing,Tiger2,100 MiB,104857600,bytes,2026062417.0,ns,2114
+12-threaded Hashing,Tiger2,100 MiB,104857600,bytes,2149121250.0,ns,2265
+12-threaded Hashing,Tiger2,100 MiB,104857600,bytes,2342401958.0,ns,2416
+12-threaded Hashing,Tiger2,100 MiB,104857600,bytes,2354118458.0,ns,2567
+12-threaded Hashing,Tiger2,100 MiB,104857600,bytes,2597070500.0,ns,2718
+12-threaded Hashing,Tiger2,100 MiB,104857600,bytes,2650629750.0,ns,2869
+12-threaded Hashing,Tiger2,100 MiB,104857600,bytes,2805297250.0,ns,3020

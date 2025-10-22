@@ -1,0 +1,21 @@
+group,function,value,throughput_num,throughput_type,sample_measured_value,unit,iteration_count
+12-threaded Hashing,MD5,1 KiB,1024,bytes,160165500.0,ns,9709
+12-threaded Hashing,MD5,1 KiB,1024,bytes,304833375.0,ns,19418
+12-threaded Hashing,MD5,1 KiB,1024,bytes,512836209.0,ns,29127
+12-threaded Hashing,MD5,1 KiB,1024,bytes,749824708.0,ns,38836
+12-threaded Hashing,MD5,1 KiB,1024,bytes,825452417.0,ns,48545
+12-threaded Hashing,MD5,1 KiB,1024,bytes,997754250.0,ns,58254
+12-threaded Hashing,MD5,1 KiB,1024,bytes,1014903250.0,ns,67963
+12-threaded Hashing,MD5,1 KiB,1024,bytes,1183118833.0,ns,77672
+12-threaded Hashing,MD5,1 KiB,1024,bytes,1344997541.0,ns,87381
+12-threaded Hashing,MD5,1 KiB,1024,bytes,1414510875.0,ns,97090
+12-threaded Hashing,MD5,1 KiB,1024,bytes,1779050125.0,ns,106799
+12-threaded Hashing,MD5,1 KiB,1024,bytes,2033101208.0,ns,116508
+12-threaded Hashing,MD5,1 KiB,1024,bytes,2001442667.0,ns,126217
+12-threaded Hashing,MD5,1 KiB,1024,bytes,2283610875.0,ns,135926
+12-threaded Hashing,MD5,1 KiB,1024,bytes,2609559584.0,ns,145635
+12-threaded Hashing,MD5,1 KiB,1024,bytes,2884252917.0,ns,155344
+12-threaded Hashing,MD5,1 KiB,1024,bytes,2510248875.0,ns,165053
+12-threaded Hashing,MD5,1 KiB,1024,bytes,3009137917.0,ns,174762
+12-threaded Hashing,MD5,1 KiB,1024,bytes,2893088625.0,ns,184471
+12-threaded Hashing,MD5,1 KiB,1024,bytes,3433305000.0,ns,194180

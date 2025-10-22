@@ -1,0 +1,21 @@
+group,function,value,throughput_num,throughput_type,sample_measured_value,unit,iteration_count
+12-threaded Hashing,CRC32,1 KiB,1024,bytes,172080709.0,ns,9090
+12-threaded Hashing,CRC32,1 KiB,1024,bytes,301148667.0,ns,18180
+12-threaded Hashing,CRC32,1 KiB,1024,bytes,484195500.0,ns,27270
+12-threaded Hashing,CRC32,1 KiB,1024,bytes,712569875.0,ns,36360
+12-threaded Hashing,CRC32,1 KiB,1024,bytes,854907792.0,ns,45450
+12-threaded Hashing,CRC32,1 KiB,1024,bytes,1008992000.0,ns,54540
+12-threaded Hashing,CRC32,1 KiB,1024,bytes,738180208.0,ns,63630
+12-threaded Hashing,CRC32,1 KiB,1024,bytes,1092778458.0,ns,72720
+12-threaded Hashing,CRC32,1 KiB,1024,bytes,1332785666.0,ns,81810
+12-threaded Hashing,CRC32,1 KiB,1024,bytes,1697802666.0,ns,90900
+12-threaded Hashing,CRC32,1 KiB,1024,bytes,1486560500.0,ns,99990
+12-threaded Hashing,CRC32,1 KiB,1024,bytes,2005065667.0,ns,109080
+12-threaded Hashing,CRC32,1 KiB,1024,bytes,1936341500.0,ns,118170
+12-threaded Hashing,CRC32,1 KiB,1024,bytes,1721195000.0,ns,127260
+12-threaded Hashing,CRC32,1 KiB,1024,bytes,2199683583.0,ns,136350
+12-threaded Hashing,CRC32,1 KiB,1024,bytes,2315034459.0,ns,145440
+12-threaded Hashing,CRC32,1 KiB,1024,bytes,2623702167.0,ns,154530
+12-threaded Hashing,CRC32,1 KiB,1024,bytes,3004537750.0,ns,163620
+12-threaded Hashing,CRC32,1 KiB,1024,bytes,3102042583.0,ns,172710
+12-threaded Hashing,CRC32,1 KiB,1024,bytes,3318659709.0,ns,181800

@@ -7,7 +7,7 @@ use humansize::{FormatSize, BINARY};
 use rand::Rng;
 use rayon::prelude::*;
 use sha2::{Digest, Sha256};
-use std::hash::Hasher as StdHasher;
+use std::hash::Hasher;
 use std::io::Cursor;
 
 /// Generate arbitrary data of a given size
@@ -186,7 +186,8 @@ fn hash_gxhash(data: &[u8]) {
 
 /// Hash data using MurmurHash3 (x64, 128-bit)
 fn hash_murmur3(data: &[u8]) {
-    let _result: u128 = murmur3::murmur3_x64_128(&mut Cursor::new(data), 0).unwrap();
+    let _result: u128 =
+        murmur3::murmur3_x64_128(&mut Cursor::new(data), 0).expect("murmur3 on in-memory cursor never fails");
 }
 
 /// Hash data using HighwayHash
@@ -292,6 +293,60 @@ fn hash_adler32(data: &[u8]) {
     let _result: u32 = hasher.checksum();
 }
 
+/// Hash data using RIPEMD-128
+fn hash_ripemd128(data: &[u8]) {
+    let mut hasher = ripemd::Ripemd128::new();
+    hasher.update(data);
+    let _result: [u8; 16] = hasher.finalize().into();
+}
+
+/// Hash data using RIPEMD-256
+fn hash_ripemd256(data: &[u8]) {
+    let mut hasher = ripemd::Ripemd256::new();
+    hasher.update(data);
+    let _result: [u8; 32] = hasher.finalize().into();
+}
+
+/// Hash data using RIPEMD-320
+fn hash_ripemd320(data: &[u8]) {
+    let mut hasher = ripemd::Ripemd320::new();
+    hasher.update(data);
+    let _result: [u8; 40] = hasher.finalize().into();
+}
+
+/// Hash data using SHA-512/224
+fn hash_sha512_224(data: &[u8]) {
+    let mut hasher = sha2::Sha512_224::new();
+    hasher.update(data);
+    let _result: [u8; 28] = hasher.finalize().into();
+}
+
+/// Hash data using Keccak-384
+fn hash_keccak384(data: &[u8]) {
+    let mut hasher = sha3::Keccak384::new();
+    hasher.update(data);
+    let _result: [u8; 48] = hasher.finalize().into();
+}
+
+/// Hash data using Keccak-512
+fn hash_keccak512(data: &[u8]) {
+    let mut hasher = sha3::Keccak512::new();
+    hasher.update(data);
+    let _result: [u8; 64] = hasher.finalize().into();
+}
+
+/// Hash data using HighwayHash-128
+fn hash_highway128(data: &[u8]) {
+    use highway::HighwayHash;
+    let _result: [u64; 2] = highway::HighwayHasher::default().hash128(data);
+}
+
+/// Hash data using HighwayHash-256
+fn hash_highway256(data: &[u8]) {
+    use highway::HighwayHash;
+    let _result: [u64; 4] = highway::HighwayHasher::default().hash256(data);
+}
+
 fn hashmark(c: &mut Criterion) {
     // Detect number of CPU cores
     let physical_cpus = num_cpus::get_physical();
@@ -333,14 +388,20 @@ fn hashmark(c: &mut Criterion) {
         ("SHA-256".to_string(), hash_sha256),
         ("SHA-384".to_string(), hash_sha384),
         ("SHA-512".to_string(), hash_sha512),
+        ("SHA-512/224".to_string(), hash_sha512_224),
         ("SHA-512/256".to_string(), hash_sha512_256),
         ("SHA3-224".to_string(), hash_sha3_224),
         ("SHA3-256".to_string(), hash_sha3_256),
         ("SHA3-384".to_string(), hash_sha3_384),
         ("SHA3-512".to_string(), hash_sha3_512),
         ("Keccak-256".to_string(), hash_keccak256),
+        ("Keccak-384".to_string(), hash_keccak384),
+        ("Keccak-512".to_string(), hash_keccak512),
         ("MD5".to_string(), hash_md5),
+        ("RIPEMD-128".to_string(), hash_ripemd128),
         ("RIPEMD-160".to_string(), hash_ripemd160),
+        ("RIPEMD-256".to_string(), hash_ripemd256),
+        ("RIPEMD-320".to_string(), hash_ripemd320),
         ("SM3".to_string(), hash_sm3),
         ("Streebog-256".to_string(), hash_streebog256),
         ("Streebog-512".to_string(), hash_streebog512),
@@ -360,7 +421,9 @@ fn hashmark(c: &mut Criterion) {
         ("FxHash".to_string(), hash_fxhash),
         ("GxHash".to_string(), hash_gxhash),
         ("MurmurHash3".to_string(), hash_murmur3),
-        ("HighwayHash".to_string(), hash_highway),
+        ("HighwayHash-64".to_string(), hash_highway),
+        ("HighwayHash-128".to_string(), hash_highway128),
+        ("HighwayHash-256".to_string(), hash_highway256),
         ("MetroHash".to_string(), hash_metrohash),
         ("FNV-1a".to_string(), hash_fnv1a),
         ("SeaHash".to_string(), hash_seahash),

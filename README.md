@@ -17,18 +17,37 @@ The benchmark measures the time taken to hash the input data preloaded into heap
 
 The following algorithms are benchmarked:
 
+#### Cryptographic
+
 - [BLAKE3](https://crates.io/crates/blake3)
 - [BLAKE2b512](https://crates.io/crates/blake2)
+- [BLAKE2s256](https://crates.io/crates/blake2)
+- [SHA-1](https://crates.io/crates/sha1)
 - [SHA-256](https://crates.io/crates/sha2)
 - [SHA-512](https://crates.io/crates/sha2)
 - [SHA3-256](https://crates.io/crates/sha3)
 - [SHA3-512](https://crates.io/crates/sha3)
 - [MD5](https://crates.io/crates/md-5)
+- [RIPEMD-160](https://crates.io/crates/ripemd)
+- [SM3](https://crates.io/crates/sm3)
+- [Streebog-256](https://crates.io/crates/streebog)
 - [Tiger2](https://crates.io/crates/tiger)
-- [whirlpool](https://crates.io/crates/whirlpool)
-- [XXH32/XXH64/XXH3](https://crates.io/crates/xxhash-rust)
+- [Whirlpool](https://crates.io/crates/whirlpool)
 
-*We also included CRC32, which is not a cryptographic, but relevant for file integrity checks.*
+#### Non-cryptographic
+
+- [CRC32](https://crates.io/crates/crc32fast)
+- [XXH32/XXH64/XXH3](https://crates.io/crates/xxhash-rust)
+- [SipHash-2-4](https://crates.io/crates/siphasher)
+- [AHash](https://crates.io/crates/ahash)
+- [wyhash](https://crates.io/crates/wyhash)
+- [FxHash](https://crates.io/crates/rustc-hash)
+- [GxHash](https://crates.io/crates/gxhash)†
+- [MurmurHash3](https://crates.io/crates/murmur3)
+- [HighwayHash](https://crates.io/crates/highway)
+- [MetroHash](https://crates.io/crates/metrohash)
+
+†GxHash requires hardware AES support (AES-NI + SSE2 on x86_64, AES + NEON on aarch64) and will not compile on platforms without it.
 
 ## Results
 

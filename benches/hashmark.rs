@@ -7,6 +7,8 @@ use humansize::{FormatSize, BINARY};
 use rand::Rng;
 use rayon::prelude::*;
 use sha2::{Digest, Sha256};
+use std::hash::Hasher as StdHasher;
+use std::io::Cursor;
 
 /// Generate arbitrary data of a given size
 fn generate_data(size: usize) -> Vec<u8> {
@@ -107,6 +109,92 @@ fn hash_xxh3_128(data: &[u8]) {
     let _result: u128 = xxhash_rust::xxh3::xxh3_128(data);
 }
 
+/// Hash data using SHA-1
+fn hash_sha1(data: &[u8]) {
+    let mut hasher = sha1::Sha1::new();
+    hasher.update(data);
+    let _result: [u8; 20] = hasher.finalize().into();
+}
+
+/// Hash data using BLAKE2s256
+fn hash_blake2s(data: &[u8]) {
+    let mut hasher = blake2::Blake2s256::new();
+    hasher.update(data);
+    let _result: [u8; 32] = hasher.finalize().into();
+}
+
+/// Hash data using RIPEMD-160
+fn hash_ripemd160(data: &[u8]) {
+    let mut hasher = ripemd::Ripemd160::new();
+    hasher.update(data);
+    let _result: [u8; 20] = hasher.finalize().into();
+}
+
+/// Hash data using SM3
+fn hash_sm3(data: &[u8]) {
+    let mut hasher = sm3::Sm3::new();
+    hasher.update(data);
+    let _result: [u8; 32] = hasher.finalize().into();
+}
+
+/// Hash data using Streebog-256
+fn hash_streebog256(data: &[u8]) {
+    let mut hasher = streebog::Streebog256::new();
+    hasher.update(data);
+    let _result: [u8; 32] = hasher.finalize().into();
+}
+
+/// Hash data using SipHash-2-4
+fn hash_siphash24(data: &[u8]) {
+    let mut hasher = siphasher::sip::SipHasher24::new();
+    hasher.write(data);
+    let _result: u64 = hasher.finish();
+}
+
+/// Hash data using AHash
+fn hash_ahash(data: &[u8]) {
+    let mut hasher = ahash::AHasher::default();
+    hasher.write(data);
+    let _result: u64 = hasher.finish();
+}
+
+/// Hash data using wyhash
+fn hash_wyhash(data: &[u8]) {
+    let _result: u64 = wyhash::wyhash(data, 0);
+}
+
+/// Hash data using FxHash
+fn hash_fxhash(data: &[u8]) {
+    let mut hasher = rustc_hash::FxHasher::default();
+    hasher.write(data);
+    let _result: u64 = hasher.finish();
+}
+
+/// Hash data using GxHash
+fn hash_gxhash(data: &[u8]) {
+    let mut hasher = gxhash::GxHasher::default();
+    hasher.write(data);
+    let _result: u64 = hasher.finish();
+}
+
+/// Hash data using MurmurHash3 (x64, 128-bit)
+fn hash_murmur3(data: &[u8]) {
+    let _result: u128 = murmur3::murmur3_x64_128(&mut Cursor::new(data), 0).unwrap();
+}
+
+/// Hash data using HighwayHash
+fn hash_highway(data: &[u8]) {
+    use highway::HighwayHash;
+    let _result: u64 = highway::HighwayHasher::default().hash64(data);
+}
+
+/// Hash data using MetroHash64
+fn hash_metrohash(data: &[u8]) {
+    let mut hasher = metrohash::MetroHash64::new();
+    hasher.write(data);
+    let _result: u64 = hasher.finish();
+}
+
 fn hashmark(c: &mut Criterion) {
     // Detect number of CPU cores
     let physical_cpus = num_cpus::get_physical();
@@ -139,20 +227,35 @@ fn hashmark(c: &mut Criterion) {
     // Hashing algorithms to benchmark
     #[allow(clippy::type_complexity)]
     let hash_algs: [(String, fn(&[u8])); _] = [
+        // Cryptographic
         ("BLAKE3".to_string(), hash_blake3),
         ("BLAKE2b".to_string(), hash_blake2b),
+        ("BLAKE2s".to_string(), hash_blake2s),
+        ("SHA-1".to_string(), hash_sha1),
         ("SHA-256".to_string(), hash_sha256),
         ("SHA-512".to_string(), hash_sha512),
         ("SHA3-256".to_string(), hash_sha3_256),
         ("SHA3-512".to_string(), hash_sha3_512),
         ("MD5".to_string(), hash_md5),
+        ("RIPEMD-160".to_string(), hash_ripemd160),
+        ("SM3".to_string(), hash_sm3),
+        ("Streebog-256".to_string(), hash_streebog256),
         ("Tiger2".to_string(), hash_tiger2),
         ("Whirlpool".to_string(), hash_whirlpool),
+        // Non-cryptographic
         ("CRC32".to_string(), hash_crc32),
         ("XXH32".to_string(), hash_xxh32),
         ("XXH64".to_string(), hash_xxh64),
         ("XXH3_64".to_string(), hash_xxh3_64),
         ("XXH3_128".to_string(), hash_xxh3_128),
+        ("SipHash-2-4".to_string(), hash_siphash24),
+        ("AHash".to_string(), hash_ahash),
+        ("wyhash".to_string(), hash_wyhash),
+        ("FxHash".to_string(), hash_fxhash),
+        ("GxHash".to_string(), hash_gxhash),
+        ("MurmurHash3".to_string(), hash_murmur3),
+        ("HighwayHash".to_string(), hash_highway),
+        ("MetroHash".to_string(), hash_metrohash),
     ];
     println!(
         "Benchmarking hashing algorithms: {:?}",

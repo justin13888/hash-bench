@@ -19,8 +19,15 @@ fn generate_data(size: usize) -> Vec<u8> {
     data
 }
 
-/// Hash data using BLAKE3
+/// Hash data using BLAKE3 (single-threaded)
 fn hash_blake3(data: &[u8]) {
+    let mut hasher = blake3::Hasher::new();
+    hasher.update(data);
+    let _result: [u8; 32] = hasher.finalize().into();
+}
+
+/// Hash data using BLAKE3 with rayon parallelism (multi-threaded single stream)
+fn hash_blake3_rayon(data: &[u8]) {
     let mut hasher = blake3::Hasher::new();
     hasher.update_rayon(data);
     let _result: [u8; 32] = hasher.finalize().into();
@@ -33,7 +40,7 @@ fn hash_blake2b(data: &[u8]) {
     let _result: [u8; 64] = hasher.finalize().into();
 }
 
-/// Hash data using SHA-512
+/// Hash data using SHA-256
 fn hash_sha256(data: &[u8]) {
     let mut hasher = Sha256::new();
     hasher.update(data);
@@ -70,7 +77,7 @@ fn hash_md5(data: &[u8]) {
 
 /// Hash data using Tiger2
 fn hash_tiger2(data: &[u8]) {
-    let mut hasher = tiger::Tiger::new();
+    let mut hasher = tiger::Tiger2::new();
     hasher.update(data);
     let _result: [u8; 24] = hasher.finalize().into();
 }
@@ -195,6 +202,96 @@ fn hash_metrohash(data: &[u8]) {
     let _result: u64 = hasher.finish();
 }
 
+/// Hash data using SHA-224
+fn hash_sha224(data: &[u8]) {
+    let mut hasher = sha2::Sha224::new();
+    hasher.update(data);
+    let _result: [u8; 28] = hasher.finalize().into();
+}
+
+/// Hash data using SHA-384
+fn hash_sha384(data: &[u8]) {
+    let mut hasher = sha2::Sha384::new();
+    hasher.update(data);
+    let _result: [u8; 48] = hasher.finalize().into();
+}
+
+/// Hash data using SHA-512/256
+fn hash_sha512_256(data: &[u8]) {
+    let mut hasher = sha2::Sha512_256::new();
+    hasher.update(data);
+    let _result: [u8; 32] = hasher.finalize().into();
+}
+
+/// Hash data using SHA3-224
+fn hash_sha3_224(data: &[u8]) {
+    let mut hasher = sha3::Sha3_224::new();
+    hasher.update(data);
+    let _result: [u8; 28] = hasher.finalize().into();
+}
+
+/// Hash data using SHA3-384
+fn hash_sha3_384(data: &[u8]) {
+    let mut hasher = sha3::Sha3_384::new();
+    hasher.update(data);
+    let _result: [u8; 48] = hasher.finalize().into();
+}
+
+/// Hash data using Keccak-256
+fn hash_keccak256(data: &[u8]) {
+    let mut hasher = sha3::Keccak256::new();
+    hasher.update(data);
+    let _result: [u8; 32] = hasher.finalize().into();
+}
+
+/// Hash data using Streebog-512
+fn hash_streebog512(data: &[u8]) {
+    let mut hasher = streebog::Streebog512::new();
+    hasher.update(data);
+    let _result: [u8; 64] = hasher.finalize().into();
+}
+
+/// Hash data using BLAKE2b256
+fn hash_blake2b256(data: &[u8]) {
+    use blake2::digest::consts::U32;
+    let mut hasher = blake2::Blake2b::<U32>::new();
+    hasher.update(data);
+    let _result: [u8; 32] = hasher.finalize().into();
+}
+
+/// Hash data using Tiger (original)
+fn hash_tiger(data: &[u8]) {
+    let mut hasher = tiger::Tiger::new();
+    hasher.update(data);
+    let _result: [u8; 24] = hasher.finalize().into();
+}
+
+/// Hash data using SipHash-1-3
+fn hash_siphash13(data: &[u8]) {
+    let mut hasher = siphasher::sip::SipHasher13::new();
+    hasher.write(data);
+    let _result: u64 = hasher.finish();
+}
+
+/// Hash data using FNV-1a
+fn hash_fnv1a(data: &[u8]) {
+    let mut hasher = fnv::FnvHasher::default();
+    hasher.write(data);
+    let _result: u64 = hasher.finish();
+}
+
+/// Hash data using SeaHash
+fn hash_seahash(data: &[u8]) {
+    let _result: u64 = seahash::hash(data);
+}
+
+/// Hash data using Adler32
+fn hash_adler32(data: &[u8]) {
+    let mut hasher = adler::Adler32::new();
+    hasher.write_slice(data);
+    let _result: u32 = hasher.checksum();
+}
+
 fn hashmark(c: &mut Criterion) {
     // Detect number of CPU cores
     let physical_cpus = num_cpus::get_physical();
@@ -217,29 +314,37 @@ fn hashmark(c: &mut Criterion) {
     );
 
     // Number of files to hash in parallel
-    let mut parallel_iterationss = vec![1, physical_cpus, logical_cpus];
-    parallel_iterationss.dedup();
-    println!(
-        "Benchmarking parallel iterations: {:?}",
-        parallel_iterationss
-    );
+    let mut thread_counts = vec![1, physical_cpus, logical_cpus];
+    thread_counts.sort();
+    thread_counts.dedup();
+    println!("Benchmarking parallel iterations: {:?}", thread_counts);
 
     // Hashing algorithms to benchmark
     #[allow(clippy::type_complexity)]
     let hash_algs: [(String, fn(&[u8])); _] = [
         // Cryptographic
         ("BLAKE3".to_string(), hash_blake3),
-        ("BLAKE2b".to_string(), hash_blake2b),
-        ("BLAKE2s".to_string(), hash_blake2s),
+        ("BLAKE3 (rayon)".to_string(), hash_blake3_rayon),
+        ("BLAKE2b512".to_string(), hash_blake2b),
+        ("BLAKE2b256".to_string(), hash_blake2b256),
+        ("BLAKE2s256".to_string(), hash_blake2s),
         ("SHA-1".to_string(), hash_sha1),
+        ("SHA-224".to_string(), hash_sha224),
         ("SHA-256".to_string(), hash_sha256),
+        ("SHA-384".to_string(), hash_sha384),
         ("SHA-512".to_string(), hash_sha512),
+        ("SHA-512/256".to_string(), hash_sha512_256),
+        ("SHA3-224".to_string(), hash_sha3_224),
         ("SHA3-256".to_string(), hash_sha3_256),
+        ("SHA3-384".to_string(), hash_sha3_384),
         ("SHA3-512".to_string(), hash_sha3_512),
+        ("Keccak-256".to_string(), hash_keccak256),
         ("MD5".to_string(), hash_md5),
         ("RIPEMD-160".to_string(), hash_ripemd160),
         ("SM3".to_string(), hash_sm3),
         ("Streebog-256".to_string(), hash_streebog256),
+        ("Streebog-512".to_string(), hash_streebog512),
+        ("Tiger".to_string(), hash_tiger),
         ("Tiger2".to_string(), hash_tiger2),
         ("Whirlpool".to_string(), hash_whirlpool),
         // Non-cryptographic
@@ -248,6 +353,7 @@ fn hashmark(c: &mut Criterion) {
         ("XXH64".to_string(), hash_xxh64),
         ("XXH3_64".to_string(), hash_xxh3_64),
         ("XXH3_128".to_string(), hash_xxh3_128),
+        ("SipHash-1-3".to_string(), hash_siphash13),
         ("SipHash-2-4".to_string(), hash_siphash24),
         ("AHash".to_string(), hash_ahash),
         ("wyhash".to_string(), hash_wyhash),
@@ -256,6 +362,9 @@ fn hashmark(c: &mut Criterion) {
         ("MurmurHash3".to_string(), hash_murmur3),
         ("HighwayHash".to_string(), hash_highway),
         ("MetroHash".to_string(), hash_metrohash),
+        ("FNV-1a".to_string(), hash_fnv1a),
+        ("SeaHash".to_string(), hash_seahash),
+        ("Adler32".to_string(), hash_adler32),
     ];
     println!(
         "Benchmarking hashing algorithms: {:?}",
@@ -265,34 +374,33 @@ fn hashmark(c: &mut Criterion) {
             .collect::<Vec<&String>>()
     );
 
-    add_benchmarks(c, &sizes, &parallel_iterationss, &hash_algs);
+    add_benchmarks(c, &sizes, &thread_counts, &hash_algs);
 }
 
 /// Adds benchmarks for hashing algorithms
 /// # Arguments
 /// * `c` - Criterion instance
 /// * `sizes` - Sizes of files to hash
-/// * `parallel_iterationss` - Number of files to hash in parallel
+/// * `thread_counts` - Number of files to hash in parallel
 /// * `hash_algs` - Hashing algorithms to benchmark
 #[allow(clippy::type_complexity)]
 fn add_benchmarks(
     c: &mut Criterion,
     sizes: &[usize],
-    parallel_iterationss: &[usize],
+    thread_counts: &[usize],
     hash_algs: &[(String, fn(&[u8]))],
 ) {
     let mut parallel_group_template = |parallel_iterations: usize| {
         let mut parallel_group =
             c.benchmark_group(format!("{}-threaded Hashing", parallel_iterations));
-        parallel_group
-            .throughput(criterion::Throughput::Elements(sizes.len() as u64))
-            .plot_config(
-                PlotConfiguration::default().summary_scale(criterion::AxisScale::Logarithmic),
-            );
+        parallel_group.plot_config(
+            PlotConfiguration::default().summary_scale(criterion::AxisScale::Logarithmic),
+        );
         for size in sizes.iter() {
             let size_str = size.format_size(BINARY);
             let data = generate_data(*size);
-            parallel_group.throughput(criterion::Throughput::Bytes(*size as u64));
+            parallel_group
+                .throughput(criterion::Throughput::Bytes(*size as u64 * parallel_iterations as u64));
 
             hash_algs.iter().for_each(|(hash_name, hash_alg)| {
                 parallel_group.bench_with_input(
@@ -311,12 +419,11 @@ fn add_benchmarks(
         parallel_group.finish();
     };
 
-    parallel_iterationss
+    thread_counts
         .iter()
         .for_each(|&parallel_iterations| parallel_group_template(parallel_iterations));
 }
 
-// criterion_group!(benches, bench_hashes);
 criterion_group! {
     name = benches;
     config = Criterion::default()

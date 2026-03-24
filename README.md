@@ -17,27 +17,38 @@ The benchmark measures the time taken to hash the input data preloaded into heap
 
 The following algorithms are benchmarked:
 
-#### Cryptographic
+#### Cryptographic (24)
 
-- [BLAKE3](https://crates.io/crates/blake3)
+- [BLAKE3](https://crates.io/crates/blake3) — single-stream
+- [BLAKE3 (rayon)](https://crates.io/crates/blake3) — multi-threaded single stream via `update_rayon`
 - [BLAKE2b512](https://crates.io/crates/blake2)
+- [BLAKE2b256](https://crates.io/crates/blake2)
 - [BLAKE2s256](https://crates.io/crates/blake2)
 - [SHA-1](https://crates.io/crates/sha1)
+- [SHA-224](https://crates.io/crates/sha2)
 - [SHA-256](https://crates.io/crates/sha2)
+- [SHA-384](https://crates.io/crates/sha2)
 - [SHA-512](https://crates.io/crates/sha2)
+- [SHA-512/256](https://crates.io/crates/sha2)
+- [SHA3-224](https://crates.io/crates/sha3)
 - [SHA3-256](https://crates.io/crates/sha3)
+- [SHA3-384](https://crates.io/crates/sha3)
 - [SHA3-512](https://crates.io/crates/sha3)
+- [Keccak-256](https://crates.io/crates/sha3)
 - [MD5](https://crates.io/crates/md-5)
 - [RIPEMD-160](https://crates.io/crates/ripemd)
 - [SM3](https://crates.io/crates/sm3)
 - [Streebog-256](https://crates.io/crates/streebog)
+- [Streebog-512](https://crates.io/crates/streebog)
+- [Tiger](https://crates.io/crates/tiger)
 - [Tiger2](https://crates.io/crates/tiger)
 - [Whirlpool](https://crates.io/crates/whirlpool)
 
-#### Non-cryptographic
+#### Non-cryptographic (17)
 
 - [CRC32](https://crates.io/crates/crc32fast)
 - [XXH32/XXH64/XXH3](https://crates.io/crates/xxhash-rust)
+- [SipHash-1-3](https://crates.io/crates/siphasher)
 - [SipHash-2-4](https://crates.io/crates/siphasher)
 - [AHash](https://crates.io/crates/ahash)
 - [wyhash](https://crates.io/crates/wyhash)
@@ -46,18 +57,26 @@ The following algorithms are benchmarked:
 - [MurmurHash3](https://crates.io/crates/murmur3)
 - [HighwayHash](https://crates.io/crates/highway)
 - [MetroHash](https://crates.io/crates/metrohash)
+- [FNV-1a](https://crates.io/crates/fnv)
+- [SeaHash](https://crates.io/crates/seahash)
+- [Adler32](https://crates.io/crates/adler)
 
 †GxHash requires hardware AES support (AES-NI + SSE2 on x86_64, AES + NEON on aarch64) and will not compile on platforms without it.
 
 ## Results
 
-The following results were obtained on a desktop with the following specifications:
+Results are available for two platforms:
 
+**AMD Ryzen 9 7900X (Desktop):**
 - **OS**: Ubuntu 24.04.3 LTS (x86_64) (Linux 6.8.0)
 - **CPU**: AMD Ryzen 9 7900X (24) @ 5.609GHz
 - **RAM**: 128 GB DDR5 5600 MHZ CL32
 
-IMPORTANT: When we say "single-threaded" we man that the algorithm is ran on a single data stream. Most hashing algorithms could only utilize a single core with the exception of BLAKE3, which is designed to run in parallel.
+**Apple M3 MacBook Pro:**
+- **OS**: macOS (aarch64)
+- **RAM**: 36 GB
+
+IMPORTANT: When we say "single-threaded" we mean that the algorithm is run on a single data stream. Most hashing algorithms can only utilize a single core. The exception is BLAKE3, which is benchmarked in two modes: standard single-stream (`BLAKE3`) and with internal rayon parallelism (`BLAKE3 (rayon)`) that parallelizes hashing of a single buffer across all available threads.
 
 ### Single-threaded Hashing Performance
 
@@ -82,7 +101,6 @@ For more detailed results, see the [results](results/) directory. The reports sa
 ### Prerequisites
 
 - Rust installed via rustup
-- `gnuplot` (optional, for plotting the results)
 
 ### Starting the benchmark
 

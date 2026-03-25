@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "bun run prebuild && vite",
     "prebuild": "bun scripts/process-results.ts",
-    "build": "bun run prebuild && bunx tsc -b && bunx vite build",
+    "build": "bun run prebuild && tsc -b && vite build",
     "preview": "vite preview",
     "check": "biome check src/",
     "check:fix": "biome check --write src/",

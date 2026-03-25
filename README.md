@@ -127,11 +127,28 @@ For more detailed results, see the [results](results/) directory. The reports sa
 
 ### Prerequisites
 
-- Rust installed via rustup
+- Rust installed via [rustup](https://rustup.rs/)
+- [just](https://github.com/casey/just) command runner (optional, but recommended)
 
-### Starting the benchmark
+### Commands
 
-To run the benchmark, clone the repository and run the following command:
+All common commands are defined in the [`justfile`](justfile). Run `just` to see available recipes:
+
+```bash
+just              # List available recipes
+just bench        # Run all benchmarks with native CPU optimizations
+just bench-filter "BLAKE3"  # Run benchmarks matching a filter
+just build        # Build the project
+just build-release # Build with native CPU optimizations (release)
+just check        # Check the project compiles
+just lint         # Run clippy lints
+just fmt          # Format code
+just fmt-check    # Check formatting
+just clean        # Clean build artifacts
+just open-report  # Open the latest benchmark report in the browser
+```
+
+Or equivalently, without `just`:
 
 ```bash
 RUSTFLAGS="-C target-cpu=native" cargo bench

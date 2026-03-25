@@ -4,16 +4,19 @@ use criterion::{
     criterion_group, criterion_main, BenchmarkId, Criterion, PlotConfiguration, PlottingBackend,
 };
 use humansize::{FormatSize, BINARY};
-use rand::Rng;
+use rand::{Rng, SeedableRng};
 use rayon::prelude::*;
 use sha2::Digest;
 use std::hash::Hasher;
 use std::io::Cursor;
 
-/// Generate arbitrary data of a given size
+/// Fixed seed for reproducible benchmark data across runs.
+const RNG_SEED: u64 = 0xDEAD_BEEF_CAFE_BABE;
+
+/// Generate arbitrary data of a given size using a deterministic seed
 fn generate_data(size: usize) -> Vec<u8> {
     let mut data = vec![0; size];
-    let mut rng = rand::rng();
+    let mut rng = rand::rngs::StdRng::seed_from_u64(RNG_SEED);
     rng.fill(&mut data[..]);
 
     data
@@ -249,6 +252,9 @@ fn hash_whirlpool(data: &[u8]) {
 
 /// Hash data using Ascon-Hash256 (NIST SP 800-232 lightweight standard)
 fn hash_ascon256(data: &[u8]) {
+    // ascon-hash re-exports its own Digest trait, which shadows sha2::Digest
+    // in this scope. The two traits are incompatible, so a local import is
+    // required here.
     use ascon_hash::Digest;
     let mut hasher = ascon_hash::AsconHash256::new();
     hasher.update(data);
@@ -397,7 +403,7 @@ fn hashmark(c: &mut Criterion) {
             .collect::<Vec<String>>()
     );
 
-    // Number of files to hash in parallel
+    // Number of parallel hash operations per iteration
     let mut thread_counts = vec![1, physical_cpus, logical_cpus];
     thread_counts.sort();
     thread_counts.dedup();
@@ -516,11 +522,18 @@ fn add_benchmarks(
                     BenchmarkId::new(hash_name, size_str),
                     data,
                     |b, data| {
-                        b.iter(|| {
-                            (0..parallel_iterations)
-                                .into_par_iter()
-                                .for_each(|_| hash_alg(black_box(data)))
-                        })
+                        if parallel_iterations == 1 {
+                            // Avoid rayon scheduler overhead for single-stream
+                            // benchmarks so the measurement reflects only the
+                            // algorithm's own cost.
+                            b.iter(|| hash_alg(black_box(data)));
+                        } else {
+                            b.iter(|| {
+                                (0..parallel_iterations)
+                                    .into_par_iter()
+                                    .for_each(|_| hash_alg(black_box(data)))
+                            });
+                        }
                     },
                 );
             }

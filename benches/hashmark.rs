@@ -19,6 +19,8 @@ fn generate_data(size: usize) -> Vec<u8> {
     data
 }
 
+// ── Cryptographic ───────────────────────────────────────────────────────────
+
 /// Hash data using BLAKE3 (single-threaded)
 fn hash_blake3(data: &[u8]) {
     let mut hasher = blake3::Hasher::new();
@@ -40,11 +42,47 @@ fn hash_blake2b(data: &[u8]) {
     let _result: [u8; 64] = hasher.finalize().into();
 }
 
+/// Hash data using BLAKE2b256
+fn hash_blake2b256(data: &[u8]) {
+    use blake2::digest::consts::U32;
+    let mut hasher = blake2::Blake2b::<U32>::new();
+    hasher.update(data);
+    let _result: [u8; 32] = hasher.finalize().into();
+}
+
+/// Hash data using BLAKE2s256
+fn hash_blake2s(data: &[u8]) {
+    let mut hasher = blake2::Blake2s256::new();
+    hasher.update(data);
+    let _result: [u8; 32] = hasher.finalize().into();
+}
+
+/// Hash data using SHA-1
+fn hash_sha1(data: &[u8]) {
+    let mut hasher = sha1::Sha1::new();
+    hasher.update(data);
+    let _result: [u8; 20] = hasher.finalize().into();
+}
+
+/// Hash data using SHA-224
+fn hash_sha224(data: &[u8]) {
+    let mut hasher = sha2::Sha224::new();
+    hasher.update(data);
+    let _result: [u8; 28] = hasher.finalize().into();
+}
+
 /// Hash data using SHA-256
 fn hash_sha256(data: &[u8]) {
     let mut hasher = Sha256::new();
     hasher.update(data);
     let _result: [u8; 32] = hasher.finalize().into();
+}
+
+/// Hash data using SHA-384
+fn hash_sha384(data: &[u8]) {
+    let mut hasher = sha2::Sha384::new();
+    hasher.update(data);
+    let _result: [u8; 48] = hasher.finalize().into();
 }
 
 /// Hash data using SHA-512
@@ -54,6 +92,27 @@ fn hash_sha512(data: &[u8]) {
     let _result: [u8; 64] = hasher.finalize().into();
 }
 
+/// Hash data using SHA-512/224
+fn hash_sha512_224(data: &[u8]) {
+    let mut hasher = sha2::Sha512_224::new();
+    hasher.update(data);
+    let _result: [u8; 28] = hasher.finalize().into();
+}
+
+/// Hash data using SHA-512/256
+fn hash_sha512_256(data: &[u8]) {
+    let mut hasher = sha2::Sha512_256::new();
+    hasher.update(data);
+    let _result: [u8; 32] = hasher.finalize().into();
+}
+
+/// Hash data using SHA3-224
+fn hash_sha3_224(data: &[u8]) {
+    let mut hasher = sha3::Sha3_224::new();
+    hasher.update(data);
+    let _result: [u8; 28] = hasher.finalize().into();
+}
+
 /// Hash data using SHA3-256
 fn hash_sha3_256(data: &[u8]) {
     let mut hasher = sha3::Sha3_256::new();
@@ -61,9 +120,64 @@ fn hash_sha3_256(data: &[u8]) {
     let _result: [u8; 32] = hasher.finalize().into();
 }
 
+/// Hash data using SHA3-384
+fn hash_sha3_384(data: &[u8]) {
+    let mut hasher = sha3::Sha3_384::new();
+    hasher.update(data);
+    let _result: [u8; 48] = hasher.finalize().into();
+}
+
 /// Hash data using SHA3-512
 fn hash_sha3_512(data: &[u8]) {
     let mut hasher = sha3::Sha3_512::new();
+    hasher.update(data);
+    let _result: [u8; 64] = hasher.finalize().into();
+}
+
+/// Hash data using SHAKE128 (256-bit output)
+fn hash_shake128(data: &[u8]) {
+    use sha3::digest::{ExtendableOutput, Update, XofReader};
+    let mut hasher = sha3::Shake128::default();
+    hasher.update(data);
+    let mut reader = hasher.finalize_xof();
+    let mut result = [0u8; 32];
+    reader.read(&mut result);
+}
+
+/// Hash data using SHAKE256 (512-bit output)
+fn hash_shake256(data: &[u8]) {
+    use sha3::digest::{ExtendableOutput, Update, XofReader};
+    let mut hasher = sha3::Shake256::default();
+    hasher.update(data);
+    let mut reader = hasher.finalize_xof();
+    let mut result = [0u8; 64];
+    reader.read(&mut result);
+}
+
+/// Hash data using Keccak-224
+fn hash_keccak224(data: &[u8]) {
+    let mut hasher = sha3::Keccak224::new();
+    hasher.update(data);
+    let _result: [u8; 28] = hasher.finalize().into();
+}
+
+/// Hash data using Keccak-256
+fn hash_keccak256(data: &[u8]) {
+    let mut hasher = sha3::Keccak256::new();
+    hasher.update(data);
+    let _result: [u8; 32] = hasher.finalize().into();
+}
+
+/// Hash data using Keccak-384
+fn hash_keccak384(data: &[u8]) {
+    let mut hasher = sha3::Keccak384::new();
+    hasher.update(data);
+    let _result: [u8; 48] = hasher.finalize().into();
+}
+
+/// Hash data using Keccak-512
+fn hash_keccak512(data: &[u8]) {
+    let mut hasher = sha3::Keccak512::new();
     hasher.update(data);
     let _result: [u8; 64] = hasher.finalize().into();
 }
@@ -75,11 +189,53 @@ fn hash_md5(data: &[u8]) {
     let _result: [u8; 16] = hasher.finalize().into();
 }
 
-/// Hash data using Tiger2
-fn hash_tiger2(data: &[u8]) {
-    let mut hasher = tiger::Tiger2::new();
+/// Hash data using RIPEMD-128
+fn hash_ripemd128(data: &[u8]) {
+    let mut hasher = ripemd::Ripemd128::new();
     hasher.update(data);
-    let _result: [u8; 24] = hasher.finalize().into();
+    let _result: [u8; 16] = hasher.finalize().into();
+}
+
+/// Hash data using RIPEMD-160
+fn hash_ripemd160(data: &[u8]) {
+    let mut hasher = ripemd::Ripemd160::new();
+    hasher.update(data);
+    let _result: [u8; 20] = hasher.finalize().into();
+}
+
+/// Hash data using RIPEMD-256
+fn hash_ripemd256(data: &[u8]) {
+    let mut hasher = ripemd::Ripemd256::new();
+    hasher.update(data);
+    let _result: [u8; 32] = hasher.finalize().into();
+}
+
+/// Hash data using RIPEMD-320
+fn hash_ripemd320(data: &[u8]) {
+    let mut hasher = ripemd::Ripemd320::new();
+    hasher.update(data);
+    let _result: [u8; 40] = hasher.finalize().into();
+}
+
+/// Hash data using SM3
+fn hash_sm3(data: &[u8]) {
+    let mut hasher = sm3::Sm3::new();
+    hasher.update(data);
+    let _result: [u8; 32] = hasher.finalize().into();
+}
+
+/// Hash data using Streebog-256
+fn hash_streebog256(data: &[u8]) {
+    let mut hasher = streebog::Streebog256::new();
+    hasher.update(data);
+    let _result: [u8; 32] = hasher.finalize().into();
+}
+
+/// Hash data using Streebog-512
+fn hash_streebog512(data: &[u8]) {
+    let mut hasher = streebog::Streebog512::new();
+    hasher.update(data);
+    let _result: [u8; 64] = hasher.finalize().into();
 }
 
 /// Hash data using Whirlpool
@@ -89,11 +245,25 @@ fn hash_whirlpool(data: &[u8]) {
     let _result: [u8; 64] = hasher.finalize().into();
 }
 
+// ── Non-cryptographic ───────────────────────────────────────────────────────
+
 /// Hash data using CRC32
 fn hash_crc32(data: &[u8]) {
     let mut hasher = crc32fast::Hasher::new();
     hasher.update(data);
     let _result: u32 = hasher.finalize();
+}
+
+/// Hash data using CRC32C
+fn hash_crc32c(data: &[u8]) {
+    let _result: u32 = crc32c::crc32c(data);
+}
+
+/// Hash data using CRC64
+fn hash_crc64(data: &[u8]) {
+    let mut hasher = crc64fast::Digest::new();
+    hasher.write(data);
+    let _result: u64 = hasher.sum64();
 }
 
 /// Hash data using XXH32
@@ -116,39 +286,11 @@ fn hash_xxh3_128(data: &[u8]) {
     let _result: u128 = xxhash_rust::xxh3::xxh3_128(data);
 }
 
-/// Hash data using SHA-1
-fn hash_sha1(data: &[u8]) {
-    let mut hasher = sha1::Sha1::new();
-    hasher.update(data);
-    let _result: [u8; 20] = hasher.finalize().into();
-}
-
-/// Hash data using BLAKE2s256
-fn hash_blake2s(data: &[u8]) {
-    let mut hasher = blake2::Blake2s256::new();
-    hasher.update(data);
-    let _result: [u8; 32] = hasher.finalize().into();
-}
-
-/// Hash data using RIPEMD-160
-fn hash_ripemd160(data: &[u8]) {
-    let mut hasher = ripemd::Ripemd160::new();
-    hasher.update(data);
-    let _result: [u8; 20] = hasher.finalize().into();
-}
-
-/// Hash data using SM3
-fn hash_sm3(data: &[u8]) {
-    let mut hasher = sm3::Sm3::new();
-    hasher.update(data);
-    let _result: [u8; 32] = hasher.finalize().into();
-}
-
-/// Hash data using Streebog-256
-fn hash_streebog256(data: &[u8]) {
-    let mut hasher = streebog::Streebog256::new();
-    hasher.update(data);
-    let _result: [u8; 32] = hasher.finalize().into();
+/// Hash data using SipHash-1-3
+fn hash_siphash13(data: &[u8]) {
+    let mut hasher = siphasher::sip::SipHasher13::new();
+    hasher.write(data);
+    let _result: u64 = hasher.finish();
 }
 
 /// Hash data using SipHash-2-4
@@ -177,11 +319,9 @@ fn hash_fxhash(data: &[u8]) {
     let _result: u64 = hasher.finish();
 }
 
-/// Hash data using GxHash
-fn hash_gxhash(data: &[u8]) {
-    let mut hasher = gxhash::GxHasher::default();
-    hasher.write(data);
-    let _result: u64 = hasher.finish();
+/// Hash data using FarmHash (64-bit)
+fn hash_farmhash(data: &[u8]) {
+    let _result: u64 = farmhash::hash64(data);
 }
 
 /// Hash data using MurmurHash3 (x64, 128-bit)
@@ -190,149 +330,10 @@ fn hash_murmur3(data: &[u8]) {
         murmur3::murmur3_x64_128(&mut Cursor::new(data), 0).expect("murmur3 on in-memory cursor never fails");
 }
 
-/// Hash data using HighwayHash
+/// Hash data using HighwayHash-64
 fn hash_highway(data: &[u8]) {
     use highway::HighwayHash;
     let _result: u64 = highway::HighwayHasher::default().hash64(data);
-}
-
-/// Hash data using MetroHash64
-fn hash_metrohash(data: &[u8]) {
-    let mut hasher = metrohash::MetroHash64::new();
-    hasher.write(data);
-    let _result: u64 = hasher.finish();
-}
-
-/// Hash data using SHA-224
-fn hash_sha224(data: &[u8]) {
-    let mut hasher = sha2::Sha224::new();
-    hasher.update(data);
-    let _result: [u8; 28] = hasher.finalize().into();
-}
-
-/// Hash data using SHA-384
-fn hash_sha384(data: &[u8]) {
-    let mut hasher = sha2::Sha384::new();
-    hasher.update(data);
-    let _result: [u8; 48] = hasher.finalize().into();
-}
-
-/// Hash data using SHA-512/256
-fn hash_sha512_256(data: &[u8]) {
-    let mut hasher = sha2::Sha512_256::new();
-    hasher.update(data);
-    let _result: [u8; 32] = hasher.finalize().into();
-}
-
-/// Hash data using SHA3-224
-fn hash_sha3_224(data: &[u8]) {
-    let mut hasher = sha3::Sha3_224::new();
-    hasher.update(data);
-    let _result: [u8; 28] = hasher.finalize().into();
-}
-
-/// Hash data using SHA3-384
-fn hash_sha3_384(data: &[u8]) {
-    let mut hasher = sha3::Sha3_384::new();
-    hasher.update(data);
-    let _result: [u8; 48] = hasher.finalize().into();
-}
-
-/// Hash data using Keccak-256
-fn hash_keccak256(data: &[u8]) {
-    let mut hasher = sha3::Keccak256::new();
-    hasher.update(data);
-    let _result: [u8; 32] = hasher.finalize().into();
-}
-
-/// Hash data using Streebog-512
-fn hash_streebog512(data: &[u8]) {
-    let mut hasher = streebog::Streebog512::new();
-    hasher.update(data);
-    let _result: [u8; 64] = hasher.finalize().into();
-}
-
-/// Hash data using BLAKE2b256
-fn hash_blake2b256(data: &[u8]) {
-    use blake2::digest::consts::U32;
-    let mut hasher = blake2::Blake2b::<U32>::new();
-    hasher.update(data);
-    let _result: [u8; 32] = hasher.finalize().into();
-}
-
-/// Hash data using Tiger (original)
-fn hash_tiger(data: &[u8]) {
-    let mut hasher = tiger::Tiger::new();
-    hasher.update(data);
-    let _result: [u8; 24] = hasher.finalize().into();
-}
-
-/// Hash data using SipHash-1-3
-fn hash_siphash13(data: &[u8]) {
-    let mut hasher = siphasher::sip::SipHasher13::new();
-    hasher.write(data);
-    let _result: u64 = hasher.finish();
-}
-
-/// Hash data using FNV-1a
-fn hash_fnv1a(data: &[u8]) {
-    let mut hasher = fnv::FnvHasher::default();
-    hasher.write(data);
-    let _result: u64 = hasher.finish();
-}
-
-/// Hash data using SeaHash
-fn hash_seahash(data: &[u8]) {
-    let _result: u64 = seahash::hash(data);
-}
-
-/// Hash data using Adler32
-fn hash_adler32(data: &[u8]) {
-    let mut hasher = adler::Adler32::new();
-    hasher.write_slice(data);
-    let _result: u32 = hasher.checksum();
-}
-
-/// Hash data using RIPEMD-128
-fn hash_ripemd128(data: &[u8]) {
-    let mut hasher = ripemd::Ripemd128::new();
-    hasher.update(data);
-    let _result: [u8; 16] = hasher.finalize().into();
-}
-
-/// Hash data using RIPEMD-256
-fn hash_ripemd256(data: &[u8]) {
-    let mut hasher = ripemd::Ripemd256::new();
-    hasher.update(data);
-    let _result: [u8; 32] = hasher.finalize().into();
-}
-
-/// Hash data using RIPEMD-320
-fn hash_ripemd320(data: &[u8]) {
-    let mut hasher = ripemd::Ripemd320::new();
-    hasher.update(data);
-    let _result: [u8; 40] = hasher.finalize().into();
-}
-
-/// Hash data using SHA-512/224
-fn hash_sha512_224(data: &[u8]) {
-    let mut hasher = sha2::Sha512_224::new();
-    hasher.update(data);
-    let _result: [u8; 28] = hasher.finalize().into();
-}
-
-/// Hash data using Keccak-384
-fn hash_keccak384(data: &[u8]) {
-    let mut hasher = sha3::Keccak384::new();
-    hasher.update(data);
-    let _result: [u8; 48] = hasher.finalize().into();
-}
-
-/// Hash data using Keccak-512
-fn hash_keccak512(data: &[u8]) {
-    let mut hasher = sha3::Keccak512::new();
-    hasher.update(data);
-    let _result: [u8; 64] = hasher.finalize().into();
 }
 
 /// Hash data using HighwayHash-128
@@ -345,6 +346,20 @@ fn hash_highway128(data: &[u8]) {
 fn hash_highway256(data: &[u8]) {
     use highway::HighwayHash;
     let _result: [u64; 4] = highway::HighwayHasher::default().hash256(data);
+}
+
+/// Hash data using FNV-1a
+fn hash_fnv1a(data: &[u8]) {
+    let mut hasher = fnv::FnvHasher::default();
+    hasher.write(data);
+    let _result: u64 = hasher.finish();
+}
+
+/// Hash data using Adler32
+fn hash_adler32(data: &[u8]) {
+    let mut hasher = adler::Adler32::new();
+    hasher.write_slice(data);
+    let _result: u32 = hasher.checksum();
 }
 
 fn hashmark(c: &mut Criterion) {
@@ -394,6 +409,9 @@ fn hashmark(c: &mut Criterion) {
         ("SHA3-256".to_string(), hash_sha3_256),
         ("SHA3-384".to_string(), hash_sha3_384),
         ("SHA3-512".to_string(), hash_sha3_512),
+        ("SHAKE128".to_string(), hash_shake128),
+        ("SHAKE256".to_string(), hash_shake256),
+        ("Keccak-224".to_string(), hash_keccak224),
         ("Keccak-256".to_string(), hash_keccak256),
         ("Keccak-384".to_string(), hash_keccak384),
         ("Keccak-512".to_string(), hash_keccak512),
@@ -405,11 +423,11 @@ fn hashmark(c: &mut Criterion) {
         ("SM3".to_string(), hash_sm3),
         ("Streebog-256".to_string(), hash_streebog256),
         ("Streebog-512".to_string(), hash_streebog512),
-        ("Tiger".to_string(), hash_tiger),
-        ("Tiger2".to_string(), hash_tiger2),
         ("Whirlpool".to_string(), hash_whirlpool),
         // Non-cryptographic
         ("CRC32".to_string(), hash_crc32),
+        ("CRC32C".to_string(), hash_crc32c),
+        ("CRC64".to_string(), hash_crc64),
         ("XXH32".to_string(), hash_xxh32),
         ("XXH64".to_string(), hash_xxh64),
         ("XXH3_64".to_string(), hash_xxh3_64),
@@ -419,14 +437,12 @@ fn hashmark(c: &mut Criterion) {
         ("AHash".to_string(), hash_ahash),
         ("wyhash".to_string(), hash_wyhash),
         ("FxHash".to_string(), hash_fxhash),
-        ("GxHash".to_string(), hash_gxhash),
+        ("FarmHash".to_string(), hash_farmhash),
         ("MurmurHash3".to_string(), hash_murmur3),
         ("HighwayHash-64".to_string(), hash_highway),
         ("HighwayHash-128".to_string(), hash_highway128),
         ("HighwayHash-256".to_string(), hash_highway256),
-        ("MetroHash".to_string(), hash_metrohash),
         ("FNV-1a".to_string(), hash_fnv1a),
-        ("SeaHash".to_string(), hash_seahash),
         ("Adler32".to_string(), hash_adler32),
     ];
     println!(

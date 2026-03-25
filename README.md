@@ -15,51 +15,78 @@ The benchmark measures the time taken to hash the input data preloaded into heap
 
 ### Algorithms
 
-The following algorithms are benchmarked:
+61 hashing algorithms are benchmarked across two categories.
 
-#### Cryptographic (24)
+#### Cryptographic (38)
 
-- [BLAKE3](https://crates.io/crates/blake3) — single-stream
-- [BLAKE3 (rayon)](https://crates.io/crates/blake3) — multi-threaded single stream via `update_rayon`
-- [BLAKE2b512](https://crates.io/crates/blake2)
-- [BLAKE2b256](https://crates.io/crates/blake2)
-- [BLAKE2s256](https://crates.io/crates/blake2)
-- [SHA-1](https://crates.io/crates/sha1)
-- [SHA-224](https://crates.io/crates/sha2)
-- [SHA-256](https://crates.io/crates/sha2)
-- [SHA-384](https://crates.io/crates/sha2)
-- [SHA-512](https://crates.io/crates/sha2)
-- [SHA-512/256](https://crates.io/crates/sha2)
-- [SHA3-224](https://crates.io/crates/sha3)
-- [SHA3-256](https://crates.io/crates/sha3)
-- [SHA3-384](https://crates.io/crates/sha3)
-- [SHA3-512](https://crates.io/crates/sha3)
-- [Keccak-256](https://crates.io/crates/sha3)
-- [MD5](https://crates.io/crates/md-5)
-- [RIPEMD-160](https://crates.io/crates/ripemd)
-- [SM3](https://crates.io/crates/sm3)
-- [Streebog-256](https://crates.io/crates/streebog)
-- [Streebog-512](https://crates.io/crates/streebog)
-- [Tiger](https://crates.io/crates/tiger)
-- [Tiger2](https://crates.io/crates/tiger)
-- [Whirlpool](https://crates.io/crates/whirlpool)
+| Algorithm | Crate | Output (bits) | Notes |
+|---|---|---|---|
+| BLAKE3 | [`blake3`](https://crates.io/crates/blake3) | 256 | Single-stream |
+| BLAKE3 (rayon) | [`blake3`](https://crates.io/crates/blake3) | 256 | Multi-threaded single stream via `update_rayon` |
+| BLAKE2b512 | [`blake2`](https://crates.io/crates/blake2) | 512 | |
+| BLAKE2b256 | [`blake2`](https://crates.io/crates/blake2) | 256 | |
+| BLAKE2s256 | [`blake2`](https://crates.io/crates/blake2) | 256 | |
+| BLAKE2bp | [`blake2`](https://crates.io/crates/blake2) | 512 | 4-way parallel tree hashing variant of BLAKE2b |
+| BLAKE2sp | [`blake2`](https://crates.io/crates/blake2) | 256 | 4-way parallel tree hashing variant of BLAKE2s |
+| SHA-1 | [`sha1`](https://crates.io/crates/sha1) | 160 | Broken — included for reference only |
+| SHA-224 | [`sha2`](https://crates.io/crates/sha2) | 224 | |
+| SHA-256 | [`sha2`](https://crates.io/crates/sha2) | 256 | |
+| SHA-384 | [`sha2`](https://crates.io/crates/sha2) | 384 | |
+| SHA-512 | [`sha2`](https://crates.io/crates/sha2) | 512 | |
+| SHA-512/224 | [`sha2`](https://crates.io/crates/sha2) | 224 | |
+| SHA-512/256 | [`sha2`](https://crates.io/crates/sha2) | 256 | |
+| SHA3-224 | [`sha3`](https://crates.io/crates/sha3) | 224 | NIST FIPS 202 |
+| SHA3-256 | [`sha3`](https://crates.io/crates/sha3) | 256 | NIST FIPS 202 |
+| SHA3-384 | [`sha3`](https://crates.io/crates/sha3) | 384 | NIST FIPS 202 |
+| SHA3-512 | [`sha3`](https://crates.io/crates/sha3) | 512 | NIST FIPS 202 |
+| SHAKE128 | [`sha3`](https://crates.io/crates/sha3) | Variable (XOF) | NIST FIPS 202; benchmarked at 256-bit output |
+| SHAKE256 | [`sha3`](https://crates.io/crates/sha3) | Variable (XOF) | NIST FIPS 202; benchmarked at 512-bit output |
+| Keccak-256 | [`sha3`](https://crates.io/crates/sha3) | 256 | Pre-NIST Keccak (as used by Ethereum) |
+| Keccak-384 | [`sha3`](https://crates.io/crates/sha3) | 384 | |
+| Keccak-512 | [`sha3`](https://crates.io/crates/sha3) | 512 | |
+| KangarooTwelve | [`k12`](https://crates.io/crates/k12) | Variable (XOF) | Reduced-round Keccak; benchmarked at 256-bit output |
+| Ascon-Hash | [`ascon-hash`](https://crates.io/crates/ascon-hash) | 256 | NIST lightweight cryptography standard (2023) |
+| Skein-256 | [`skein`](https://crates.io/crates/skein) | 256 | SHA-3 finalist |
+| Skein-512 | [`skein`](https://crates.io/crates/skein) | 512 | SHA-3 finalist |
+| MD5 | [`md-5`](https://crates.io/crates/md-5) | 128 | Broken — included for reference only |
+| RIPEMD-128 | [`ripemd`](https://crates.io/crates/ripemd) | 128 | |
+| RIPEMD-160 | [`ripemd`](https://crates.io/crates/ripemd) | 160 | Used by Bitcoin |
+| RIPEMD-256 | [`ripemd`](https://crates.io/crates/ripemd) | 256 | |
+| RIPEMD-320 | [`ripemd`](https://crates.io/crates/ripemd) | 320 | |
+| SM3 | [`sm3`](https://crates.io/crates/sm3) | 256 | Chinese national standard (GB/T 32905-2016) |
+| Streebog-256 | [`streebog`](https://crates.io/crates/streebog) | 256 | Russian standard (GOST R 34.11-2012) |
+| Streebog-512 | [`streebog`](https://crates.io/crates/streebog) | 512 | Russian standard (GOST R 34.11-2012) |
+| Tiger | [`tiger`](https://crates.io/crates/tiger) | 192 | |
+| Tiger2 | [`tiger`](https://crates.io/crates/tiger) | 192 | |
+| Whirlpool | [`whirlpool`](https://crates.io/crates/whirlpool) | 512 | ISO/IEC 10118-3 |
 
-#### Non-cryptographic (17)
+#### Non-cryptographic (23)
 
-- [CRC32](https://crates.io/crates/crc32fast)
-- [XXH32/XXH64/XXH3](https://crates.io/crates/xxhash-rust)
-- [SipHash-1-3](https://crates.io/crates/siphasher)
-- [SipHash-2-4](https://crates.io/crates/siphasher)
-- [AHash](https://crates.io/crates/ahash)
-- [wyhash](https://crates.io/crates/wyhash)
-- [FxHash](https://crates.io/crates/rustc-hash)
-- [GxHash](https://crates.io/crates/gxhash)†
-- [MurmurHash3](https://crates.io/crates/murmur3)
-- [HighwayHash](https://crates.io/crates/highway)
-- [MetroHash](https://crates.io/crates/metrohash)
-- [FNV-1a](https://crates.io/crates/fnv)
-- [SeaHash](https://crates.io/crates/seahash)
-- [Adler32](https://crates.io/crates/adler)
+| Algorithm | Crate | Output (bits) | Notes |
+|---|---|---|---|
+| CRC32 | [`crc32fast`](https://crates.io/crates/crc32fast) | 32 | Hardware-accelerated where available |
+| CRC32C | [`crc32c`](https://crates.io/crates/crc32c) | 32 | Castagnoli polynomial; hardware-accelerated (SSE 4.2 / ARMv8) |
+| CRC64 | [`crc64fast`](https://crates.io/crates/crc64fast) | 64 | ECMA-182; used by Redis, xz |
+| XXH32 | [`xxhash-rust`](https://crates.io/crates/xxhash-rust) | 32 | |
+| XXH64 | [`xxhash-rust`](https://crates.io/crates/xxhash-rust) | 64 | |
+| XXH3 (64-bit) | [`xxhash-rust`](https://crates.io/crates/xxhash-rust) | 64 | |
+| XXH3 (128-bit) | [`xxhash-rust`](https://crates.io/crates/xxhash-rust) | 128 | |
+| SipHash-1-3 | [`siphasher`](https://crates.io/crates/siphasher) | 64 | Reduced rounds for speed |
+| SipHash-2-4 | [`siphasher`](https://crates.io/crates/siphasher) | 64 | Rust `HashMap` default (via `DefaultHasher`) |
+| AHash | [`ahash`](https://crates.io/crates/ahash) | 64 | Uses AES-NI when available |
+| wyhash | [`wyhash`](https://crates.io/crates/wyhash) | 64 | |
+| rapidhash | [`rapidhash`](https://crates.io/crates/rapidhash) | 64 | wyhash successor |
+| FxHash | [`rustc-hash`](https://crates.io/crates/rustc-hash) | 64 | Used internally by `rustc` |
+| GxHash | [`gxhash`](https://crates.io/crates/gxhash) | 64 | Requires hardware AES† |
+| FarmHash | [`farmhash`](https://crates.io/crates/farmhash) | 64 | Google's successor to CityHash |
+| MurmurHash3 | [`murmur3`](https://crates.io/crates/murmur3) | 128 | x64 128-bit variant |
+| HighwayHash-64 | [`highway`](https://crates.io/crates/highway) | 64 | |
+| HighwayHash-128 | [`highway`](https://crates.io/crates/highway) | 128 | |
+| HighwayHash-256 | [`highway`](https://crates.io/crates/highway) | 256 | |
+| MetroHash | [`metrohash`](https://crates.io/crates/metrohash) | 64 | |
+| FNV-1a | [`fnv`](https://crates.io/crates/fnv) | 64 | |
+| SeaHash | [`seahash`](https://crates.io/crates/seahash) | 64 | |
+| Adler32 | [`adler`](https://crates.io/crates/adler) | 32 | Checksum, not a hash — included for reference |
 
 †GxHash requires hardware AES support (AES-NI + SSE2 on x86_64, AES + NEON on aarch64) and will not compile on platforms without it.
 

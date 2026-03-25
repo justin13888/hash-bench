@@ -182,7 +182,7 @@ function buildSingleOption(
             coord: (val: [number, number]) => [number, number];
           },
         ) {
-          const catIdx = api.value(0);
+          const catIdx = api.value(1);
           const [lo, hi] = errorData[params.dataIndex];
           const loPoint = api.coord([lo, catIdx]);
           const hiPoint = api.coord([hi, catIdx]);
@@ -223,7 +223,7 @@ function buildSingleOption(
             ],
           };
         },
-        data: values.map((_, i) => [i]),
+        data: values.map((v, i) => [v, i]),
         z: 10,
       },
     ],

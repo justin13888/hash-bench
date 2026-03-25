@@ -502,8 +502,7 @@ fn add_benchmarks(
         .collect();
 
     for &parallel_iterations in thread_counts {
-        let mut group =
-            c.benchmark_group(format!("{}-threaded Hashing", parallel_iterations));
+        let mut group = c.benchmark_group(format!("{}-threaded Hashing", parallel_iterations));
         group.plot_config(
             PlotConfiguration::default().summary_scale(criterion::AxisScale::Logarithmic),
         );
@@ -518,24 +517,20 @@ fn add_benchmarks(
                 // `update_rayon` competes with the outer par_iter for the same
                 // rayon thread pool. Its multi-threaded results therefore
                 // understate peak single-stream throughput in this mode.
-                group.bench_with_input(
-                    BenchmarkId::new(hash_name, size_str),
-                    data,
-                    |b, data| {
-                        if parallel_iterations == 1 {
-                            // Avoid rayon scheduler overhead for single-stream
-                            // benchmarks so the measurement reflects only the
-                            // algorithm's own cost.
-                            b.iter(|| hash_alg(black_box(data)));
-                        } else {
-                            b.iter(|| {
-                                (0..parallel_iterations)
-                                    .into_par_iter()
-                                    .for_each(|_| hash_alg(black_box(data)))
-                            });
-                        }
-                    },
-                );
+                group.bench_with_input(BenchmarkId::new(hash_name, size_str), data, |b, data| {
+                    if parallel_iterations == 1 {
+                        // Avoid rayon scheduler overhead for single-stream
+                        // benchmarks so the measurement reflects only the
+                        // algorithm's own cost.
+                        b.iter(|| hash_alg(black_box(data)));
+                    } else {
+                        b.iter(|| {
+                            (0..parallel_iterations)
+                                .into_par_iter()
+                                .for_each(|_| hash_alg(black_box(data)))
+                        });
+                    }
+                });
             }
         }
         group.finish();

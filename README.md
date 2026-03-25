@@ -82,36 +82,9 @@ The benchmark measures the time taken to hash the input data preloaded into heap
 
 ## Results
 
-Results are available for two platforms:
+**Live interactive results:** [hash.justinchung.net](https://hash.justinchung.net)
 
-**AMD Ryzen 9 7900X (Desktop):**
-- **OS**: Ubuntu 24.04.3 LTS (x86_64) (Linux 6.8.0)
-- **CPU**: AMD Ryzen 9 7900X (24) @ 5.609GHz
-- **RAM**: 128 GB DDR5 5600 MHZ CL32
-
-**Apple M3 MacBook Pro:**
-- **OS**: macOS (aarch64)
-- **RAM**: 36 GB
-
-IMPORTANT: When we say "single-threaded" we mean that the algorithm is run on a single data stream. Most hashing algorithms can only utilize a single core. The exception is BLAKE3, which is benchmarked in two modes: standard single-stream (`BLAKE3`) and with internal rayon parallelism (`BLAKE3 (rayon)`) that parallelizes hashing of a single buffer across all available threads.
-
-### Single-threaded Hashing Performance
-
-This graph shows the performance of each hashing algorithm when run in a single thread. We see algorithms such as BLAKE3 and SHA-256 outperforming the other algorithms. CRC32 is the fastest (about 2x faster than BLAKE3), but it is non-cryptographic.
-
-<div style="background-color: white;">
-    <img src="results/amd-7900x/1-threaded%20Hashing/report/violin.svg" alt="Single-threaded Hashing Performance" style="width: 100%;"/>
-</div>
-
-### Multi-threaded Hashing Performance
-
-This graphs shows the performance of each hashing algorithm when run in 12 threads on a system with 12 physical cores. Results scaled similarly for all single-threaded algorithms when run in 64 threads. All algorithms (single-threaded ones in particular) utilized all cores simultaneously on arbitrary bits (i.e., non-specific document types). Non-cryptographic algorithms like CRC32 and xxhash family performed noticeably better than the next-best which is BLAKE3 (cryptographic).
-
-<div style="background-color: white;">
-    <img src="results/amd-7900x/12-threaded%20Hashing/report/violin.svg" alt="Multi-threaded (12) Hashing Performance" style="width: 100%;"/>
-</div>
-
-For more detailed results, see the [results](results/) directory. The reports saved as `index.html` files are particularly useful as summaries of the different metrics.
+Raw benchmark data is stored in the [`results/`](results/) directory, organized by machine ID. The web dashboard at the link above is automatically deployed when results are updated.
 
 ## Running the benchmark
 
@@ -119,36 +92,35 @@ For more detailed results, see the [results](results/) directory. The reports sa
 
 - Rust installed via [rustup](https://rustup.rs/)
 - [just](https://github.com/casey/just) command runner (optional, but recommended)
+- [Bun](https://bun.sh/) (for the web dashboard)
 
 ### Commands
 
 All common commands are defined in the [`justfile`](justfile). Run `just` to see available recipes:
 
 ```bash
-just              # List available recipes
-just bench        # Run all benchmarks with native CPU optimizations
-just bench-filter "BLAKE3"  # Run benchmarks matching a filter
-just build        # Build the project
-just build-release # Build with native CPU optimizations (release)
-just check        # Check the project compiles
-just lint         # Run clippy lints
-just fmt          # Format code
-just fmt-check    # Check formatting
-just clean        # Clean build artifacts
-just open-report  # Open the latest benchmark report in the browser
-```
-
-Or equivalently, without `just`:
-
-```bash
-RUSTFLAGS="-C target-cpu=native" cargo bench
+just                               # List available recipes
+just bench <machine-id>            # Run all benchmarks and save results
+just bench-filter <machine-id> "BLAKE3"  # Run filtered benchmarks
+just dev                           # Start web dashboard dev server
+just build-web                     # Build the web dashboard
+just check                         # Check the project compiles
+just lint                          # Run clippy lints
+just fmt                           # Format code
+just clean                         # Clean build artifacts
 ```
 
 The specific parameters for the benchmark can be adjusted in the `benches/hashmark.rs` file.
 
+### Contributing Results
+
+1. Run benchmarks on your machine: `just bench my-machine-id`
+2. Commit the results: `git add results/ && git commit -m "Add results for my-machine-id"`
+3. Push — the web dashboard redeploys automatically via CI
+
 ## Contributions
 
-Feel free to run the benchmark on your own machine to obtain results for your specific setup. Open to PRs for additional hashing algorithms.
+Open to PRs for additional hashing algorithms or benchmark results from new hardware.
 
 ## License
 

@@ -1,4 +1,12 @@
+# Rust
 debug
 target
 
+# Web
+web/node_modules
+web/dist
+web/public/data
+*.tsbuildinfo
+
+# OS
 .DS_Store

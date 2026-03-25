@@ -247,6 +247,14 @@ fn hash_whirlpool(data: &[u8]) {
     black_box(hasher.finalize());
 }
 
+/// Hash data using Ascon-Hash256 (NIST SP 800-232 lightweight standard)
+fn hash_ascon256(data: &[u8]) {
+    use ascon_hash::Digest;
+    let mut hasher = ascon_hash::AsconHash256::new();
+    hasher.update(data);
+    black_box(hasher.finalize());
+}
+
 // ── Non-cryptographic ───────────────────────────────────────────────────────
 
 /// Hash data using CRC32
@@ -375,6 +383,8 @@ fn hashmark(c: &mut Criterion) {
 
     // Sizes of files to hash
     let sizes = [
+        64,                // 64 B  — per-call overhead / hash-table key size
+        256,               // 256 B — small message
         1024,              // 1 KiB
         10 * 1024 * 1024,  // 10 MiB
         100 * 1024 * 1024, // 100 MiB
@@ -428,6 +438,7 @@ fn hashmark(c: &mut Criterion) {
         ("Streebog-256".to_string(), hash_streebog256),
         ("Streebog-512".to_string(), hash_streebog512),
         ("Whirlpool".to_string(), hash_whirlpool),
+        ("Ascon-Hash256".to_string(), hash_ascon256),
         // Non-cryptographic
         ("CRC32".to_string(), hash_crc32),
         ("CRC32C".to_string(), hash_crc32c),
@@ -473,23 +484,37 @@ fn add_benchmarks(
     thread_counts: &[usize],
     hash_algs: &[(String, fn(&[u8]))],
 ) {
-    let mut parallel_group_template = |parallel_iterations: usize| {
-        let mut parallel_group =
+    // Pre-generate data once per size so every thread-count group hashes
+    // identical buffers, removing a source of run-to-run variance.
+    let datasets: Vec<(usize, String, Vec<u8>)> = sizes
+        .iter()
+        .map(|&size| {
+            let label = size.format_size(BINARY);
+            let data = generate_data(size);
+            (size, label, data)
+        })
+        .collect();
+
+    for &parallel_iterations in thread_counts {
+        let mut group =
             c.benchmark_group(format!("{}-threaded Hashing", parallel_iterations));
-        parallel_group.plot_config(
+        group.plot_config(
             PlotConfiguration::default().summary_scale(criterion::AxisScale::Logarithmic),
         );
-        for size in sizes.iter() {
-            let size_str = size.format_size(BINARY);
-            let data = generate_data(*size);
-            parallel_group.throughput(criterion::Throughput::Bytes(
+
+        for (size, size_str, data) in &datasets {
+            group.throughput(criterion::Throughput::Bytes(
                 *size as u64 * parallel_iterations as u64,
             ));
 
-            hash_algs.iter().for_each(|(hash_name, hash_alg)| {
-                parallel_group.bench_with_input(
-                    BenchmarkId::new(hash_name, &size_str),
-                    &data,
+            for (hash_name, hash_alg) in hash_algs {
+                // NOTE: When parallel_iterations > 1, BLAKE3 (rayon)'s inner
+                // `update_rayon` competes with the outer par_iter for the same
+                // rayon thread pool. Its multi-threaded results therefore
+                // understate peak single-stream throughput in this mode.
+                group.bench_with_input(
+                    BenchmarkId::new(hash_name, size_str),
+                    data,
                     |b, data| {
                         b.iter(|| {
                             (0..parallel_iterations)
@@ -498,19 +523,16 @@ fn add_benchmarks(
                         })
                     },
                 );
-            });
+            }
         }
-        parallel_group.finish();
-    };
-
-    thread_counts
-        .iter()
-        .for_each(|&parallel_iterations| parallel_group_template(parallel_iterations));
+        group.finish();
+    }
 }
 
 criterion_group! {
     name = benches;
     config = Criterion::default()
+        .warm_up_time(Duration::from_secs(10))
         .measurement_time(Duration::from_secs(30))
         .sample_size(20)
         .plotting_backend(PlottingBackend::Plotters)

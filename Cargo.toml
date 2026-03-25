@@ -9,6 +9,7 @@ license = "MIT"
 [dependencies]
 adler = "1.0.2"
 ahash = "0.8.12"
+ascon-hash = "0.4.0"
 blake2 = "0.10.6"
 blake3 = { version = "1.8.2", features = [
     "rayon",

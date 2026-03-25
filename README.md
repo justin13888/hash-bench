@@ -15,9 +15,9 @@ The benchmark measures the time taken to hash the input data preloaded into heap
 
 ### Algorithms
 
-50 hashing algorithms are benchmarked across two categories.
+51 hashing algorithms are benchmarked across two categories.
 
-#### Cryptographic (31)
+#### Cryptographic (32)
 
 | Algorithm | Crate | Output (bits) | Notes |
 |---|---|---|---|
@@ -52,6 +52,7 @@ The benchmark measures the time taken to hash the input data preloaded into heap
 | Streebog-256 | [`streebog`](https://crates.io/crates/streebog) | 256 | Russian standard (GOST R 34.11-2012) |
 | Streebog-512 | [`streebog`](https://crates.io/crates/streebog) | 512 | Russian standard (GOST R 34.11-2012) |
 | Whirlpool | [`whirlpool`](https://crates.io/crates/whirlpool) | 512 | ISO/IEC 10118-3; used by VeraCrypt |
+| Ascon-Hash256 | [`ascon-hash`](https://crates.io/crates/ascon-hash) | 256 | NIST SP 800-232 lightweight standard |
 
 #### Non-cryptographic (19)
 

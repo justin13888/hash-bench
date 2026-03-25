@@ -100,6 +100,18 @@ clean:
 open-report:
     open target/criterion/report/index.html
 
+# Run all checks (Rust fmt, clippy, web lint + typecheck)
+check-all: fmt-check lint
+    cd web && bun run check && bun run typecheck
+
+# Run web lint and format checks (Biome)
+lint-web:
+    cd web && bun run check
+
+# Format web source files with Biome
+fmt-web:
+    cd web && bun run format
+
 # Start the web app dev server
 dev:
     cd web && bun run dev

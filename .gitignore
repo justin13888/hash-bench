@@ -8,5 +8,8 @@ web/dist
 web/public/data
 *.tsbuildinfo
 
+# Git hooks
+.lefthook-local.yml
+
 # OS
 .DS_Store

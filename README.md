@@ -118,6 +118,37 @@ The specific parameters for the benchmark can be adjusted in the `benches/hashma
 2. Commit the results: `git add results/ && git commit -m "Add results for my-machine-id"`
 3. Push — the web dashboard redeploys automatically via CI
 
+## Development
+
+### Git Hooks (lefthook)
+
+This project uses [lefthook](https://github.com/evilmartians/lefthook) for pre-commit hooks. After cloning, install the hooks once:
+
+```bash
+lefthook install
+```
+
+The pre-commit hook runs in parallel:
+- **Rust**: `cargo fmt --check` and `cargo clippy`
+- **Web**: `biome check` on staged TypeScript/TSX files
+
+### Lint & Format
+
+```bash
+just fmt-check      # Check Rust formatting
+just lint           # Run clippy
+just lint-web       # Run Biome lint + format check on web
+just fmt            # Format Rust code
+just fmt-web        # Format web source with Biome
+just check-all      # Run all checks (Rust + web)
+```
+
+### CI
+
+All pushes to `master` and pull requests run the [CI workflow](.github/workflows/ci.yml), which checks:
+- Rust: `cargo fmt --check`, `cargo clippy`, `cargo check`
+- Web: `biome check`, TypeScript type checking
+
 ## Limitations
 
 - **Single-machine results**: Benchmarks reflect the specific hardware they were run on. Results are not directly comparable across machines due to differences in CPU microarchitecture, cache sizes, and available instruction sets (e.g. AES-NI, AVX2).

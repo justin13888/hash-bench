@@ -118,6 +118,13 @@ The specific parameters for the benchmark can be adjusted in the `benches/hashma
 2. Commit the results: `git add results/ && git commit -m "Add results for my-machine-id"`
 3. Push — the web dashboard redeploys automatically via CI
 
+## Limitations
+
+- **Single-machine results**: Benchmarks reflect the specific hardware they were run on. Results are not directly comparable across machines due to differences in CPU microarchitecture, cache sizes, and available instruction sets (e.g. AES-NI, AVX2).
+- **Throughput only**: The benchmark measures raw hashing throughput on pre-loaded heap memory. It does not capture latency for small/single-use hashes, memory allocation overhead, or streaming use cases.
+- **Pure Rust implementations**: Results depend on the quality of each crate's implementation. Some algorithms may have faster implementations in C/C++ or via hardware intrinsics not yet exposed in their Rust crates.
+- **No collision/security testing**: This benchmark is purely for performance. It does not evaluate collision resistance, cryptographic strength, or suitability for any particular security use case.
+
 ## Contributions
 
 Open to PRs for additional hashing algorithms or benchmark results from new hardware.

@@ -62,8 +62,8 @@ The benchmark measures the time taken to hash the input data preloaded into heap
 | CRC64 | [`crc64fast`](https://crates.io/crates/crc64fast) | 64 | ECMA-182; used by Redis, xz |
 | XXH32 | [`xxhash-rust`](https://crates.io/crates/xxhash-rust) | 32 | |
 | XXH64 | [`xxhash-rust`](https://crates.io/crates/xxhash-rust) | 64 | |
-| XXH3 (64-bit) | [`xxhash-rust`](https://crates.io/crates/xxhash-rust) | 64 | Used by Linux kernel, rsync |
-| XXH3 (128-bit) | [`xxhash-rust`](https://crates.io/crates/xxhash-rust) | 128 | |
+| XXH3_64 | [`xxhash-rust`](https://crates.io/crates/xxhash-rust) | 64 | Used by Linux kernel, rsync |
+| XXH3_128 | [`xxhash-rust`](https://crates.io/crates/xxhash-rust) | 128 | |
 | SipHash-1-3 | [`siphasher`](https://crates.io/crates/siphasher) | 64 | Used by Python's `dict` default hasher |
 | SipHash-2-4 | [`siphasher`](https://crates.io/crates/siphasher) | 64 | Rust `HashMap` default (via `DefaultHasher`) |
 | AHash | [`ahash`](https://crates.io/crates/ahash) | 64 | Rust `hashbrown` default; uses AES-NI when available |

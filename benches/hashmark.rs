@@ -6,7 +6,7 @@ use criterion::{
 use humansize::{FormatSize, BINARY};
 use rand::Rng;
 use rayon::prelude::*;
-use sha2::{Digest, Sha256};
+use sha2::Digest;
 use std::hash::Hasher;
 use std::io::Cursor;
 
@@ -25,21 +25,21 @@ fn generate_data(size: usize) -> Vec<u8> {
 fn hash_blake3(data: &[u8]) {
     let mut hasher = blake3::Hasher::new();
     hasher.update(data);
-    let _result: [u8; 32] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using BLAKE3 with rayon parallelism (multi-threaded single stream)
 fn hash_blake3_rayon(data: &[u8]) {
     let mut hasher = blake3::Hasher::new();
     hasher.update_rayon(data);
-    let _result: [u8; 32] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using BLAKE2b512
 fn hash_blake2b(data: &[u8]) {
     let mut hasher = blake2::Blake2b512::new();
     hasher.update(data);
-    let _result: [u8; 64] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using BLAKE2b256
@@ -47,91 +47,91 @@ fn hash_blake2b256(data: &[u8]) {
     use blake2::digest::consts::U32;
     let mut hasher = blake2::Blake2b::<U32>::new();
     hasher.update(data);
-    let _result: [u8; 32] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using BLAKE2s256
 fn hash_blake2s(data: &[u8]) {
     let mut hasher = blake2::Blake2s256::new();
     hasher.update(data);
-    let _result: [u8; 32] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using SHA-1
 fn hash_sha1(data: &[u8]) {
     let mut hasher = sha1::Sha1::new();
     hasher.update(data);
-    let _result: [u8; 20] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using SHA-224
 fn hash_sha224(data: &[u8]) {
     let mut hasher = sha2::Sha224::new();
     hasher.update(data);
-    let _result: [u8; 28] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using SHA-256
 fn hash_sha256(data: &[u8]) {
-    let mut hasher = Sha256::new();
+    let mut hasher = sha2::Sha256::new();
     hasher.update(data);
-    let _result: [u8; 32] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using SHA-384
 fn hash_sha384(data: &[u8]) {
     let mut hasher = sha2::Sha384::new();
     hasher.update(data);
-    let _result: [u8; 48] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using SHA-512
 fn hash_sha512(data: &[u8]) {
     let mut hasher = sha2::Sha512::new();
     hasher.update(data);
-    let _result: [u8; 64] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using SHA-512/224
 fn hash_sha512_224(data: &[u8]) {
     let mut hasher = sha2::Sha512_224::new();
     hasher.update(data);
-    let _result: [u8; 28] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using SHA-512/256
 fn hash_sha512_256(data: &[u8]) {
     let mut hasher = sha2::Sha512_256::new();
     hasher.update(data);
-    let _result: [u8; 32] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using SHA3-224
 fn hash_sha3_224(data: &[u8]) {
     let mut hasher = sha3::Sha3_224::new();
     hasher.update(data);
-    let _result: [u8; 28] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using SHA3-256
 fn hash_sha3_256(data: &[u8]) {
     let mut hasher = sha3::Sha3_256::new();
     hasher.update(data);
-    let _result: [u8; 32] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using SHA3-384
 fn hash_sha3_384(data: &[u8]) {
     let mut hasher = sha3::Sha3_384::new();
     hasher.update(data);
-    let _result: [u8; 48] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using SHA3-512
 fn hash_sha3_512(data: &[u8]) {
     let mut hasher = sha3::Sha3_512::new();
     hasher.update(data);
-    let _result: [u8; 64] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using SHAKE128 (256-bit output)
@@ -142,6 +142,7 @@ fn hash_shake128(data: &[u8]) {
     let mut reader = hasher.finalize_xof();
     let mut result = [0u8; 32];
     reader.read(&mut result);
+    black_box(result);
 }
 
 /// Hash data using SHAKE256 (512-bit output)
@@ -152,97 +153,98 @@ fn hash_shake256(data: &[u8]) {
     let mut reader = hasher.finalize_xof();
     let mut result = [0u8; 64];
     reader.read(&mut result);
+    black_box(result);
 }
 
 /// Hash data using Keccak-224
 fn hash_keccak224(data: &[u8]) {
     let mut hasher = sha3::Keccak224::new();
     hasher.update(data);
-    let _result: [u8; 28] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using Keccak-256
 fn hash_keccak256(data: &[u8]) {
     let mut hasher = sha3::Keccak256::new();
     hasher.update(data);
-    let _result: [u8; 32] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using Keccak-384
 fn hash_keccak384(data: &[u8]) {
     let mut hasher = sha3::Keccak384::new();
     hasher.update(data);
-    let _result: [u8; 48] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using Keccak-512
 fn hash_keccak512(data: &[u8]) {
     let mut hasher = sha3::Keccak512::new();
     hasher.update(data);
-    let _result: [u8; 64] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using MD5
 fn hash_md5(data: &[u8]) {
     let mut hasher = md5::Md5::new();
     hasher.update(data);
-    let _result: [u8; 16] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using RIPEMD-128
 fn hash_ripemd128(data: &[u8]) {
     let mut hasher = ripemd::Ripemd128::new();
     hasher.update(data);
-    let _result: [u8; 16] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using RIPEMD-160
 fn hash_ripemd160(data: &[u8]) {
     let mut hasher = ripemd::Ripemd160::new();
     hasher.update(data);
-    let _result: [u8; 20] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using RIPEMD-256
 fn hash_ripemd256(data: &[u8]) {
     let mut hasher = ripemd::Ripemd256::new();
     hasher.update(data);
-    let _result: [u8; 32] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using RIPEMD-320
 fn hash_ripemd320(data: &[u8]) {
     let mut hasher = ripemd::Ripemd320::new();
     hasher.update(data);
-    let _result: [u8; 40] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using SM3
 fn hash_sm3(data: &[u8]) {
     let mut hasher = sm3::Sm3::new();
     hasher.update(data);
-    let _result: [u8; 32] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using Streebog-256
 fn hash_streebog256(data: &[u8]) {
     let mut hasher = streebog::Streebog256::new();
     hasher.update(data);
-    let _result: [u8; 32] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using Streebog-512
 fn hash_streebog512(data: &[u8]) {
     let mut hasher = streebog::Streebog512::new();
     hasher.update(data);
-    let _result: [u8; 64] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using Whirlpool
 fn hash_whirlpool(data: &[u8]) {
     let mut hasher = whirlpool::Whirlpool::new();
     hasher.update(data);
-    let _result: [u8; 64] = hasher.finalize().into();
+    black_box(hasher.finalize());
 }
 
 // ── Non-cryptographic ───────────────────────────────────────────────────────
@@ -251,115 +253,117 @@ fn hash_whirlpool(data: &[u8]) {
 fn hash_crc32(data: &[u8]) {
     let mut hasher = crc32fast::Hasher::new();
     hasher.update(data);
-    let _result: u32 = hasher.finalize();
+    black_box(hasher.finalize());
 }
 
 /// Hash data using CRC32C
 fn hash_crc32c(data: &[u8]) {
-    let _result: u32 = crc32c::crc32c(data);
+    black_box(crc32c::crc32c(data));
 }
 
 /// Hash data using CRC64
 fn hash_crc64(data: &[u8]) {
     let mut hasher = crc64fast::Digest::new();
     hasher.write(data);
-    let _result: u64 = hasher.sum64();
+    black_box(hasher.sum64());
 }
 
 /// Hash data using XXH32
 fn hash_xxh32(data: &[u8]) {
-    let _result: u32 = xxhash_rust::xxh32::xxh32(data, 0);
+    black_box(xxhash_rust::xxh32::xxh32(data, 0));
 }
 
 /// Hash data using XXH64
 fn hash_xxh64(data: &[u8]) {
-    let _result: u64 = xxhash_rust::xxh64::xxh64(data, 0);
+    black_box(xxhash_rust::xxh64::xxh64(data, 0));
 }
 
 /// Hash data using XXH3_64
 fn hash_xxh3_64(data: &[u8]) {
-    let _result: u64 = xxhash_rust::xxh3::xxh3_64(data);
+    black_box(xxhash_rust::xxh3::xxh3_64(data));
 }
 
 /// Hash data using XXH3_128
 fn hash_xxh3_128(data: &[u8]) {
-    let _result: u128 = xxhash_rust::xxh3::xxh3_128(data);
+    black_box(xxhash_rust::xxh3::xxh3_128(data));
 }
 
 /// Hash data using SipHash-1-3
 fn hash_siphash13(data: &[u8]) {
     let mut hasher = siphasher::sip::SipHasher13::new();
     hasher.write(data);
-    let _result: u64 = hasher.finish();
+    black_box(hasher.finish());
 }
 
 /// Hash data using SipHash-2-4
 fn hash_siphash24(data: &[u8]) {
     let mut hasher = siphasher::sip::SipHasher24::new();
     hasher.write(data);
-    let _result: u64 = hasher.finish();
+    black_box(hasher.finish());
 }
 
 /// Hash data using AHash
 fn hash_ahash(data: &[u8]) {
     let mut hasher = ahash::AHasher::default();
     hasher.write(data);
-    let _result: u64 = hasher.finish();
+    black_box(hasher.finish());
 }
 
 /// Hash data using wyhash
 fn hash_wyhash(data: &[u8]) {
-    let _result: u64 = wyhash::wyhash(data, 0);
+    black_box(wyhash::wyhash(data, 0));
 }
 
 /// Hash data using FxHash
 fn hash_fxhash(data: &[u8]) {
     let mut hasher = rustc_hash::FxHasher::default();
     hasher.write(data);
-    let _result: u64 = hasher.finish();
+    black_box(hasher.finish());
 }
 
 /// Hash data using FarmHash (64-bit)
 fn hash_farmhash(data: &[u8]) {
-    let _result: u64 = farmhash::hash64(data);
+    black_box(farmhash::hash64(data));
 }
 
 /// Hash data using MurmurHash3 (x64, 128-bit)
 fn hash_murmur3(data: &[u8]) {
-    let _result: u128 =
-        murmur3::murmur3_x64_128(&mut Cursor::new(data), 0).expect("murmur3 on in-memory cursor never fails");
+    black_box(
+        murmur3::murmur3_x64_128(&mut Cursor::new(data), 0)
+            .expect("murmur3 on in-memory cursor never fails"),
+    );
 }
 
 /// Hash data using HighwayHash-64
 fn hash_highway(data: &[u8]) {
     use highway::HighwayHash;
-    let _result: u64 = highway::HighwayHasher::default().hash64(data);
+    black_box(highway::HighwayHasher::default().hash64(data));
 }
 
 /// Hash data using HighwayHash-128
 fn hash_highway128(data: &[u8]) {
     use highway::HighwayHash;
-    let _result: [u64; 2] = highway::HighwayHasher::default().hash128(data);
+    black_box(highway::HighwayHasher::default().hash128(data));
 }
 
 /// Hash data using HighwayHash-256
 fn hash_highway256(data: &[u8]) {
     use highway::HighwayHash;
-    let _result: [u64; 4] = highway::HighwayHasher::default().hash256(data);
+    black_box(highway::HighwayHasher::default().hash256(data));
 }
 
 /// Hash data using FNV-1a
 fn hash_fnv1a(data: &[u8]) {
     let mut hasher = fnv::FnvHasher::default();
     hasher.write(data);
-    let _result: u64 = hasher.finish();
+    black_box(hasher.finish());
 }
 
 /// Hash data using Adler32
 fn hash_adler32(data: &[u8]) {
     let mut hasher = adler::Adler32::new();
     hasher.write_slice(data);
-    let _result: u32 = hasher.checksum();
+    black_box(hasher.checksum());
 }
 
 fn hashmark(c: &mut Criterion) {
@@ -478,8 +482,9 @@ fn add_benchmarks(
         for size in sizes.iter() {
             let size_str = size.format_size(BINARY);
             let data = generate_data(*size);
-            parallel_group
-                .throughput(criterion::Throughput::Bytes(*size as u64 * parallel_iterations as u64));
+            parallel_group.throughput(criterion::Throughput::Bytes(
+                *size as u64 * parallel_iterations as u64,
+            ));
 
             hash_algs.iter().for_each(|(hash_name, hash_alg)| {
                 parallel_group.bench_with_input(

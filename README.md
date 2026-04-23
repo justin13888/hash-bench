@@ -2,6 +2,10 @@
 
 This benchmark compares the runtime performance of various hashing algorithms in Rust. This was originally created for analyzing different hashing algorithms to choose the best one for the [Beam](https://github.com/justin13888/beam) project.
 
+> Notes:
+> - All implementations are use the best **Rust** implementations which usually are well-optimized for each platform and use platform-specific intrinsics when available. but equivalently, it is limited by the Rust implementation used.
+> - If you are looking for the fastest cryptographic hash algorithm given limited power budget and for general use, you are probably looking for hardware-accelerated algorithms which basically leaves the SHA-2 family (and SHA-3 if your target devices have instructions for Keccak like via ARM v8.2).
+
 ## Testing Methodology
 
 The benchmark tests the runtime performance of each hashing algorithm with the following parameters:

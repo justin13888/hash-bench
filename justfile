@@ -4,69 +4,31 @@
 default:
     @just --list
 
-# Run all benchmarks and save results for the given machine
+# Run the full benchmark suite and save results for the given machine
 bench machine-id:
     #!/usr/bin/env bash
     set -euo pipefail
-    RESULT_DIR="results/{{machine-id}}"
-    if [ -d "$RESULT_DIR" ] && [ "$(ls -A "$RESULT_DIR" 2>/dev/null)" ]; then
-      read -rp "Remove existing results for '{{machine-id}}'? [Y/n] " answer
-      answer="${answer:-Y}"
-      if [[ "$answer" =~ ^[Yy]$ ]]; then
-        rm -rf "$RESULT_DIR"
-        echo "Removed $RESULT_DIR"
-      fi
-    fi
-    RUSTFLAGS="-C target-cpu=native" cargo bench
-    echo "Copying results to $RESULT_DIR/"
-    mkdir -p "$RESULT_DIR"
-    cd target/criterion
-    find . \( -path '*/new/estimates.json' -o -path '*/new/benchmark.json' \
-      -o -path '*/new/sample.json' -o -path '*/new/tukey.json' \) | while read -r f; do
-      mkdir -p "../../$RESULT_DIR/$(dirname "$f")"
-      cp "$f" "../../$RESULT_DIR/$f"
-    done
-    cd ../..
-    echo "Results saved to $RESULT_DIR/."
+    RESULT_FILE="results/{{machine-id}}/results.json"
+    RUSTFLAGS="-C target-cpu=native" cargo run --release -- \
+      run --machine-id "{{machine-id}}" --output "$RESULT_FILE"
+    echo "Results saved to $RESULT_FILE."
     read -rp "Commit results? [y/N] " commit
     commit="${commit:-N}"
     if [[ "$commit" =~ ^[Yy]$ ]]; then
-      git add "$RESULT_DIR"
+      git add "$RESULT_FILE"
       git commit -m "Add benchmark results for {{machine-id}}"
       echo "Committed. Push with: git push"
     fi
 
-# Run benchmarks matching a filter for the given machine
+# Run benchmarks matching a name filter for the given machine
 bench-filter machine-id filter:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    RESULT_DIR="results/{{machine-id}}"
-    if [ -d "$RESULT_DIR" ] && [ "$(ls -A "$RESULT_DIR" 2>/dev/null)" ]; then
-      read -rp "Remove existing results for '{{machine-id}}'? [Y/n] " answer
-      answer="${answer:-Y}"
-      if [[ "$answer" =~ ^[Yy]$ ]]; then
-        rm -rf "$RESULT_DIR"
-        echo "Removed $RESULT_DIR"
-      fi
-    fi
-    RUSTFLAGS="-C target-cpu=native" cargo bench -- "{{filter}}"
-    echo "Copying results to $RESULT_DIR/"
-    mkdir -p "$RESULT_DIR"
-    cd target/criterion
-    find . \( -path '*/new/estimates.json' -o -path '*/new/benchmark.json' \
-      -o -path '*/new/sample.json' -o -path '*/new/tukey.json' \) | while read -r f; do
-      mkdir -p "../../$RESULT_DIR/$(dirname "$f")"
-      cp "$f" "../../$RESULT_DIR/$f"
-    done
-    cd ../..
-    echo "Results saved to $RESULT_DIR/."
-    read -rp "Commit results? [y/N] " commit
-    commit="${commit:-N}"
-    if [[ "$commit" =~ ^[Yy]$ ]]; then
-      git add "$RESULT_DIR"
-      git commit -m "Add benchmark results for {{machine-id}}"
-      echo "Committed. Push with: git push"
-    fi
+    RUSTFLAGS="-C target-cpu=native" cargo run --release -- \
+      run --machine-id "{{machine-id}}" --filter "{{filter}}" \
+      --output "results/{{machine-id}}/results.json"
+
+# Regenerate the algorithm metadata catalogue consumed by the web app
+gen-metadata:
+    cargo run -- metadata --output web/src/data/algorithms.json
 
 # Build the project
 build:
@@ -76,13 +38,23 @@ build:
 build-release:
     RUSTFLAGS="-C target-cpu=native" cargo build --release
 
-# Check the project compiles without building
+# Check the project compiles (all targets)
 check:
-    cargo check
+    cargo check --all-targets
 
-# Run clippy lints
+# Run clippy lints (all targets, all features)
 lint:
-    cargo clippy --benches -- -D warnings
+    cargo clippy --all-targets --all-features -- -D warnings
+
+# Run clippy with no default features (verifies the minimal build)
+lint-no-default:
+    cargo clippy --no-default-features --all-targets -- -D warnings
+
+# Verify a few single-family feature subsets compile in isolation
+check-features:
+    cargo check --no-default-features --features sha2
+    cargo check --no-default-features --features blake3
+    cargo check --no-default-features --features crc
 
 # Format code
 fmt:
@@ -95,10 +67,6 @@ fmt-check:
 # Clean build artifacts
 clean:
     cargo clean
-
-# Open the latest Criterion report in the browser
-open-report:
-    open target/criterion/report/index.html
 
 # Run all checks (Rust fmt, clippy, web lint + typecheck)
 check-all: fmt-check lint
@@ -118,4 +86,4 @@ dev:
 
 # Build the web app (processes results + Vite build)
 build-web:
-    cd web && bun run prebuild && bun run build
+    cd web && bun run build

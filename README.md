@@ -15,7 +15,7 @@ The benchmark tests the runtime performance of each hashing algorithm with the f
 - **Number of Threads**: The number of threads to use for hashing.
 - **Number of Simultaneous Hashes**: The number of simultaneous hashes to perform.
 
-The benchmark measures the time taken to hash the input data preloaded into heap memory. The benchmark is run multiple times to get a statistical average of the runtime performance. Algorithms with multithreading (e.g. BLAKE3) and/or when ran in parallel are ran in pools managed by [rayon](https://github.com/rayon-rs/rayon). For more detail, refer to the code in `benches`.
+The benchmark measures the time taken to hash the input data preloaded into heap memory. Each measured case is warmed up and then sampled multiple times to get a statistical average (mean, median, and a 95% confidence interval). The thread-count axis records how many threads were involved: for an ordinary algorithm that is the number of independent hashes run concurrently, while an internally-parallel algorithm (BLAKE3 in `rayon` mode) hashes a single stream across that many threads — sized via its own pool so the two are directly comparable. Parallel work is scheduled in pools managed by [rayon](https://github.com/rayon-rs/rayon). For more detail, refer to the code in [`src/`](src/).
 
 ### Algorithms
 
@@ -88,7 +88,28 @@ The benchmark measures the time taken to hash the input data preloaded into heap
 
 **Live interactive results:** [hash.justinchung.net](https://hash.justinchung.net)
 
-Raw benchmark data is stored in the [`results/`](results/) directory, organized by machine ID. The web dashboard at the link above is automatically deployed when results are updated.
+Raw benchmark data is stored in the [`results/`](results/) directory, one
+`results.json` per machine ID. Each report conforms to a versioned JSON Schema
+([`schema/results.v1.schema.json`](schema/results.v1.schema.json)), so the format
+is consistent across platforms and machine-parseable without any hardcoding. The
+web dashboard at the link above is automatically deployed when results are updated.
+
+## Project layout
+
+`hash-bench` is a Rust **library** plus a standalone benchmark **binary**:
+
+- Each algorithm family lives in its own module under
+  [`src/algorithms/`](src/algorithms/), carrying its own metadata, behind its own
+  Cargo feature. [`src/registry.rs`](src/registry.rs) defines the metadata types
+  and `src/lib.rs` aggregates whichever families are enabled.
+- Every hash crate is an optional dependency. A slim build selects only the
+  families it needs, e.g. `cargo build --no-default-features --features sha2,blake3`
+  — useful for bundling into desktop or thin mobile (Android/iOS) wrappers.
+- The benchmark is a normal binary (not a `cargo bench` harness), so it can be
+  cross-compiled and run on targets without a Rust toolchain installed.
+- Algorithm metadata is the single source of truth: `hash-bench metadata` emits
+  [`web/src/data/algorithms.json`](web/src/data/algorithms.json), which the web
+  dashboard consumes for categories and labels.
 
 ## Running the benchmark
 
@@ -106,6 +127,7 @@ All common commands are defined in the [`justfile`](justfile). Run `just` to see
 just                               # List available recipes
 just bench <machine-id>            # Run all benchmarks and save results
 just bench-filter <machine-id> "BLAKE3"  # Run filtered benchmarks
+just gen-metadata                  # Regenerate web/src/data/algorithms.json
 just dev                           # Start web dashboard dev server
 just build-web                     # Build the web dashboard
 just check                         # Check the project compiles
@@ -114,13 +136,22 @@ just fmt                           # Format code
 just clean                         # Clean build artifacts
 ```
 
-The specific parameters for the benchmark can be adjusted in the `benches/hashmark.rs` file.
+The benchmark binary can also be run directly for finer control over its
+parameters:
+
+```bash
+cargo run --release -- run --machine-id my-machine \
+  --sizes 64,1024,1048576 --concurrency 1,8 \
+  --sample-count 30 --warmup 3000 --cpu-model "AMD Ryzen 9 7900X"
+```
+
+Run `cargo run --release -- run --help` for the full list of flags.
 
 ### Contributing Results
 
-1. Run benchmarks on your machine: `just bench my-machine-id`
-2. Commit the results: `git add results/ && git commit -m "Add results for my-machine-id"`
-3. Push — the web dashboard redeploys automatically via CI
+1. Run benchmarks on your machine: `just bench my-machine-id` (it offers to commit
+   the resulting `results/my-machine-id/results.json` for you)
+2. Push — the web dashboard redeploys automatically via CI
 
 ## Development
 
@@ -150,8 +181,9 @@ just check-all      # Run all checks (Rust + web)
 ### CI
 
 All pushes to `master` and pull requests run the [CI workflow](.github/workflows/ci.yml), which checks:
-- Rust: `cargo fmt --check`, `cargo clippy`, `cargo check`
-- Web: `biome check`, TypeScript type checking
+- Rust: `cargo fmt --check`, `cargo clippy --all-features`, `cargo check`, a minimal
+  no-default-features build, and that `algorithms.json` is in sync with the registry
+- Web: `biome check`, schema validation of results, TypeScript type checking
 
 ## Limitations
 

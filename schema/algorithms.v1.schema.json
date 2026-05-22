@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/justin13888/hash-bench/schema/algorithms.v1.schema.json",
+  "title": "hash-bench algorithm catalogue (v1)",
+  "description": "The algorithm metadata catalogue emitted by `hash-bench metadata`.",
+  "type": "object",
+  "required": ["schema_version", "algorithms"],
+  "properties": {
+    "schema_version": {
+      "description": "Algorithms format version. Currently 1.",
+      "type": "integer",
+      "const": 1
+    },
+    "algorithms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "crate",
+          "output_bits",
+          "output_kind",
+          "category",
+          "internally_parallel",
+          "notes"
+        ],
+        "properties": {
+          "name": {
+            "description": "Display name; the join key with benchmark results.",
+            "type": "string"
+          },
+          "crate": {
+            "description": "Backing crate as published on crates.io.",
+            "type": "string"
+          },
+          "output_bits": {
+            "description": "Digest width in bits (the benchmarked width for XOFs).",
+            "type": "integer",
+            "minimum": 1
+          },
+          "output_kind": {
+            "type": "string",
+            "enum": ["fixed", "xof"]
+          },
+          "category": {
+            "type": "string",
+            "enum": ["cryptographic", "non-cryptographic"]
+          },
+          "internally_parallel": {
+            "description": "Whether the algorithm parallelises a single stream internally.",
+            "type": "boolean"
+          },
+          "notes": { "type": "string" }
+        }
+      }
+    }
+  }
+}

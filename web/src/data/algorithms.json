@@ -1,0 +1,464 @@
+{
+  "schema_version": 1,
+  "algorithms": [
+    {
+      "name": "BLAKE3",
+      "crate": "blake3",
+      "output_bits": 256,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "Single-stream"
+    },
+    {
+      "name": "BLAKE3 (rayon)",
+      "crate": "blake3",
+      "output_bits": 256,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": true,
+      "notes": "Multi-threaded single stream via update_rayon"
+    },
+    {
+      "name": "BLAKE2b512",
+      "crate": "blake2",
+      "output_bits": 512,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "RFC 7693; used by WireGuard, Argon2"
+    },
+    {
+      "name": "BLAKE2b256",
+      "crate": "blake2",
+      "output_bits": 256,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "RFC 7693"
+    },
+    {
+      "name": "BLAKE2s256",
+      "crate": "blake2",
+      "output_bits": 256,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "RFC 7693; used by WireGuard"
+    },
+    {
+      "name": "SHA-1",
+      "crate": "sha1",
+      "output_bits": 160,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "Broken — included for reference only"
+    },
+    {
+      "name": "SHA-224",
+      "crate": "sha2",
+      "output_bits": 224,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "NIST FIPS 180-4"
+    },
+    {
+      "name": "SHA-256",
+      "crate": "sha2",
+      "output_bits": 256,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "NIST FIPS 180-4; used by Bitcoin, TLS"
+    },
+    {
+      "name": "SHA-384",
+      "crate": "sha2",
+      "output_bits": 384,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "NIST FIPS 180-4; used by TLS"
+    },
+    {
+      "name": "SHA-512",
+      "crate": "sha2",
+      "output_bits": 512,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "NIST FIPS 180-4"
+    },
+    {
+      "name": "SHA-512/224",
+      "crate": "sha2",
+      "output_bits": 224,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "NIST FIPS 180-4"
+    },
+    {
+      "name": "SHA-512/256",
+      "crate": "sha2",
+      "output_bits": 256,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "NIST FIPS 180-4"
+    },
+    {
+      "name": "SHA3-224",
+      "crate": "sha3",
+      "output_bits": 224,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "NIST FIPS 202"
+    },
+    {
+      "name": "SHA3-256",
+      "crate": "sha3",
+      "output_bits": 256,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "NIST FIPS 202"
+    },
+    {
+      "name": "SHA3-384",
+      "crate": "sha3",
+      "output_bits": 384,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "NIST FIPS 202"
+    },
+    {
+      "name": "SHA3-512",
+      "crate": "sha3",
+      "output_bits": 512,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "NIST FIPS 202"
+    },
+    {
+      "name": "SHAKE128",
+      "crate": "sha3",
+      "output_bits": 256,
+      "output_kind": "xof",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "NIST FIPS 202; benchmarked at 256-bit output"
+    },
+    {
+      "name": "SHAKE256",
+      "crate": "sha3",
+      "output_bits": 512,
+      "output_kind": "xof",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "NIST FIPS 202; benchmarked at 512-bit output"
+    },
+    {
+      "name": "Keccak-224",
+      "crate": "sha3",
+      "output_bits": 224,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "Pre-NIST Keccak"
+    },
+    {
+      "name": "Keccak-256",
+      "crate": "sha3",
+      "output_bits": 256,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "Pre-NIST Keccak; used by Ethereum"
+    },
+    {
+      "name": "Keccak-384",
+      "crate": "sha3",
+      "output_bits": 384,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "Pre-NIST Keccak"
+    },
+    {
+      "name": "Keccak-512",
+      "crate": "sha3",
+      "output_bits": 512,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "Pre-NIST Keccak"
+    },
+    {
+      "name": "MD5",
+      "crate": "md-5",
+      "output_bits": 128,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "Broken — included for reference only"
+    },
+    {
+      "name": "RIPEMD-128",
+      "crate": "ripemd",
+      "output_bits": 128,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "ISO/IEC 10118-3"
+    },
+    {
+      "name": "RIPEMD-160",
+      "crate": "ripemd",
+      "output_bits": 160,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "ISO/IEC 10118-3; used by Bitcoin"
+    },
+    {
+      "name": "RIPEMD-256",
+      "crate": "ripemd",
+      "output_bits": 256,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "ISO/IEC 10118-3"
+    },
+    {
+      "name": "RIPEMD-320",
+      "crate": "ripemd",
+      "output_bits": 320,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "ISO/IEC 10118-3"
+    },
+    {
+      "name": "SM3",
+      "crate": "sm3",
+      "output_bits": 256,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "Chinese national standard (GB/T 32905-2016)"
+    },
+    {
+      "name": "Streebog-256",
+      "crate": "streebog",
+      "output_bits": 256,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "Russian standard (GOST R 34.11-2012)"
+    },
+    {
+      "name": "Streebog-512",
+      "crate": "streebog",
+      "output_bits": 512,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "Russian standard (GOST R 34.11-2012)"
+    },
+    {
+      "name": "Whirlpool",
+      "crate": "whirlpool",
+      "output_bits": 512,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "ISO/IEC 10118-3; used by VeraCrypt"
+    },
+    {
+      "name": "Ascon-Hash256",
+      "crate": "ascon-hash",
+      "output_bits": 256,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "NIST SP 800-232 lightweight standard"
+    },
+    {
+      "name": "CRC32",
+      "crate": "crc32fast",
+      "output_bits": 32,
+      "output_kind": "fixed",
+      "category": "non-cryptographic",
+      "internally_parallel": false,
+      "notes": "Hardware-accelerated where available"
+    },
+    {
+      "name": "CRC32C",
+      "crate": "crc32c",
+      "output_bits": 32,
+      "output_kind": "fixed",
+      "category": "non-cryptographic",
+      "internally_parallel": false,
+      "notes": "Castagnoli polynomial; used by iSCSI, Btrfs, LevelDB, gRPC"
+    },
+    {
+      "name": "CRC64",
+      "crate": "crc64fast",
+      "output_bits": 64,
+      "output_kind": "fixed",
+      "category": "non-cryptographic",
+      "internally_parallel": false,
+      "notes": "ECMA-182; used by Redis, xz"
+    },
+    {
+      "name": "XXH32",
+      "crate": "xxhash-rust",
+      "output_bits": 32,
+      "output_kind": "fixed",
+      "category": "non-cryptographic",
+      "internally_parallel": false,
+      "notes": ""
+    },
+    {
+      "name": "XXH64",
+      "crate": "xxhash-rust",
+      "output_bits": 64,
+      "output_kind": "fixed",
+      "category": "non-cryptographic",
+      "internally_parallel": false,
+      "notes": ""
+    },
+    {
+      "name": "XXH3_64",
+      "crate": "xxhash-rust",
+      "output_bits": 64,
+      "output_kind": "fixed",
+      "category": "non-cryptographic",
+      "internally_parallel": false,
+      "notes": "Used by Linux kernel, rsync"
+    },
+    {
+      "name": "XXH3_128",
+      "crate": "xxhash-rust",
+      "output_bits": 128,
+      "output_kind": "fixed",
+      "category": "non-cryptographic",
+      "internally_parallel": false,
+      "notes": ""
+    },
+    {
+      "name": "SipHash-1-3",
+      "crate": "siphasher",
+      "output_bits": 64,
+      "output_kind": "fixed",
+      "category": "non-cryptographic",
+      "internally_parallel": false,
+      "notes": "Used by Python's dict default hasher"
+    },
+    {
+      "name": "SipHash-2-4",
+      "crate": "siphasher",
+      "output_bits": 64,
+      "output_kind": "fixed",
+      "category": "non-cryptographic",
+      "internally_parallel": false,
+      "notes": "Rust HashMap default (via DefaultHasher)"
+    },
+    {
+      "name": "AHash",
+      "crate": "ahash",
+      "output_bits": 64,
+      "output_kind": "fixed",
+      "category": "non-cryptographic",
+      "internally_parallel": false,
+      "notes": "Rust hashbrown default; uses AES-NI when available"
+    },
+    {
+      "name": "wyhash",
+      "crate": "wyhash",
+      "output_bits": 64,
+      "output_kind": "fixed",
+      "category": "non-cryptographic",
+      "internally_parallel": false,
+      "notes": "Used by Go runtime (maphash), Zig"
+    },
+    {
+      "name": "FxHash",
+      "crate": "rustc-hash",
+      "output_bits": 64,
+      "output_kind": "fixed",
+      "category": "non-cryptographic",
+      "internally_parallel": false,
+      "notes": "Used internally by rustc"
+    },
+    {
+      "name": "FarmHash",
+      "crate": "farmhash",
+      "output_bits": 64,
+      "output_kind": "fixed",
+      "category": "non-cryptographic",
+      "internally_parallel": false,
+      "notes": "Used by Google internally, TensorFlow"
+    },
+    {
+      "name": "MurmurHash3",
+      "crate": "murmur3",
+      "output_bits": 128,
+      "output_kind": "fixed",
+      "category": "non-cryptographic",
+      "internally_parallel": false,
+      "notes": "x64 128-bit variant; used by Cassandra, Elasticsearch"
+    },
+    {
+      "name": "HighwayHash-64",
+      "crate": "highway",
+      "output_bits": 64,
+      "output_kind": "fixed",
+      "category": "non-cryptographic",
+      "internally_parallel": false,
+      "notes": "Google; SipHash alternative"
+    },
+    {
+      "name": "HighwayHash-128",
+      "crate": "highway",
+      "output_bits": 128,
+      "output_kind": "fixed",
+      "category": "non-cryptographic",
+      "internally_parallel": false,
+      "notes": ""
+    },
+    {
+      "name": "HighwayHash-256",
+      "crate": "highway",
+      "output_bits": 256,
+      "output_kind": "fixed",
+      "category": "non-cryptographic",
+      "internally_parallel": false,
+      "notes": ""
+    },
+    {
+      "name": "FNV-1a",
+      "crate": "fnv",
+      "output_bits": 64,
+      "output_kind": "fixed",
+      "category": "non-cryptographic",
+      "internally_parallel": false,
+      "notes": "Go hash/fnv standard library"
+    },
+    {
+      "name": "Adler32",
+      "crate": "adler",
+      "output_bits": 32,
+      "output_kind": "fixed",
+      "category": "non-cryptographic",
+      "internally_parallel": false,
+      "notes": "Checksum used by zlib/gzip — included for reference"
+    }
+  ]
+}

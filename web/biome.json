@@ -7,7 +7,7 @@
 		"root": ".."
 	},
 	"files": {
-		"includes": ["**", "!!**/dist"]
+		"includes": ["**", "!!**/dist", "!src/data/**"]
 	},
 	"formatter": {
 		"enabled": true,

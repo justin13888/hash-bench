@@ -1,0 +1,23 @@
+//! FxHash — the hasher used internally by `rustc`.
+
+use crate::registry::{Algorithm, Category, OutputBits, Runner};
+use std::hash::Hasher;
+use std::hint::black_box;
+
+/// Hash data using FxHash.
+fn fxhash(data: &[u8]) {
+    let mut hasher = rustc_hash::FxHasher::default();
+    hasher.write(data);
+    black_box(hasher.finish());
+}
+
+pub fn algorithms() -> Vec<Algorithm> {
+    vec![Algorithm {
+        name: "FxHash",
+        crate_name: "rustc-hash",
+        output: OutputBits::Fixed(64),
+        category: Category::NonCryptographic,
+        notes: "Used internally by rustc",
+        runner: Runner::SingleStream(fxhash),
+    }]
+}

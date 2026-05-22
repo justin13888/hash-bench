@@ -6,7 +6,7 @@ pre-commit:
       run: cargo fmt -- --check
     rust-lint:
       glob: "*.rs"
-      run: cargo clippy --benches -- -D warnings
+      run: cargo clippy --all-targets --all-features -- -D warnings
     web-check:
       root: "web/"
       glob: "src/**/*.{ts,tsx}"

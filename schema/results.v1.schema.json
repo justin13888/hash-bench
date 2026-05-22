@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/justin13888/hash-bench/schema/results.v1.schema.json",
+  "title": "hash-bench benchmark results (v1)",
+  "description": "A per-platform benchmark report emitted by `hash-bench run`.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "generated_at_unix_ms",
+    "tool",
+    "platform",
+    "config",
+    "results"
+  ],
+  "properties": {
+    "schema_version": {
+      "description": "Results format version. Currently 1.",
+      "type": "integer",
+      "const": 1
+    },
+    "generated_at_unix_ms": {
+      "description": "When the report was produced, Unix epoch milliseconds.",
+      "type": "integer",
+      "minimum": 0
+    },
+    "tool": {
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "string" }
+      }
+    },
+    "platform": {
+      "type": "object",
+      "required": ["id", "physical_cores", "logical_cores", "os", "arch"],
+      "properties": {
+        "id": {
+          "description": "Identifier for the machine under test.",
+          "type": "string"
+        },
+        "cpu_model": {
+          "description": "Human-readable CPU model; best-effort, may be null.",
+          "type": ["string", "null"]
+        },
+        "physical_cores": { "type": "integer", "minimum": 1 },
+        "logical_cores": { "type": "integer", "minimum": 1 },
+        "os": { "type": "string" },
+        "arch": { "type": "string" }
+      }
+    },
+    "config": {
+      "type": "object",
+      "required": [
+        "sizes_bytes",
+        "concurrency_levels",
+        "warmup_ms",
+        "sample_count"
+      ],
+      "properties": {
+        "sizes_bytes": {
+          "type": "array",
+          "items": { "type": "integer", "minimum": 0 }
+        },
+        "concurrency_levels": {
+          "type": "array",
+          "items": { "type": "integer", "minimum": 1 }
+        },
+        "warmup_ms": { "type": "integer", "minimum": 0 },
+        "sample_count": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "algorithm",
+          "size_bytes",
+          "threads",
+          "mean_ns",
+          "median_ns",
+          "stddev_ns",
+          "ci_lower_ns",
+          "ci_upper_ns",
+          "throughput_bps",
+          "samples"
+        ],
+        "properties": {
+          "algorithm": {
+            "description": "Algorithm display name; the join key with the metadata catalogue.",
+            "type": "string"
+          },
+          "size_bytes": { "type": "integer", "minimum": 0 },
+          "threads": {
+            "description": "Threads involved: independent streams for single-stream algorithms, internal pool size for internally-parallel ones.",
+            "type": "integer",
+            "minimum": 1
+          },
+          "mean_ns": { "type": "number", "minimum": 0 },
+          "median_ns": { "type": "number", "minimum": 0 },
+          "stddev_ns": { "type": "number", "minimum": 0 },
+          "ci_lower_ns": { "type": "number", "minimum": 0 },
+          "ci_upper_ns": { "type": "number", "minimum": 0 },
+          "throughput_bps": {
+            "description": "Bytes hashed per second using `threads` threads.",
+            "type": "number",
+            "minimum": 0
+          },
+          "samples": { "type": "integer", "minimum": 1 }
+        }
+      }
+    }
+  }
+}

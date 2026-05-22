@@ -18,7 +18,7 @@ export default function App() {
 			.then((d: ReportData) => {
 				setData(d);
 				const allThreads = [
-					...new Set(d.benchmarks.map((b) => b.thread_count)),
+					...new Set(d.benchmarks.map((b) => b.threads)),
 				].sort((a, b) => a - b);
 				const sizeOrder = new Map<string, number>();
 				for (const b of d.benchmarks) sizeOrder.set(b.size, b.size_bytes);
@@ -43,7 +43,7 @@ export default function App() {
 		return data.benchmarks.filter(
 			(b) =>
 				filters.selectedPlatforms.has(b.platform) &&
-				b.thread_count === filters.threadCount &&
+				b.threads === filters.threadCount &&
 				b.size === filters.size &&
 				(filters.category === "all" ||
 					data.categories[b.algorithm] === filters.category),
@@ -84,9 +84,9 @@ export default function App() {
 		);
 	}
 
-	const allThreads = [
-		...new Set(data.benchmarks.map((b) => b.thread_count)),
-	].sort((a, b) => a - b);
+	const allThreads = [...new Set(data.benchmarks.map((b) => b.threads))].sort(
+		(a, b) => a - b,
+	);
 	const sizeOrder = new Map<string, number>();
 	for (const b of data.benchmarks) sizeOrder.set(b.size, b.size_bytes);
 	const allSizes = [...new Set(data.benchmarks.map((b) => b.size))].sort(
@@ -135,7 +135,9 @@ export default function App() {
 				/>
 
 				<footer className="mt-8 border-t border-gray-200 pt-4 text-center text-xs text-gray-400 dark:border-gray-800 dark:text-gray-500">
-					<p>Generated: {new Date(data.generated_at).toLocaleString()}</p>
+					<p>
+						Generated: {new Date(data.generated_at_unix_ms).toLocaleString()}
+					</p>
 					<a
 						href="https://github.com/justin13888/hash-bench"
 						target="_blank"

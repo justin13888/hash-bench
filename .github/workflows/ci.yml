@@ -8,18 +8,28 @@ on:
 
 jobs:
   rust-checks:
-    name: Rust (fmt + lint)
+    name: Rust (fmt + lint + features)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: nightly-2025-10-17
+          components: rustfmt,clippy
       - uses: Swatinem/rust-cache@v2
       - name: Check formatting
         run: cargo fmt -- --check
       - name: Clippy
-        run: cargo clippy --benches -- -D warnings
+        run: cargo clippy --all-targets --all-features -- -D warnings
       - name: Check compilation
-        run: cargo check --benches
+        run: cargo check --all-targets
+      - name: Build minimal feature set
+        run: cargo build --no-default-features --features sha2
+      - name: Verify algorithms.json is up to date
+        run: |
+          cargo run --quiet -- metadata --output web/src/data/algorithms.json
+          git diff --exit-code web/src/data/algorithms.json \
+            || (echo "::error::web/src/data/algorithms.json is stale — run \`just gen-metadata\`" && exit 1)
 
   web-checks:
     name: Web (lint + typecheck)
@@ -33,5 +43,7 @@ jobs:
         run: cd web && bun install --frozen-lockfile
       - name: Biome check
         run: cd web && bunx biome check src/
+      - name: Process benchmark results (schema validation)
+        run: cd web && bun run prebuild
       - name: TypeScript typecheck
         run: cd web && tsc -b --noEmit

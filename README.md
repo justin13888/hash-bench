@@ -127,6 +127,7 @@ All common commands are defined in the [`justfile`](justfile). Run `just` to see
 just                               # List available recipes
 just bench <machine-id>            # Run all benchmarks and save results
 just bench-filter <machine-id> "BLAKE3"  # Run filtered benchmarks
+just verify                        # Verify results files are complete
 just gen-metadata                  # Regenerate web/src/data/algorithms.json
 just dev                           # Start web dashboard dev server
 just build-web                     # Build the web dashboard
@@ -151,7 +152,10 @@ Run `cargo run --release -- run --help` for the full list of flags.
 
 1. Run benchmarks on your machine: `just bench my-machine-id` (it offers to commit
    the resulting `results/my-machine-id/results.json` for you)
-2. Push — the web dashboard redeploys automatically via CI
+2. Verify the report is complete: `just verify` — it checks every
+   `results/<id>/results.json` contains every expected algorithm × size × thread
+   combination, and is run in CI on every pull request
+3. Push — the web dashboard redeploys automatically via CI
 
 ## Development
 

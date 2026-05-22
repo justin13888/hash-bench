@@ -30,6 +30,10 @@ bench-filter machine-id filter:
 gen-metadata:
     cargo run -- metadata --output web/src/data/algorithms.json
 
+# Verify committed results files contain every expected combination
+verify dir="results":
+    cargo run --quiet -- verify --dir "{{dir}}"
+
 # Build the project
 build:
     cargo build

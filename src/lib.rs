@@ -13,6 +13,7 @@ pub mod algorithms;
 pub mod bench;
 pub mod metadata;
 pub mod registry;
+pub mod verify;
 
 pub use registry::{Algorithm, Category, OutputBits, Runner};
 

@@ -30,6 +30,8 @@ jobs:
           cargo run --quiet -- metadata --output web/src/data/algorithms.json
           git diff --exit-code web/src/data/algorithms.json \
             || (echo "::error::web/src/data/algorithms.json is stale — run \`just gen-metadata\`" && exit 1)
+      - name: Verify results completeness
+        run: cargo run --quiet -- verify
 
   web-checks:
     name: Web (lint + typecheck)

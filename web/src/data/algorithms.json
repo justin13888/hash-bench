@@ -272,6 +272,42 @@
       "notes": "Russian standard (GOST R 34.11-2012)"
     },
     {
+      "name": "Kupyna-224",
+      "crate": "kupyna",
+      "output_bits": 224,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "Ukrainian national standard (DSTU 7564:2014)"
+    },
+    {
+      "name": "Kupyna-256",
+      "crate": "kupyna",
+      "output_bits": 256,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "Ukrainian national standard (DSTU 7564:2014)"
+    },
+    {
+      "name": "Kupyna-384",
+      "crate": "kupyna",
+      "output_bits": 384,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "Ukrainian national standard (DSTU 7564:2014)"
+    },
+    {
+      "name": "Kupyna-512",
+      "crate": "kupyna",
+      "output_bits": 512,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "Ukrainian national standard (DSTU 7564:2014)"
+    },
+    {
       "name": "Whirlpool",
       "crate": "whirlpool",
       "output_bits": 512,

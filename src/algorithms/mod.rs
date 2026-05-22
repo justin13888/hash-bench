@@ -24,6 +24,8 @@ pub mod fnv;
 pub mod fxhash;
 #[cfg(feature = "highway")]
 pub mod highway;
+#[cfg(feature = "kupyna")]
+pub mod kupyna;
 #[cfg(feature = "md5")]
 pub mod md5;
 #[cfg(feature = "murmur3")]

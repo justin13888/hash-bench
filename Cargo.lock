@@ -402,6 +402,7 @@ dependencies = [
  "farmhash",
  "fnv",
  "highway",
+ "kupyna",
  "md-5",
  "murmur3",
  "num_cpus",
@@ -468,6 +469,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ecc2af9a1119c51f12a14607e783cb977bde58bc069ff0c3da1095e635d70654"
 dependencies = [
  "cpufeatures",
+]
+
+[[package]]
+name = "kupyna"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a8552d0116a202b5a4760c8bdb345db2121eefeb2730f7db04114167cae68a07"
+dependencies = [
+ "digest 0.11.2",
 ]
 
 [[package]]

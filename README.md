@@ -19,9 +19,9 @@ The benchmark measures the time taken to hash the input data preloaded into heap
 
 ### Algorithms
 
-51 hashing algorithms are benchmarked across two categories.
+55 hashing algorithms are benchmarked across two categories.
 
-#### Cryptographic (32)
+#### Cryptographic (36)
 
 | Algorithm | Crate | Output (bits) | Notes |
 |---|---|---|---|
@@ -55,6 +55,10 @@ The benchmark measures the time taken to hash the input data preloaded into heap
 | SM3 | [`sm3`](https://crates.io/crates/sm3) | 256 | Chinese national standard (GB/T 32905-2016) |
 | Streebog-256 | [`streebog`](https://crates.io/crates/streebog) | 256 | Russian standard (GOST R 34.11-2012) |
 | Streebog-512 | [`streebog`](https://crates.io/crates/streebog) | 512 | Russian standard (GOST R 34.11-2012) |
+| Kupyna-224 | [`kupyna`](https://crates.io/crates/kupyna) | 224 | Ukrainian national standard (DSTU 7564:2014) |
+| Kupyna-256 | [`kupyna`](https://crates.io/crates/kupyna) | 256 | Ukrainian national standard (DSTU 7564:2014) |
+| Kupyna-384 | [`kupyna`](https://crates.io/crates/kupyna) | 384 | Ukrainian national standard (DSTU 7564:2014) |
+| Kupyna-512 | [`kupyna`](https://crates.io/crates/kupyna) | 512 | Ukrainian national standard (DSTU 7564:2014) |
 | Whirlpool | [`whirlpool`](https://crates.io/crates/whirlpool) | 512 | ISO/IEC 10118-3; used by VeraCrypt |
 | Ascon-Hash256 | [`ascon-hash`](https://crates.io/crates/ascon-hash) | 256 | NIST SP 800-232 lightweight standard |
 

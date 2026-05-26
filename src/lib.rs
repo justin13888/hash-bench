@@ -43,6 +43,8 @@ pub fn registry() -> Vec<Algorithm> {
     algs.extend(algorithms::sm3::algorithms());
     #[cfg(feature = "streebog")]
     algs.extend(algorithms::streebog::algorithms());
+    #[cfg(feature = "kupyna")]
+    algs.extend(algorithms::kupyna::algorithms());
     #[cfg(feature = "whirlpool")]
     algs.extend(algorithms::whirlpool::algorithms());
     #[cfg(feature = "ascon")]

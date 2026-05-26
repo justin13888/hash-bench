@@ -81,8 +81,8 @@ interface BenchmarkResult {
 	mean_ns: number;
 	median_ns: number;
 	stddev_ns: number;
-	mean_lower_ns: number;
-	mean_upper_ns: number;
+	ci_lower_ns: number;
+	ci_upper_ns: number;
 	throughput_bps: number;
 }
 
@@ -222,8 +222,8 @@ function buildReportData(
 				mean_ns: row.mean_ns,
 				median_ns: row.median_ns,
 				stddev_ns: row.stddev_ns,
-				mean_lower_ns: row.ci_lower_ns,
-				mean_upper_ns: row.ci_upper_ns,
+				ci_lower_ns: row.ci_lower_ns,
+				ci_upper_ns: row.ci_upper_ns,
 				throughput_bps: row.throughput_bps,
 			});
 		}

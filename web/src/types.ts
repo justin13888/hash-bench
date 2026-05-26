@@ -14,8 +14,8 @@ export interface BenchmarkResult {
 	mean_ns: number;
 	median_ns: number;
 	stddev_ns: number;
-	mean_lower_ns: number;
-	mean_upper_ns: number;
+	ci_lower_ns: number;
+	ci_upper_ns: number;
 	throughput_bps: number;
 }
 

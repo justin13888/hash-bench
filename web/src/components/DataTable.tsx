@@ -145,7 +145,7 @@ export default function DataTable({
 								{formatNs(b.median_ns)}
 							</td>
 							<td className="px-3 py-2 text-right tabular-nums">
-								{formatNs(b.mean_lower_ns)} &ndash; {formatNs(b.mean_upper_ns)}
+								{formatNs(b.ci_lower_ns)} &ndash; {formatNs(b.ci_upper_ns)}
 							</td>
 						</tr>
 					))}

@@ -122,11 +122,11 @@ function buildSingleOption(
 	const errorData = entries.map((e) => {
 		if (filters.metric === "throughput") {
 			return [
-				e.size_bytes / (e.mean_upper_ns * 1e-9),
-				e.size_bytes / (e.mean_lower_ns * 1e-9),
+				e.size_bytes / (e.ci_upper_ns * 1e-9),
+				e.size_bytes / (e.ci_lower_ns * 1e-9),
 			];
 		}
-		return [e.mean_lower_ns, e.mean_upper_ns];
+		return [e.ci_lower_ns, e.ci_upper_ns];
 	});
 
 	return {
@@ -143,7 +143,7 @@ function buildSingleOption(
 					`Throughput: ${formatBytes(b.throughput_bps)}<br/>` +
 					`Mean latency: ${formatNs(b.mean_ns)}<br/>` +
 					`Median latency: ${formatNs(b.median_ns)}<br/>` +
-					`95% CI: ${formatNs(b.mean_lower_ns)} \u2013 ${formatNs(b.mean_upper_ns)}`
+					`95% CI: ${formatNs(b.ci_lower_ns)} \u2013 ${formatNs(b.ci_upper_ns)}`
 				);
 			},
 		},

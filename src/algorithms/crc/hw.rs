@@ -4,8 +4,8 @@
 //!   or ARMv8 `crc32` instructions.
 //! - **CRC32C (Castagnoli)** via `crc32c` — dispatches to x86 SSE4.2 `crc32`
 //!   or ARMv8 `crc32c` instructions.
-//! - **CRC64 (ECMA-182)** via `crc64fast` — dispatches to x86 PCLMULQDQ or
-//!   ARMv8 PMULL.
+//! - **CRC64/XZ** via `crc64fast` — ECMA-182 polynomial with reflected
+//!   input/output; dispatches to x86 PCLMULQDQ or ARMv8 PMULL.
 //!
 //! Each entry is filtered out on hosts without the matching CPU feature so the
 //! `[clmul]` / `[crc-ext]` labels remain truthful — without that filter the
@@ -59,7 +59,7 @@ pub fn algorithms() -> Vec<Algorithm> {
             crate_name: "crc64fast",
             output: OutputBits::Fixed(64),
             category: Category::NonCryptographic,
-            notes: "ECMA-182; x86 PCLMULQDQ / ARMv8 PMULL via `crc64fast`",
+            notes: "CRC-64/XZ (ECMA-182 polynomial, reflected); x86 PCLMULQDQ / ARMv8 PMULL via `crc64fast`",
             runner: Runner::SingleStream(crc64),
             available: clmul_available,
         },

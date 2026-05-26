@@ -409,7 +409,7 @@
       "output_kind": "fixed",
       "category": "non-cryptographic",
       "internally_parallel": false,
-      "notes": "ECMA-182; table-based pure-Rust"
+      "notes": "CRC-64/XZ (ECMA-182 polynomial, reflected); table-based pure-Rust"
     },
     {
       "name": "CRC32",
@@ -439,7 +439,7 @@
       "output_kind": "fixed",
       "category": "non-cryptographic",
       "internally_parallel": false,
-      "notes": "ECMA-182; x86 PCLMULQDQ / ARMv8 PMULL via `crc64fast`"
+      "notes": "CRC-64/XZ (ECMA-182 polynomial, reflected); x86 PCLMULQDQ / ARMv8 PMULL via `crc64fast`"
     },
     {
       "name": "XXH32",

@@ -34,6 +34,10 @@ gen-metadata:
 verify dir="results":
     cargo run --quiet -- verify --dir "{{dir}}"
 
+# Cross-implementation consistency tests (sw vs HW variants, BLAKE3 vs rayon, library manifest)
+test:
+    cargo test --all-features --release -- --nocapture
+
 # Build the project
 build:
     cargo build

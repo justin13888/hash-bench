@@ -1,13 +1,17 @@
-//! Pure-Rust CRC32 (IEEE), CRC32C (Castagnoli), and CRC64 (ECMA-182) via the
+//! Pure-Rust CRC32 (IEEE), CRC32C (Castagnoli), and CRC64/XZ via the
 //! `crc` crate's table-driven implementations. No intrinsics, no PCLMULQDQ /
 //! PMULL, no SSE4.2 / ARMv8 `crc32` instructions.
+//!
+//! The CRC64 parameter set is CRC-64/XZ (ECMA-182 polynomial with reflected
+//! input/output and 0xFFFF…FFFF init/xorout). That's what the `crc64fast`
+//! [clmul] counterpart computes, so the two rows benchmark the same function.
 
 use crate::registry::{always_available, Algorithm, Category, OutputBits, Runner};
 use std::hint::black_box;
 
 const CRC32_IEEE: crc::Crc<u32> = crc::Crc::<u32>::new(&crc::CRC_32_ISO_HDLC);
 const CRC32_ISCSI: crc::Crc<u32> = crc::Crc::<u32>::new(&crc::CRC_32_ISCSI);
-const CRC64_ECMA: crc::Crc<u64> = crc::Crc::<u64>::new(&crc::CRC_64_ECMA_182);
+const CRC64_XZ: crc::Crc<u64> = crc::Crc::<u64>::new(&crc::CRC_64_XZ);
 
 fn crc32(data: &[u8]) {
     let mut digest = CRC32_IEEE.digest();
@@ -22,7 +26,7 @@ fn crc32c(data: &[u8]) {
 }
 
 fn crc64(data: &[u8]) {
-    let mut digest = CRC64_ECMA.digest();
+    let mut digest = CRC64_XZ.digest();
     digest.update(data);
     black_box(digest.finalize());
 }
@@ -55,7 +59,7 @@ pub fn algorithms() -> Vec<Algorithm> {
             crate_name: "crc",
             output: OutputBits::Fixed(64),
             category: Category::NonCryptographic,
-            notes: "ECMA-182; table-based pure-Rust",
+            notes: "CRC-64/XZ (ECMA-182 polynomial, reflected); table-based pure-Rust",
             runner: Runner::SingleStream(crc64),
             available: always_available,
         },

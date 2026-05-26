@@ -68,7 +68,7 @@ The benchmark measures the time taken to hash the input data preloaded into heap
 |---|---|---|---|
 | CRC32 | [`crc32fast`](https://crates.io/crates/crc32fast) | 32 | Hardware-accelerated where available |
 | CRC32C | [`crc32c`](https://crates.io/crates/crc32c) | 32 | Castagnoli polynomial; used by iSCSI, Btrfs, LevelDB, gRPC |
-| CRC64 | [`crc64fast`](https://crates.io/crates/crc64fast) | 64 | ECMA-182; used by Redis, xz |
+| CRC64 | [`crc64fast`](https://crates.io/crates/crc64fast) | 64 | CRC-64/XZ (ECMA-182 polynomial, reflected); used by Redis, xz |
 | XXH32 | [`xxhash-rust`](https://crates.io/crates/xxhash-rust) | 32 | |
 | XXH64 | [`xxhash-rust`](https://crates.io/crates/xxhash-rust) | 64 | |
 | XXH3_64 | [`xxhash-rust`](https://crates.io/crates/xxhash-rust) | 64 | Used by Linux kernel, rsync |

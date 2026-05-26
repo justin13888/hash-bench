@@ -1,6 +1,6 @@
 //! xxHash family.
 
-use crate::registry::{Algorithm, Category, OutputBits, Runner};
+use crate::registry::{always_available, Algorithm, Category, OutputBits, Runner};
 use std::hint::black_box;
 
 /// Hash data using XXH32.
@@ -27,35 +27,43 @@ pub fn algorithms() -> Vec<Algorithm> {
     vec![
         Algorithm {
             name: "XXH32",
+            variant: "sw",
             crate_name: "xxhash-rust",
             output: OutputBits::Fixed(32),
             category: Category::NonCryptographic,
             notes: "",
             runner: Runner::SingleStream(xxh32),
+            available: always_available,
         },
         Algorithm {
             name: "XXH64",
+            variant: "sw",
             crate_name: "xxhash-rust",
             output: OutputBits::Fixed(64),
             category: Category::NonCryptographic,
             notes: "",
             runner: Runner::SingleStream(xxh64),
+            available: always_available,
         },
         Algorithm {
             name: "XXH3_64",
+            variant: "sw",
             crate_name: "xxhash-rust",
             output: OutputBits::Fixed(64),
             category: Category::NonCryptographic,
             notes: "Used by Linux kernel, rsync",
             runner: Runner::SingleStream(xxh3_64),
+            available: always_available,
         },
         Algorithm {
             name: "XXH3_128",
+            variant: "sw",
             crate_name: "xxhash-rust",
             output: OutputBits::Fixed(128),
             category: Category::NonCryptographic,
             notes: "",
             runner: Runner::SingleStream(xxh3_128),
+            available: always_available,
         },
     ]
 }

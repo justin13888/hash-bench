@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import BenchmarkChart from "./components/BenchmarkChart";
 import Controls from "./components/Controls";
 import DataTable from "./components/DataTable";
+import { algoKey } from "./lib/format";
 import type { BenchmarkResult, FilterState, ReportData } from "./types";
 
 export default function App() {
@@ -46,7 +47,8 @@ export default function App() {
 				b.threads === filters.threadCount &&
 				b.size === filters.size &&
 				(filters.category === "all" ||
-					data.categories[b.algorithm] === filters.category),
+					data.categories[algoKey(b.algorithm, b.variant)] ===
+						filters.category),
 		);
 	}, [data, filters]);
 

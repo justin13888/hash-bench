@@ -4,7 +4,10 @@
 use serde::Serialize;
 
 /// Version of the algorithms JSON format. Bump on breaking changes.
-pub const SCHEMA_VERSION: u32 = 1;
+///
+/// v2 added the per-entry `variant` discriminator so multiple implementations
+/// of the same algorithm (e.g. SW vs SHA-NI) can be enumerated separately.
+pub const SCHEMA_VERSION: u32 = 2;
 
 /// The full algorithm catalogue for the enabled feature set.
 #[derive(Serialize)]
@@ -18,6 +21,8 @@ pub struct MetadataReport {
 #[derive(Serialize)]
 pub struct AlgorithmMeta {
     pub name: String,
+    /// Implementation tag — matches `ResultRow::variant` in the results JSON.
+    pub variant: String,
     #[serde(rename = "crate")]
     pub crate_name: String,
     /// Digest width in bits (the benchmarked width for XOFs).
@@ -37,6 +42,7 @@ pub fn metadata_report() -> MetadataReport {
         .into_iter()
         .map(|a| AlgorithmMeta {
             name: a.name.to_string(),
+            variant: a.variant.to_string(),
             crate_name: a.crate_name.to_string(),
             output_bits: a.output.bits(),
             output_kind: a.output.kind().to_string(),

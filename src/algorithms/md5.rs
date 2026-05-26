@@ -1,6 +1,6 @@
 //! MD5 (broken — included for reference only).
 
-use crate::registry::{Algorithm, Category, OutputBits, Runner};
+use crate::registry::{always_available, Algorithm, Category, OutputBits, Runner};
 use md5::Digest;
 use std::hint::black_box;
 
@@ -14,10 +14,12 @@ fn md5(data: &[u8]) {
 pub fn algorithms() -> Vec<Algorithm> {
     vec![Algorithm {
         name: "MD5",
+        variant: "sw",
         crate_name: "md-5",
         output: OutputBits::Fixed(128),
         category: Category::Cryptographic,
         notes: "Broken — included for reference only",
         runner: Runner::SingleStream(md5),
+        available: always_available,
     }]
 }

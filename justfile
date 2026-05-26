@@ -59,6 +59,9 @@ check-features:
     cargo check --no-default-features --features sha2
     cargo check --no-default-features --features blake3
     cargo check --no-default-features --features crc
+    cargo check --no-default-features --features crc-sw
+    cargo check --no-default-features --features "sha1,sha-hw"
+    cargo check --no-default-features --features "sha2,sha-hw"
 
 # Format code
 fmt:

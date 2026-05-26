@@ -17,8 +17,11 @@ pub mod verify;
 
 pub use registry::{Algorithm, Category, OutputBits, Runner};
 
-/// All algorithms enabled by the current feature set, in stable display order
-/// (cryptographic families first, then non-cryptographic).
+/// All algorithms enabled by the current feature set **and supported on the
+/// current host**, in stable display order (cryptographic families first, then
+/// non-cryptographic). HW variants whose CPU instructions are unavailable at
+/// runtime are filtered out so labels like `[sha-ext]` always reflect what
+/// actually ran.
 pub fn registry() -> Vec<Algorithm> {
     // `mut` is unused when the crate is built with no algorithm families enabled.
     #[allow(unused_mut)]
@@ -51,7 +54,7 @@ pub fn registry() -> Vec<Algorithm> {
     algs.extend(algorithms::ascon::algorithms());
 
     // ── Non-cryptographic ───────────────────────────────────────────────────
-    #[cfg(feature = "crc")]
+    #[cfg(any(feature = "crc", feature = "crc-sw"))]
     algs.extend(algorithms::crc::algorithms());
     #[cfg(feature = "xxhash")]
     algs.extend(algorithms::xxhash::algorithms());
@@ -74,5 +77,6 @@ pub fn registry() -> Vec<Algorithm> {
     #[cfg(feature = "adler")]
     algs.extend(algorithms::adler::algorithms());
 
+    algs.retain(|a| (a.available)());
     algs
 }

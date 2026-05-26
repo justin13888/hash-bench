@@ -1,6 +1,6 @@
 //! HighwayHash.
 
-use crate::registry::{Algorithm, Category, OutputBits, Runner};
+use crate::registry::{always_available, Algorithm, Category, OutputBits, Runner};
 use std::hint::black_box;
 
 /// Hash data using HighwayHash-64.
@@ -25,27 +25,33 @@ pub fn algorithms() -> Vec<Algorithm> {
     vec![
         Algorithm {
             name: "HighwayHash-64",
+            variant: "sw",
             crate_name: "highway",
             output: OutputBits::Fixed(64),
             category: Category::NonCryptographic,
             notes: "Google; SipHash alternative",
             runner: Runner::SingleStream(highway64),
+            available: always_available,
         },
         Algorithm {
             name: "HighwayHash-128",
+            variant: "sw",
             crate_name: "highway",
             output: OutputBits::Fixed(128),
             category: Category::NonCryptographic,
             notes: "",
             runner: Runner::SingleStream(highway128),
+            available: always_available,
         },
         Algorithm {
             name: "HighwayHash-256",
+            variant: "sw",
             crate_name: "highway",
             output: OutputBits::Fixed(256),
             category: Category::NonCryptographic,
             notes: "",
             runner: Runner::SingleStream(highway256),
+            available: always_available,
         },
     ]
 }

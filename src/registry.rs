@@ -66,10 +66,18 @@ pub enum Runner {
 /// One benchmarkable hash algorithm together with all of its metadata.
 #[derive(Clone, Copy)]
 pub struct Algorithm {
-    /// Display name, e.g. `"SHA-256"`. Unique across the registry; used as the
-    /// benchmark result key and the web app's algorithm identifier.
+    /// Canonical algorithm name, e.g. `"SHA-256"`. Multiple entries may share a
+    /// name if they differ by [`Self::variant`]; `(name, variant)` is unique
+    /// across the registry and used as the benchmark result key.
     pub name: &'static str,
-    /// Backing crate as published on crates.io, e.g. `"sha2"`.
+    /// Implementation tag, e.g. `"sw"` for pure-Rust software, `"sha-ext"` for
+    /// the x86 SHA-NI / ARMv8 SHA2 instruction sets, `"aes-ext"` for AES-NI,
+    /// `"clmul"` for PCLMULQDQ / PMULL, `"crc-ext"` for the SSE4.2 / ARMv8 CRC
+    /// instructions. Single-implementation families use `"sw"`.
+    pub variant: &'static str,
+    /// Backing crate as published on crates.io, e.g. `"sha2"`. With multiple
+    /// variants per algorithm, this identifies *which* crate provided the impl
+    /// (e.g. `"sha2"` for the SW SHA-256 entry vs `"ring"` for SHA-NI).
     pub crate_name: &'static str,
     /// Digest output size.
     pub output: OutputBits,
@@ -79,6 +87,10 @@ pub struct Algorithm {
     pub notes: &'static str,
     /// How the algorithm is invoked and threaded.
     pub runner: Runner,
+    /// Whether this algorithm can run on the current host. Used to drop HW
+    /// variants on machines whose CPU lacks the relevant instruction set so
+    /// the variant label stays truthful. SW entries return `true`.
+    pub available: fn() -> bool,
 }
 
 impl Algorithm {
@@ -86,4 +98,9 @@ impl Algorithm {
     pub fn internally_parallel(&self) -> bool {
         matches!(self.runner, Runner::ParallelStream(_))
     }
+}
+
+/// Convenience marker for entries that always run.
+pub fn always_available() -> bool {
+    true
 }

@@ -8,7 +8,11 @@ use serde::Serialize;
 use super::BenchConfig;
 
 /// Version of the results JSON format. Bump on breaking changes.
-pub const SCHEMA_VERSION: u32 = 1;
+///
+/// v2 added the per-row `variant` discriminator (e.g. `"sw"`, `"sha-ext"`)
+/// alongside `algorithm`, so multiple implementations of the same algorithm
+/// can coexist in one report.
+pub const SCHEMA_VERSION: u32 = 2;
 
 /// A complete per-platform benchmark report.
 #[derive(Serialize)]
@@ -49,10 +53,15 @@ pub struct ReportConfig {
     pub sample_count: u32,
 }
 
-/// One measured (algorithm, size, thread-count) cell.
+/// One measured (algorithm, variant, size, thread-count) cell.
 #[derive(Serialize)]
 pub struct ResultRow {
     pub algorithm: String,
+    /// Implementation tag — `"sw"` for pure-Rust, `"sha-ext"` for x86 SHA-NI /
+    /// ARMv8 SHA2, `"aes-ext"` for AES-NI, `"clmul"` for PCLMULQDQ / PMULL,
+    /// `"crc-ext"` for SSE4.2 / ARMv8 CRC instructions. Together with
+    /// `algorithm`, it forms the unique row key.
+    pub variant: String,
     pub size_bytes: u64,
     /// Threads involved: independent streams for single-stream algorithms, or
     /// internal pool size for internally-parallel ones.

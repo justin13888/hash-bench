@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/justin13888/hash-bench/schema/results.v1.schema.json",
-  "title": "hash-bench benchmark results (v1)",
+  "$id": "https://github.com/justin13888/hash-bench/schema/results.v2.schema.json",
+  "title": "hash-bench benchmark results (v2)",
   "description": "A per-platform benchmark report emitted by `hash-bench run`.",
   "type": "object",
   "required": [
@@ -14,9 +14,9 @@
   ],
   "properties": {
     "schema_version": {
-      "description": "Results format version. Currently 1.",
+      "description": "Results format version. Currently 2.",
       "type": "integer",
-      "const": 1
+      "const": 2
     },
     "generated_at_unix_ms": {
       "description": "When the report was produced, Unix epoch milliseconds.",
@@ -76,6 +76,7 @@
         "type": "object",
         "required": [
           "algorithm",
+          "variant",
           "size_bytes",
           "threads",
           "mean_ns",
@@ -88,7 +89,11 @@
         ],
         "properties": {
           "algorithm": {
-            "description": "Algorithm display name; the join key with the metadata catalogue.",
+            "description": "Algorithm display name; joins with the metadata catalogue together with `variant`.",
+            "type": "string"
+          },
+          "variant": {
+            "description": "Implementation tag — e.g. \"sw\" (pure-Rust), \"sha-ext\" (x86 SHA-NI / ARMv8 SHA2), \"aes-ext\" (AES-NI / ARMv8 AES), \"clmul\" (PCLMULQDQ / PMULL), \"crc-ext\" (SSE4.2 / ARMv8 CRC).",
             "type": "string"
           },
           "size_bytes": { "type": "integer", "minimum": 0 },

@@ -1,6 +1,6 @@
 //! wyhash.
 
-use crate::registry::{Algorithm, Category, OutputBits, Runner};
+use crate::registry::{always_available, Algorithm, Category, OutputBits, Runner};
 use std::hint::black_box;
 
 /// Hash data using wyhash.
@@ -11,10 +11,12 @@ fn wyhash(data: &[u8]) {
 pub fn algorithms() -> Vec<Algorithm> {
     vec![Algorithm {
         name: "wyhash",
+        variant: "sw",
         crate_name: "wyhash",
         output: OutputBits::Fixed(64),
         category: Category::NonCryptographic,
         notes: "Used by Go runtime (maphash), Zig",
         runner: Runner::SingleStream(wyhash),
+        available: always_available,
     }]
 }

@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { formatBytes, formatNs } from "../lib/format";
+import { algoKey, displayName, formatBytes, formatNs } from "../lib/format";
 import type { BenchmarkResult } from "../types";
 
 interface Props {
@@ -39,7 +39,8 @@ export default function DataTable({
 	const sorted = useMemo(() => {
 		const rows = benchmarks.map((b) => ({
 			...b,
-			category: categories[b.algorithm] ?? "unknown",
+			category: categories[algoKey(b.algorithm, b.variant)] ?? "unknown",
+			display: displayName(b.algorithm, b.variant),
 			platform_name: platformMap.get(b.platform) ?? b.platform,
 		}));
 
@@ -49,8 +50,10 @@ export default function DataTable({
 
 			switch (sortKey) {
 				case "algorithm":
-					va = a.algorithm.toLowerCase();
-					vb = b.algorithm.toLowerCase();
+					// Sort by algorithm name first, then variant — keeps SHA-256 [sw]
+					// and SHA-256 [sha-ext] adjacent.
+					va = `${a.algorithm.toLowerCase()}|${a.variant}`;
+					vb = `${b.algorithm.toLowerCase()}|${b.variant}`;
 					break;
 				case "category":
 					va = a.category;
@@ -116,10 +119,10 @@ export default function DataTable({
 				<tbody>
 					{sorted.map((b) => (
 						<tr
-							key={`${b.platform}-${b.algorithm}`}
+							key={`${b.platform}-${b.algorithm}-${b.variant}`}
 							className="border-t border-gray-200 dark:border-gray-800"
 						>
-							<td className="px-3 py-2">{b.algorithm}</td>
+							<td className="px-3 py-2">{b.display}</td>
 							<td className="px-3 py-2">
 								<span
 									className={`inline-block rounded px-1.5 py-0.5 text-xs font-semibold ${

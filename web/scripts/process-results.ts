@@ -21,6 +21,7 @@ const OUTPUT_FILE = join(OUTPUT_DIR, "benchmarks.json");
 
 interface ResultRow {
 	algorithm: string;
+	variant: string;
 	size_bytes: number;
 	threads: number;
 	mean_ns: number;
@@ -54,6 +55,7 @@ interface ResultsReport {
 
 interface AlgorithmMeta {
 	name: string;
+	variant: string;
 	crate: string;
 	output_bits: number;
 	output_kind: string;
@@ -73,6 +75,7 @@ interface BenchmarkResult {
 	platform: string;
 	threads: number;
 	algorithm: string;
+	variant: string;
 	size: string;
 	size_bytes: number;
 	mean_ns: number;
@@ -99,6 +102,7 @@ interface ReportData {
 	generated_at_unix_ms: number;
 	platforms: PlatformInfo[];
 	benchmarks: BenchmarkResult[];
+	/** Keyed by `<algorithm>|<variant>` (matches the join key emitted below). */
 	categories: Record<string, string>;
 }
 
@@ -137,7 +141,7 @@ async function compileSchema(ajv: Ajv2020, file: string) {
 async function loadCategories(
 	ajv: Ajv2020,
 ): Promise<Record<string, string>> {
-	const validate = await compileSchema(ajv, "algorithms.v1.schema.json");
+	const validate = await compileSchema(ajv, "algorithms.v2.schema.json");
 
 	if (!(await exists(ALGORITHMS_FILE))) {
 		throw new Error(
@@ -156,7 +160,7 @@ async function loadCategories(
 
 	const categories: Record<string, string> = {};
 	for (const alg of report.algorithms) {
-		categories[alg.name] = alg.category;
+		categories[`${alg.name}|${alg.variant}`] = alg.category;
 	}
 	return categories;
 }
@@ -164,7 +168,7 @@ async function loadCategories(
 // ── Load + validate per-platform benchmark reports ───────────────────────────
 
 async function loadReports(ajv: Ajv2020): Promise<ResultsReport[]> {
-	const validate = await compileSchema(ajv, "results.v1.schema.json");
+	const validate = await compileSchema(ajv, "results.v2.schema.json");
 	const reports: ResultsReport[] = [];
 
 	if (!(await exists(RESULTS_DIR))) {
@@ -212,6 +216,7 @@ function buildReportData(
 				platform: p.id,
 				threads: row.threads,
 				algorithm: row.algorithm,
+				variant: row.variant,
 				size,
 				size_bytes: row.size_bytes,
 				mean_ns: row.mean_ns,
@@ -244,6 +249,7 @@ function buildReportData(
 			a.platform.localeCompare(b.platform) ||
 			a.threads - b.threads ||
 			a.algorithm.localeCompare(b.algorithm) ||
+			a.variant.localeCompare(b.variant) ||
 			a.size_bytes - b.size_bytes,
 	);
 

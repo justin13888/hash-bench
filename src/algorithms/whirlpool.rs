@@ -1,6 +1,6 @@
 //! Whirlpool (ISO/IEC 10118-3).
 
-use crate::registry::{Algorithm, Category, OutputBits, Runner};
+use crate::registry::{always_available, Algorithm, Category, OutputBits, Runner};
 use std::hint::black_box;
 use whirlpool::Digest;
 
@@ -14,10 +14,12 @@ fn whirlpool(data: &[u8]) {
 pub fn algorithms() -> Vec<Algorithm> {
     vec![Algorithm {
         name: "Whirlpool",
+        variant: "sw",
         crate_name: "whirlpool",
         output: OutputBits::Fixed(512),
         category: Category::Cryptographic,
         notes: "ISO/IEC 10118-3; used by VeraCrypt",
         runner: Runner::SingleStream(whirlpool),
+        available: always_available,
     }]
 }

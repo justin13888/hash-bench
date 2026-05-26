@@ -1,17 +1,19 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "algorithms": [
     {
       "name": "BLAKE3",
+      "variant": "sw",
       "crate": "blake3",
       "output_bits": 256,
       "output_kind": "fixed",
       "category": "cryptographic",
       "internally_parallel": false,
-      "notes": "Single-stream"
+      "notes": "Single-stream; runtime SIMD dispatch (SSE2/SSE4.1/AVX2/AVX-512/NEON)"
     },
     {
       "name": "BLAKE3 (rayon)",
+      "variant": "sw",
       "crate": "blake3",
       "output_bits": 256,
       "output_kind": "fixed",
@@ -21,6 +23,7 @@
     },
     {
       "name": "BLAKE2b512",
+      "variant": "sw",
       "crate": "blake2",
       "output_bits": 512,
       "output_kind": "fixed",
@@ -30,6 +33,7 @@
     },
     {
       "name": "BLAKE2b256",
+      "variant": "sw",
       "crate": "blake2",
       "output_bits": 256,
       "output_kind": "fixed",
@@ -39,6 +43,7 @@
     },
     {
       "name": "BLAKE2s256",
+      "variant": "sw",
       "crate": "blake2",
       "output_bits": 256,
       "output_kind": "fixed",
@@ -48,69 +53,97 @@
     },
     {
       "name": "SHA-1",
+      "variant": "sw",
       "crate": "sha1",
       "output_bits": 160,
       "output_kind": "fixed",
       "category": "cryptographic",
       "internally_parallel": false,
-      "notes": "Broken — included for reference only"
+      "notes": "Broken — included for reference only; pure-Rust (force-soft)"
+    },
+    {
+      "name": "SHA-1",
+      "variant": "sha-ext",
+      "crate": "ring",
+      "output_bits": 160,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "x86 SHA-NI / ARMv8 SHA1 via `ring`"
     },
     {
       "name": "SHA-224",
+      "variant": "sw",
       "crate": "sha2",
       "output_bits": 224,
       "output_kind": "fixed",
       "category": "cryptographic",
       "internally_parallel": false,
-      "notes": "NIST FIPS 180-4"
+      "notes": "NIST FIPS 180-4; pure-Rust (force-soft)"
     },
     {
       "name": "SHA-256",
+      "variant": "sw",
       "crate": "sha2",
       "output_bits": 256,
       "output_kind": "fixed",
       "category": "cryptographic",
       "internally_parallel": false,
-      "notes": "NIST FIPS 180-4; used by Bitcoin, TLS"
+      "notes": "NIST FIPS 180-4; used by Bitcoin, TLS; pure-Rust (force-soft)"
     },
     {
       "name": "SHA-384",
+      "variant": "sw",
       "crate": "sha2",
       "output_bits": 384,
       "output_kind": "fixed",
       "category": "cryptographic",
       "internally_parallel": false,
-      "notes": "NIST FIPS 180-4; used by TLS"
+      "notes": "NIST FIPS 180-4; used by TLS; pure-Rust (force-soft)"
     },
     {
       "name": "SHA-512",
+      "variant": "sw",
       "crate": "sha2",
       "output_bits": 512,
       "output_kind": "fixed",
       "category": "cryptographic",
       "internally_parallel": false,
-      "notes": "NIST FIPS 180-4"
+      "notes": "NIST FIPS 180-4; pure-Rust (force-soft)"
     },
     {
       "name": "SHA-512/224",
+      "variant": "sw",
       "crate": "sha2",
       "output_bits": 224,
       "output_kind": "fixed",
       "category": "cryptographic",
       "internally_parallel": false,
-      "notes": "NIST FIPS 180-4"
+      "notes": "NIST FIPS 180-4; pure-Rust (force-soft)"
     },
     {
       "name": "SHA-512/256",
+      "variant": "sw",
       "crate": "sha2",
       "output_bits": 256,
       "output_kind": "fixed",
       "category": "cryptographic",
       "internally_parallel": false,
-      "notes": "NIST FIPS 180-4"
+      "notes": "NIST FIPS 180-4; pure-Rust (force-soft)"
+    },
+    {
+      "name": "SHA-256",
+      "variant": "sha-ext",
+      "crate": "ring",
+      "output_bits": 256,
+      "output_kind": "fixed",
+      "category": "cryptographic",
+      "internally_parallel": false,
+      "notes": "x86 SHA-NI / ARMv8 SHA2 via `ring`"
     },
     {
       "name": "SHA3-224",
+      "variant": "sw",
       "crate": "sha3",
       "output_bits": 224,
       "output_kind": "fixed",
@@ -120,6 +153,7 @@
     },
     {
       "name": "SHA3-256",
+      "variant": "sw",
       "crate": "sha3",
       "output_bits": 256,
       "output_kind": "fixed",
@@ -129,6 +163,7 @@
     },
     {
       "name": "SHA3-384",
+      "variant": "sw",
       "crate": "sha3",
       "output_bits": 384,
       "output_kind": "fixed",
@@ -138,6 +173,7 @@
     },
     {
       "name": "SHA3-512",
+      "variant": "sw",
       "crate": "sha3",
       "output_bits": 512,
       "output_kind": "fixed",
@@ -147,6 +183,7 @@
     },
     {
       "name": "SHAKE128",
+      "variant": "sw",
       "crate": "sha3",
       "output_bits": 256,
       "output_kind": "xof",
@@ -156,6 +193,7 @@
     },
     {
       "name": "SHAKE256",
+      "variant": "sw",
       "crate": "sha3",
       "output_bits": 512,
       "output_kind": "xof",
@@ -165,6 +203,7 @@
     },
     {
       "name": "Keccak-224",
+      "variant": "sw",
       "crate": "sha3",
       "output_bits": 224,
       "output_kind": "fixed",
@@ -174,6 +213,7 @@
     },
     {
       "name": "Keccak-256",
+      "variant": "sw",
       "crate": "sha3",
       "output_bits": 256,
       "output_kind": "fixed",
@@ -183,6 +223,7 @@
     },
     {
       "name": "Keccak-384",
+      "variant": "sw",
       "crate": "sha3",
       "output_bits": 384,
       "output_kind": "fixed",
@@ -192,6 +233,7 @@
     },
     {
       "name": "Keccak-512",
+      "variant": "sw",
       "crate": "sha3",
       "output_bits": 512,
       "output_kind": "fixed",
@@ -201,6 +243,7 @@
     },
     {
       "name": "MD5",
+      "variant": "sw",
       "crate": "md-5",
       "output_bits": 128,
       "output_kind": "fixed",
@@ -210,6 +253,7 @@
     },
     {
       "name": "RIPEMD-128",
+      "variant": "sw",
       "crate": "ripemd",
       "output_bits": 128,
       "output_kind": "fixed",
@@ -219,6 +263,7 @@
     },
     {
       "name": "RIPEMD-160",
+      "variant": "sw",
       "crate": "ripemd",
       "output_bits": 160,
       "output_kind": "fixed",
@@ -228,6 +273,7 @@
     },
     {
       "name": "RIPEMD-256",
+      "variant": "sw",
       "crate": "ripemd",
       "output_bits": 256,
       "output_kind": "fixed",
@@ -237,6 +283,7 @@
     },
     {
       "name": "RIPEMD-320",
+      "variant": "sw",
       "crate": "ripemd",
       "output_bits": 320,
       "output_kind": "fixed",
@@ -246,6 +293,7 @@
     },
     {
       "name": "SM3",
+      "variant": "sw",
       "crate": "sm3",
       "output_bits": 256,
       "output_kind": "fixed",
@@ -255,6 +303,7 @@
     },
     {
       "name": "Streebog-256",
+      "variant": "sw",
       "crate": "streebog",
       "output_bits": 256,
       "output_kind": "fixed",
@@ -264,6 +313,7 @@
     },
     {
       "name": "Streebog-512",
+      "variant": "sw",
       "crate": "streebog",
       "output_bits": 512,
       "output_kind": "fixed",
@@ -273,6 +323,7 @@
     },
     {
       "name": "Kupyna-224",
+      "variant": "sw",
       "crate": "kupyna",
       "output_bits": 224,
       "output_kind": "fixed",
@@ -282,6 +333,7 @@
     },
     {
       "name": "Kupyna-256",
+      "variant": "sw",
       "crate": "kupyna",
       "output_bits": 256,
       "output_kind": "fixed",
@@ -291,6 +343,7 @@
     },
     {
       "name": "Kupyna-384",
+      "variant": "sw",
       "crate": "kupyna",
       "output_bits": 384,
       "output_kind": "fixed",
@@ -300,6 +353,7 @@
     },
     {
       "name": "Kupyna-512",
+      "variant": "sw",
       "crate": "kupyna",
       "output_bits": 512,
       "output_kind": "fixed",
@@ -309,6 +363,7 @@
     },
     {
       "name": "Whirlpool",
+      "variant": "sw",
       "crate": "whirlpool",
       "output_bits": 512,
       "output_kind": "fixed",
@@ -318,6 +373,7 @@
     },
     {
       "name": "Ascon-Hash256",
+      "variant": "sw",
       "crate": "ascon-hash",
       "output_bits": 256,
       "output_kind": "fixed",
@@ -327,33 +383,67 @@
     },
     {
       "name": "CRC32",
+      "variant": "sw",
+      "crate": "crc",
+      "output_bits": 32,
+      "output_kind": "fixed",
+      "category": "non-cryptographic",
+      "internally_parallel": false,
+      "notes": "IEEE polynomial; table-based pure-Rust"
+    },
+    {
+      "name": "CRC32C",
+      "variant": "sw",
+      "crate": "crc",
+      "output_bits": 32,
+      "output_kind": "fixed",
+      "category": "non-cryptographic",
+      "internally_parallel": false,
+      "notes": "Castagnoli polynomial; table-based pure-Rust"
+    },
+    {
+      "name": "CRC64",
+      "variant": "sw",
+      "crate": "crc",
+      "output_bits": 64,
+      "output_kind": "fixed",
+      "category": "non-cryptographic",
+      "internally_parallel": false,
+      "notes": "ECMA-182; table-based pure-Rust"
+    },
+    {
+      "name": "CRC32",
+      "variant": "clmul",
       "crate": "crc32fast",
       "output_bits": 32,
       "output_kind": "fixed",
       "category": "non-cryptographic",
       "internally_parallel": false,
-      "notes": "Hardware-accelerated where available"
+      "notes": "IEEE polynomial; x86 PCLMULQDQ / ARMv8 `crc32` via `crc32fast`"
     },
     {
       "name": "CRC32C",
+      "variant": "crc-ext",
       "crate": "crc32c",
       "output_bits": 32,
       "output_kind": "fixed",
       "category": "non-cryptographic",
       "internally_parallel": false,
-      "notes": "Castagnoli polynomial; used by iSCSI, Btrfs, LevelDB, gRPC"
+      "notes": "Castagnoli polynomial; x86 SSE4.2 `crc32` / ARMv8 `crc32c` via `crc32c`"
     },
     {
       "name": "CRC64",
+      "variant": "clmul",
       "crate": "crc64fast",
       "output_bits": 64,
       "output_kind": "fixed",
       "category": "non-cryptographic",
       "internally_parallel": false,
-      "notes": "ECMA-182; used by Redis, xz"
+      "notes": "ECMA-182; x86 PCLMULQDQ / ARMv8 PMULL via `crc64fast`"
     },
     {
       "name": "XXH32",
+      "variant": "sw",
       "crate": "xxhash-rust",
       "output_bits": 32,
       "output_kind": "fixed",
@@ -363,6 +453,7 @@
     },
     {
       "name": "XXH64",
+      "variant": "sw",
       "crate": "xxhash-rust",
       "output_bits": 64,
       "output_kind": "fixed",
@@ -372,6 +463,7 @@
     },
     {
       "name": "XXH3_64",
+      "variant": "sw",
       "crate": "xxhash-rust",
       "output_bits": 64,
       "output_kind": "fixed",
@@ -381,6 +473,7 @@
     },
     {
       "name": "XXH3_128",
+      "variant": "sw",
       "crate": "xxhash-rust",
       "output_bits": 128,
       "output_kind": "fixed",
@@ -390,6 +483,7 @@
     },
     {
       "name": "SipHash-1-3",
+      "variant": "sw",
       "crate": "siphasher",
       "output_bits": 64,
       "output_kind": "fixed",
@@ -399,6 +493,7 @@
     },
     {
       "name": "SipHash-2-4",
+      "variant": "sw",
       "crate": "siphasher",
       "output_bits": 64,
       "output_kind": "fixed",
@@ -408,15 +503,17 @@
     },
     {
       "name": "AHash",
+      "variant": "sw",
       "crate": "ahash",
       "output_bits": 64,
       "output_kind": "fixed",
       "category": "non-cryptographic",
       "internally_parallel": false,
-      "notes": "Rust hashbrown default; uses AES-NI when available"
+      "notes": "Rust hashbrown default; AES-NI / ARMv8 AES when target_feature=\"aes\""
     },
     {
       "name": "wyhash",
+      "variant": "sw",
       "crate": "wyhash",
       "output_bits": 64,
       "output_kind": "fixed",
@@ -426,6 +523,7 @@
     },
     {
       "name": "FxHash",
+      "variant": "sw",
       "crate": "rustc-hash",
       "output_bits": 64,
       "output_kind": "fixed",
@@ -435,6 +533,7 @@
     },
     {
       "name": "FarmHash",
+      "variant": "sw",
       "crate": "farmhash",
       "output_bits": 64,
       "output_kind": "fixed",
@@ -444,6 +543,7 @@
     },
     {
       "name": "MurmurHash3",
+      "variant": "sw",
       "crate": "murmur3",
       "output_bits": 128,
       "output_kind": "fixed",
@@ -453,6 +553,7 @@
     },
     {
       "name": "HighwayHash-64",
+      "variant": "sw",
       "crate": "highway",
       "output_bits": 64,
       "output_kind": "fixed",
@@ -462,6 +563,7 @@
     },
     {
       "name": "HighwayHash-128",
+      "variant": "sw",
       "crate": "highway",
       "output_bits": 128,
       "output_kind": "fixed",
@@ -471,6 +573,7 @@
     },
     {
       "name": "HighwayHash-256",
+      "variant": "sw",
       "crate": "highway",
       "output_bits": 256,
       "output_kind": "fixed",
@@ -480,6 +583,7 @@
     },
     {
       "name": "FNV-1a",
+      "variant": "sw",
       "crate": "fnv",
       "output_bits": 64,
       "output_kind": "fixed",
@@ -489,6 +593,7 @@
     },
     {
       "name": "Adler32",
+      "variant": "sw",
       "crate": "adler",
       "output_bits": 32,
       "output_kind": "fixed",

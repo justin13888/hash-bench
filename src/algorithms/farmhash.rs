@@ -1,6 +1,6 @@
 //! FarmHash.
 
-use crate::registry::{Algorithm, Category, OutputBits, Runner};
+use crate::registry::{always_available, Algorithm, Category, OutputBits, Runner};
 use std::hint::black_box;
 
 /// Hash data using FarmHash (64-bit).
@@ -11,10 +11,12 @@ fn farmhash(data: &[u8]) {
 pub fn algorithms() -> Vec<Algorithm> {
     vec![Algorithm {
         name: "FarmHash",
+        variant: "sw",
         crate_name: "farmhash",
         output: OutputBits::Fixed(64),
         category: Category::NonCryptographic,
         notes: "Used by Google internally, TensorFlow",
         runner: Runner::SingleStream(farmhash),
+        available: always_available,
     }]
 }

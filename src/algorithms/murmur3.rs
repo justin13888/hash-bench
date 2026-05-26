@@ -1,6 +1,6 @@
 //! MurmurHash3.
 
-use crate::registry::{Algorithm, Category, OutputBits, Runner};
+use crate::registry::{always_available, Algorithm, Category, OutputBits, Runner};
 use std::hint::black_box;
 use std::io::Cursor;
 
@@ -15,10 +15,12 @@ fn murmur3(data: &[u8]) {
 pub fn algorithms() -> Vec<Algorithm> {
     vec![Algorithm {
         name: "MurmurHash3",
+        variant: "sw",
         crate_name: "murmur3",
         output: OutputBits::Fixed(128),
         category: Category::NonCryptographic,
         notes: "x64 128-bit variant; used by Cassandra, Elasticsearch",
         runner: Runner::SingleStream(murmur3),
+        available: always_available,
     }]
 }

@@ -1,6 +1,6 @@
 //! Ascon-Hash256 — NIST SP 800-232 lightweight standard.
 
-use crate::registry::{Algorithm, Category, OutputBits, Runner};
+use crate::registry::{always_available, Algorithm, Category, OutputBits, Runner};
 use std::hint::black_box;
 
 /// Hash data using Ascon-Hash256.
@@ -16,10 +16,12 @@ fn ascon256(data: &[u8]) {
 pub fn algorithms() -> Vec<Algorithm> {
     vec![Algorithm {
         name: "Ascon-Hash256",
+        variant: "sw",
         crate_name: "ascon-hash",
         output: OutputBits::Fixed(256),
         category: Category::Cryptographic,
         notes: "NIST SP 800-232 lightweight standard",
         runner: Runner::SingleStream(ascon256),
+        available: always_available,
     }]
 }

@@ -1,6 +1,16 @@
 //! aHash — Rust `hashbrown` default hasher.
+//!
+//! The AES-vs-fallback selection is **compile-time**: `ahash::AHasher`
+//! re-exports `aes_hash::AHasher` when the binary is built with
+//! `cfg(target_feature = "aes")` (on x86 / aarch64), otherwise it re-exports
+//! `fallback_hash::AHasher` (pure-Rust). The fallback module is private to the
+//! `ahash` crate so the two implementations cannot coexist in a single build
+//! without forking the crate, which is out of scope.
+//!
+//! Variant tagging mirrors that selection: `[aes-ext]` when AES is on,
+//! `[sw]` when not, so the dashboard reflects what actually ran.
 
-use crate::registry::{Algorithm, Category, OutputBits, Runner};
+use crate::registry::{always_available, Algorithm, Category, OutputBits, Runner};
 use std::hash::Hasher;
 use std::hint::black_box;
 
@@ -11,13 +21,27 @@ fn ahash(data: &[u8]) {
     black_box(hasher.finish());
 }
 
+#[cfg(all(
+    any(target_arch = "x86", target_arch = "x86_64", target_arch = "aarch64"),
+    target_feature = "aes",
+))]
+const VARIANT: &str = "aes-ext";
+
+#[cfg(not(all(
+    any(target_arch = "x86", target_arch = "x86_64", target_arch = "aarch64"),
+    target_feature = "aes",
+)))]
+const VARIANT: &str = "sw";
+
 pub fn algorithms() -> Vec<Algorithm> {
     vec![Algorithm {
         name: "AHash",
+        variant: VARIANT,
         crate_name: "ahash",
         output: OutputBits::Fixed(64),
         category: Category::NonCryptographic,
-        notes: "Rust hashbrown default; uses AES-NI when available",
+        notes: "Rust hashbrown default; AES-NI / ARMv8 AES when target_feature=\"aes\"",
         runner: Runner::SingleStream(ahash),
+        available: always_available,
     }]
 }

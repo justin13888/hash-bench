@@ -1,8 +1,12 @@
 //! Hash algorithm families, one module per backing crate.
 //!
-//! Each module is gated behind its own Cargo feature and exposes
+//! Each family module is gated behind its own Cargo feature and exposes
 //! `algorithms() -> Vec<Algorithm>`. [`crate::registry`] aggregates whichever
-//! families are enabled.
+//! families are enabled. Families that ship both software and
+//! hardware-accelerated variants (sha1, sha2, crc) are directory modules with
+//! one file per backing crate so the variants share no dependencies.
+
+pub mod cpu;
 
 #[cfg(feature = "adler")]
 pub mod adler;
@@ -14,7 +18,7 @@ pub mod ascon;
 pub mod blake2;
 #[cfg(feature = "blake3")]
 pub mod blake3;
-#[cfg(feature = "crc")]
+#[cfg(any(feature = "crc", feature = "crc-sw"))]
 pub mod crc;
 #[cfg(feature = "farmhash")]
 pub mod farmhash;

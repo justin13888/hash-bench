@@ -19,3 +19,20 @@ export function formatValue(
 ): string {
 	return metric === "throughput" ? formatBytes(value) : formatNs(value);
 }
+
+/**
+ * Join key used to pair benchmark rows with the algorithm catalogue. Mirrors
+ * the key built in `web/scripts/process-results.ts` (`<name>|<variant>`).
+ */
+export function algoKey(algorithm: string, variant: string): string {
+	return `${algorithm}|${variant}`;
+}
+
+/**
+ * Display label for an algorithm + variant pair, e.g. "SHA-256 [sha-ext]" —
+ * used in chart axes, legends, tooltips, and table rows so the side-by-side
+ * comparison is unambiguous.
+ */
+export function displayName(algorithm: string, variant: string): string {
+	return `${algorithm} [${variant}]`;
+}

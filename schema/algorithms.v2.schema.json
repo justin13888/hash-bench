@@ -1,15 +1,15 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/justin13888/hash-bench/schema/algorithms.v1.schema.json",
-  "title": "hash-bench algorithm catalogue (v1)",
+  "$id": "https://github.com/justin13888/hash-bench/schema/algorithms.v2.schema.json",
+  "title": "hash-bench algorithm catalogue (v2)",
   "description": "The algorithm metadata catalogue emitted by `hash-bench metadata`.",
   "type": "object",
   "required": ["schema_version", "algorithms"],
   "properties": {
     "schema_version": {
-      "description": "Algorithms format version. Currently 1.",
+      "description": "Algorithms format version. Currently 2.",
       "type": "integer",
-      "const": 1
+      "const": 2
     },
     "algorithms": {
       "type": "array",
@@ -17,6 +17,7 @@
         "type": "object",
         "required": [
           "name",
+          "variant",
           "crate",
           "output_bits",
           "output_kind",
@@ -26,7 +27,11 @@
         ],
         "properties": {
           "name": {
-            "description": "Display name; the join key with benchmark results.",
+            "description": "Algorithm display name; joins with benchmark results together with `variant`.",
+            "type": "string"
+          },
+          "variant": {
+            "description": "Implementation tag — e.g. \"sw\", \"sha-ext\", \"aes-ext\", \"clmul\", \"crc-ext\". `(name, variant)` is the unique catalogue key.",
             "type": "string"
           },
           "crate": {

@@ -13,7 +13,13 @@ import {
 	NONCRYPTO_COLOR,
 	PLATFORM_COLORS,
 } from "../lib/categories";
-import { formatBytes, formatNs, formatValue } from "../lib/format";
+import {
+	algoKey,
+	displayName,
+	formatBytes,
+	formatNs,
+	formatValue,
+} from "../lib/format";
 import type { BenchmarkResult, FilterState } from "../types";
 
 echarts.use([
@@ -59,7 +65,9 @@ export default function BenchmarkChart({
 	}, [benchmarks, categories, platformMap, filters, multiPlatform]);
 
 	const chartHeight = useMemo(() => {
-		const uniqueAlgos = new Set(benchmarks.map((b) => b.algorithm)).size;
+		const uniqueAlgos = new Set(
+			benchmarks.map((b) => algoKey(b.algorithm, b.variant)),
+		).size;
 		const barH = Math.max(24, Math.min(36, 600 / uniqueAlgos));
 		const multiplier = multiPlatform ? filters.selectedPlatforms.size : 1;
 		return Math.max(400, uniqueAlgos * barH * multiplier + 100);
@@ -90,10 +98,10 @@ function buildSingleOption(
 	categories: Record<string, string>,
 	filters: FilterState,
 ) {
-	// Deduplicate by algorithm (one platform)
+	// Deduplicate by (algorithm, variant) — one row per implementation per platform.
 	const byAlgo = new Map<string, BenchmarkResult>();
 	for (const b of benchmarks) {
-		byAlgo.set(b.algorithm, b);
+		byAlgo.set(algoKey(b.algorithm, b.variant), b);
 	}
 
 	const entries = [...byAlgo.values()];
@@ -103,10 +111,10 @@ function buildSingleOption(
 		entries.sort((a, b) => b.mean_ns - a.mean_ns);
 	}
 
-	const algorithms = entries.map((e) => e.algorithm);
+	const algorithms = entries.map((e) => displayName(e.algorithm, e.variant));
 	const values = entries.map((e) => getValue(e, filters.metric));
 	const colors = entries.map((e) =>
-		categories[e.algorithm] === "cryptographic"
+		categories[algoKey(e.algorithm, e.variant)] === "cryptographic"
 			? CRYPTO_COLOR
 			: NONCRYPTO_COLOR,
 	);
@@ -128,9 +136,9 @@ function buildSingleOption(
 			formatter(params: Array<{ dataIndex: number }>) {
 				const idx = params[0].dataIndex;
 				const b = entries[idx];
-				const cat = categories[b.algorithm] ?? "unknown";
+				const cat = categories[algoKey(b.algorithm, b.variant)] ?? "unknown";
 				return (
-					`<b>${b.algorithm}</b><br/>` +
+					`<b>${displayName(b.algorithm, b.variant)}</b><br/>` +
 					`Category: ${cat}<br/>` +
 					`Throughput: ${formatBytes(b.throughput_bps)}<br/>` +
 					`Mean latency: ${formatNs(b.mean_ns)}<br/>` +
@@ -236,10 +244,13 @@ function buildComparisonOption(
 	platformMap: Map<string, string>,
 	filters: FilterState,
 ) {
+	// Key by (algorithm, variant) so e.g. SHA-256 [sw] and SHA-256 [sha-ext]
+	// remain distinct rows in the cross-platform comparison.
 	const algoMap = new Map<string, Map<string, BenchmarkResult>>();
 	for (const b of benchmarks) {
-		if (!algoMap.has(b.algorithm)) algoMap.set(b.algorithm, new Map());
-		algoMap.get(b.algorithm)?.set(b.platform, b);
+		const k = algoKey(b.algorithm, b.variant);
+		if (!algoMap.has(k)) algoMap.set(k, new Map());
+		algoMap.get(k)?.set(b.platform, b);
 	}
 
 	const platformIds = [...filters.selectedPlatforms];
@@ -303,8 +314,13 @@ function buildComparisonOption(
 			formatter(
 				params: Array<{ name: string; seriesName: string; value: number }>,
 			) {
-				const algo = params[0].name;
-				let html = `<b>${algo}</b> (${categories[algo] ?? "unknown"})<br/>`;
+				// `params[0].name` is the `(algorithm, variant)` join key set on
+				// the yAxis data below.
+				const key = params[0].name;
+				const [algo, variant] = key.split("|");
+				let html = `<b>${displayName(algo, variant)}</b> (${
+					categories[key] ?? "unknown"
+				})<br/>`;
 				for (const p of params) {
 					if (p.value > 0) {
 						html += `${p.seriesName}: ${formatValue(p.value, filters.metric)}<br/>`;
@@ -327,7 +343,13 @@ function buildComparisonOption(
 		yAxis: {
 			type: "category" as const,
 			data: algorithms,
-			axisLabel: { fontSize: 11 },
+			axisLabel: {
+				fontSize: 11,
+				formatter: (key: string) => {
+					const [algo, variant] = key.split("|");
+					return displayName(algo, variant);
+				},
+			},
 			axisTick: { show: false },
 		},
 		series,

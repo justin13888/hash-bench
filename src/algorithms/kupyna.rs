@@ -1,6 +1,6 @@
 //! Kupyna — Ukrainian national standard (DSTU 7564:2014).
 
-use crate::registry::{Algorithm, Category, OutputBits, Runner};
+use crate::registry::{always_available, Algorithm, Category, OutputBits, Runner};
 use kupyna::Digest;
 use std::hint::black_box;
 
@@ -36,35 +36,43 @@ pub fn algorithms() -> Vec<Algorithm> {
     vec![
         Algorithm {
             name: "Kupyna-224",
+            variant: "sw",
             crate_name: "kupyna",
             output: OutputBits::Fixed(224),
             category: Category::Cryptographic,
             notes: "Ukrainian national standard (DSTU 7564:2014)",
             runner: Runner::SingleStream(kupyna224),
+            available: always_available,
         },
         Algorithm {
             name: "Kupyna-256",
+            variant: "sw",
             crate_name: "kupyna",
             output: OutputBits::Fixed(256),
             category: Category::Cryptographic,
             notes: "Ukrainian national standard (DSTU 7564:2014)",
             runner: Runner::SingleStream(kupyna256),
+            available: always_available,
         },
         Algorithm {
             name: "Kupyna-384",
+            variant: "sw",
             crate_name: "kupyna",
             output: OutputBits::Fixed(384),
             category: Category::Cryptographic,
             notes: "Ukrainian national standard (DSTU 7564:2014)",
             runner: Runner::SingleStream(kupyna384),
+            available: always_available,
         },
         Algorithm {
             name: "Kupyna-512",
+            variant: "sw",
             crate_name: "kupyna",
             output: OutputBits::Fixed(512),
             category: Category::Cryptographic,
             notes: "Ukrainian national standard (DSTU 7564:2014)",
             runner: Runner::SingleStream(kupyna512),
+            available: always_available,
         },
     ]
 }

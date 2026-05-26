@@ -1,23 +1,25 @@
 //! Completeness checker for per-machine results files.
 //!
 //! A `results/<id>/results.json` report is a full cartesian product of
-//! **algorithm × test size × thread count**. This module verifies that every
-//! expected `(algorithm, size, threads)` cell is present exactly once, so a
-//! partial report — a crashed run, a `--filter`ed run, a stale algorithm — is
-//! caught before it lands (PR validation) or after a code change (post-hoc).
+//! **(algorithm, variant) × test size × thread count**. This module verifies
+//! that every expected cell is present exactly once, so a partial report — a
+//! crashed run, a `--filter`ed run, a stale algorithm — is caught before it
+//! lands (PR validation) or after a code change (post-hoc).
 //!
-//! The expected algorithm list comes from [`crate::registry`], so verification
-//! reflects the *enabled* Cargo feature set: run it with the default (all)
-//! features for a meaningful check. Sizes and thread counts are read per-file
-//! from each report's own `config`, so custom-size or non-default-concurrency
-//! runs are checked against what they declared, not a hardcoded baseline.
+//! The expected `(algorithm, variant)` list comes from [`crate::registry`], so
+//! verification reflects the *enabled* Cargo feature set **and** what the
+//! current host's CPU exposes (HW-accelerated variants whose instructions are
+//! missing are filtered out by the registry, so they aren't expected here).
+//! Sizes and thread counts are read per-file from each report's own `config`,
+//! so custom-size or non-default-concurrency runs are checked against what
+//! they declared, not a hardcoded baseline.
 
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
 
 use serde::Deserialize;
 
-/// The subset of `schema/results.v1.schema.json` needed for verification.
+/// The subset of `schema/results.v2.schema.json` needed for verification.
 #[derive(Deserialize)]
 struct ResultsFile {
     platform: Platform,
@@ -39,12 +41,13 @@ struct Config {
 #[derive(Deserialize)]
 struct ResultRow {
     algorithm: String,
+    variant: String,
     size_bytes: u64,
     threads: u32,
 }
 
-/// An `(algorithm, size_bytes, threads)` coordinate.
-pub type Cell = (String, u64, u32);
+/// An `(algorithm, variant, size_bytes, threads)` coordinate.
+pub type Cell = (String, String, u64, u32);
 
 /// Verification outcome for a single results file.
 pub struct FileReport {
@@ -78,15 +81,18 @@ impl FileReport {
 
 /// Core completeness check: diff `file`'s rows against the expected cartesian
 /// product of `algorithms` × the file's own configured sizes and thread counts.
-fn check(path: PathBuf, file: &ResultsFile, algorithms: &[String]) -> FileReport {
-    let known: BTreeSet<&str> = algorithms.iter().map(String::as_str).collect();
+fn check(path: PathBuf, file: &ResultsFile, algorithms: &[(String, String)]) -> FileReport {
+    let known: BTreeSet<(&str, &str)> = algorithms
+        .iter()
+        .map(|(n, v)| (n.as_str(), v.as_str()))
+        .collect();
 
-    // Expected cells: every algorithm at every configured (size, threads) pair.
+    // Expected cells: every (algorithm, variant) at every configured (size, threads).
     let mut expected: BTreeSet<Cell> = BTreeSet::new();
-    for alg in algorithms {
+    for (name, variant) in algorithms {
         for &size in &file.config.sizes_bytes {
             for &threads in &file.config.concurrency_levels {
-                expected.insert((alg.clone(), size, threads));
+                expected.insert((name.clone(), variant.clone(), size, threads));
             }
         }
     }
@@ -96,9 +102,14 @@ fn check(path: PathBuf, file: &ResultsFile, algorithms: &[String]) -> FileReport
     let mut unknown_algorithms: BTreeSet<String> = BTreeSet::new();
     let mut inconsistent: Vec<Cell> = Vec::new();
     for row in &file.results {
-        let cell = (row.algorithm.clone(), row.size_bytes, row.threads);
-        if !known.contains(row.algorithm.as_str()) {
-            unknown_algorithms.insert(row.algorithm.clone());
+        let cell = (
+            row.algorithm.clone(),
+            row.variant.clone(),
+            row.size_bytes,
+            row.threads,
+        );
+        if !known.contains(&(row.algorithm.as_str(), row.variant.as_str())) {
+            unknown_algorithms.insert(format!("{} [{}]", row.algorithm, row.variant));
         }
         if !file.config.sizes_bytes.contains(&row.size_bytes)
             || !file.config.concurrency_levels.contains(&row.threads)
@@ -131,7 +142,7 @@ fn check(path: PathBuf, file: &ResultsFile, algorithms: &[String]) -> FileReport
 }
 
 /// Verify a single `results.json` against the canonical `algorithms` list.
-fn verify_file(path: &Path, algorithms: &[String]) -> Result<FileReport, String> {
+fn verify_file(path: &Path, algorithms: &[(String, String)]) -> Result<FileReport, String> {
     let text = std::fs::read_to_string(path)
         .map_err(|e| format!("failed to read {}: {e}", path.display()))?;
     let file: ResultsFile = serde_json::from_str(&text)
@@ -145,9 +156,9 @@ fn verify_file(path: &Path, algorithms: &[String]) -> Result<FileReport, String>
 /// whether that is a warning or a failure). Returns `Err` only on a read or
 /// parse error of a file that does exist.
 pub fn verify_dir(dir: &Path) -> Result<Vec<FileReport>, String> {
-    let algorithms: Vec<String> = crate::registry()
+    let algorithms: Vec<(String, String)> = crate::registry()
         .into_iter()
-        .map(|a| a.name.to_string())
+        .map(|a| (a.name.to_string(), a.variant.to_string()))
         .collect();
 
     if !dir.exists() {
@@ -188,11 +199,14 @@ pub fn human_size(bytes: u64) -> String {
     }
 }
 
-/// Render a cell as `"<algorithm> @ <size>, <n> thread(s)"`.
+/// Render a cell as `"<algorithm> [<variant>] @ <size>, <n> thread(s)"`.
 pub fn format_cell(cell: &Cell) -> String {
-    let (alg, size, threads) = cell;
+    let (alg, variant, size, threads) = cell;
     let plural = if *threads == 1 { "thread" } else { "threads" };
-    format!("{alg} @ {}, {threads} {plural}", human_size(*size))
+    format!(
+        "{alg} [{variant}] @ {}, {threads} {plural}",
+        human_size(*size)
+    )
 }
 
 #[cfg(test)]
@@ -201,13 +215,14 @@ mod tests {
 
     /// Build a `ResultsFile` whose rows are the product `algorithms × sizes ×
     /// threads`, then optionally mutate `results` before checking.
-    fn complete(algorithms: &[&str], sizes: &[u64], threads: &[u32]) -> ResultsFile {
+    fn complete(algorithms: &[(&str, &str)], sizes: &[u64], threads: &[u32]) -> ResultsFile {
         let mut results = Vec::new();
-        for alg in algorithms {
+        for (alg, variant) in algorithms {
             for &size in sizes {
                 for &t in threads {
                     results.push(ResultRow {
                         algorithm: alg.to_string(),
+                        variant: variant.to_string(),
                         size_bytes: size,
                         threads: t,
                     });
@@ -226,13 +241,20 @@ mod tests {
         }
     }
 
-    fn algs() -> Vec<String> {
-        ["A", "B", "C"].iter().map(|s| s.to_string()).collect()
+    fn algs() -> Vec<(String, String)> {
+        [("A", "sw"), ("B", "sw"), ("C", "sw")]
+            .iter()
+            .map(|(n, v)| (n.to_string(), v.to_string()))
+            .collect()
     }
 
     #[test]
     fn complete_report_passes() {
-        let file = complete(&["A", "B", "C"], &[64, 1024], &[1, 8]);
+        let file = complete(
+            &[("A", "sw"), ("B", "sw"), ("C", "sw")],
+            &[64, 1024],
+            &[1, 8],
+        );
         let report = check(PathBuf::from("x"), &file, &algs());
         assert!(
             report.is_ok(),
@@ -245,7 +267,11 @@ mod tests {
 
     #[test]
     fn missing_cell_fails() {
-        let mut file = complete(&["A", "B", "C"], &[64, 1024], &[1, 8]);
+        let mut file = complete(
+            &[("A", "sw"), ("B", "sw"), ("C", "sw")],
+            &[64, 1024],
+            &[1, 8],
+        );
         file.results.pop();
         let report = check(PathBuf::from("x"), &file, &algs());
         assert!(!report.is_ok());
@@ -254,9 +280,10 @@ mod tests {
 
     #[test]
     fn duplicate_cell_fails() {
-        let mut file = complete(&["A", "B", "C"], &[64], &[1]);
+        let mut file = complete(&[("A", "sw"), ("B", "sw"), ("C", "sw")], &[64], &[1]);
         file.results.push(ResultRow {
             algorithm: "A".to_string(),
+            variant: "sw".to_string(),
             size_bytes: 64,
             threads: 1,
         });
@@ -268,22 +295,38 @@ mod tests {
 
     #[test]
     fn unknown_algorithm_fails() {
-        let mut file = complete(&["A", "B", "C"], &[64], &[1]);
+        let mut file = complete(&[("A", "sw"), ("B", "sw"), ("C", "sw")], &[64], &[1]);
         file.results.push(ResultRow {
             algorithm: "Stale".to_string(),
+            variant: "sw".to_string(),
             size_bytes: 64,
             threads: 1,
         });
         let report = check(PathBuf::from("x"), &file, &algs());
         assert!(!report.is_ok());
-        assert!(report.unknown_algorithms.contains("Stale"));
+        assert!(report.unknown_algorithms.contains("Stale [sw]"));
+    }
+
+    #[test]
+    fn unknown_variant_of_known_algorithm_fails() {
+        let mut file = complete(&[("A", "sw"), ("B", "sw"), ("C", "sw")], &[64], &[1]);
+        file.results.push(ResultRow {
+            algorithm: "A".to_string(),
+            variant: "sha-ext".to_string(),
+            size_bytes: 64,
+            threads: 1,
+        });
+        let report = check(PathBuf::from("x"), &file, &algs());
+        assert!(!report.is_ok());
+        assert!(report.unknown_algorithms.contains("A [sha-ext]"));
     }
 
     #[test]
     fn row_outside_config_is_inconsistent() {
-        let mut file = complete(&["A", "B", "C"], &[64], &[1]);
+        let mut file = complete(&[("A", "sw"), ("B", "sw"), ("C", "sw")], &[64], &[1]);
         file.results.push(ResultRow {
             algorithm: "A".to_string(),
+            variant: "sw".to_string(),
             size_bytes: 999,
             threads: 1,
         });

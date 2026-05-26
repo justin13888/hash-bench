@@ -94,7 +94,7 @@ The benchmark measures the time taken to hash the input data preloaded into heap
 
 Raw benchmark data is stored in the [`results/`](results/) directory, one
 `results.json` per machine ID. Each report conforms to a versioned JSON Schema
-([`schema/results.v1.schema.json`](schema/results.v1.schema.json)), so the format
+([`schema/results.v2.schema.json`](schema/results.v2.schema.json)), so the format
 is consistent across platforms and machine-parseable without any hardcoding. The
 web dashboard at the link above is automatically deployed when results are updated.
 

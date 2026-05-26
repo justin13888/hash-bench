@@ -1,10 +1,10 @@
-//! SHA-1 (broken — included for reference only).
+//! Pure-Rust SHA-1 via the `sha1` crate built with the `force-soft` feature, so
+//! no x86 SHA-NI or ARMv8 SHA1 dispatch is compiled in.
 
-use crate::registry::{Algorithm, Category, OutputBits, Runner};
+use crate::registry::{always_available, Algorithm, Category, OutputBits, Runner};
 use sha1::Digest;
 use std::hint::black_box;
 
-/// Hash data using SHA-1.
 fn sha1(data: &[u8]) {
     let mut hasher = sha1::Sha1::new();
     hasher.update(data);
@@ -14,10 +14,12 @@ fn sha1(data: &[u8]) {
 pub fn algorithms() -> Vec<Algorithm> {
     vec![Algorithm {
         name: "SHA-1",
+        variant: "sw",
         crate_name: "sha1",
         output: OutputBits::Fixed(160),
         category: Category::Cryptographic,
-        notes: "Broken — included for reference only",
+        notes: "Broken — included for reference only; pure-Rust (force-soft)",
         runner: Runner::SingleStream(sha1),
+        available: always_available,
     }]
 }

@@ -1,6 +1,6 @@
 //! Streebog — Russian standard (GOST R 34.11-2012).
 
-use crate::registry::{Algorithm, Category, OutputBits, Runner};
+use crate::registry::{always_available, Algorithm, Category, OutputBits, Runner};
 use std::hint::black_box;
 use streebog::Digest;
 
@@ -22,19 +22,23 @@ pub fn algorithms() -> Vec<Algorithm> {
     vec![
         Algorithm {
             name: "Streebog-256",
+            variant: "sw",
             crate_name: "streebog",
             output: OutputBits::Fixed(256),
             category: Category::Cryptographic,
             notes: "Russian standard (GOST R 34.11-2012)",
             runner: Runner::SingleStream(streebog256),
+            available: always_available,
         },
         Algorithm {
             name: "Streebog-512",
+            variant: "sw",
             crate_name: "streebog",
             output: OutputBits::Fixed(512),
             category: Category::Cryptographic,
             notes: "Russian standard (GOST R 34.11-2012)",
             runner: Runner::SingleStream(streebog512),
+            available: always_available,
         },
     ]
 }

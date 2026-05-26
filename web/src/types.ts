@@ -2,6 +2,13 @@ export interface BenchmarkResult {
 	platform: string;
 	threads: number;
 	algorithm: string;
+	/**
+	 * Implementation tag — `"sw"` for pure-Rust, `"sha-ext"` for x86 SHA-NI /
+	 * ARMv8 SHA2, `"aes-ext"` for AES-NI, `"clmul"` for PCLMULQDQ / PMULL,
+	 * `"crc-ext"` for SSE4.2 / ARMv8 CRC. Together with `algorithm`, it forms
+	 * the unique result identity.
+	 */
+	variant: string;
 	size: string;
 	size_bytes: number;
 	mean_ns: number;

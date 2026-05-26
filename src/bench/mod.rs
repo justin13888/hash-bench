@@ -127,8 +127,8 @@ pub fn run_benchmarks(cfg: &BenchConfig) -> Report {
             for alg in &algorithms {
                 cell += 1;
                 eprintln!(
-                    "[{cell}/{total_cells}] {} @ {} B, {} thread(s)",
-                    alg.name, size, concurrency,
+                    "[{cell}/{total_cells}] {} [{}] @ {} B, {} thread(s)",
+                    alg.name, alg.variant, size, concurrency,
                 );
                 let stats = measure_cell(&harness, alg, data, concurrency, &pool);
                 let bytes = bytes_per_unit(alg, *size, concurrency);
@@ -139,6 +139,7 @@ pub fn run_benchmarks(cfg: &BenchConfig) -> Report {
                 };
                 results.push(ResultRow {
                     algorithm: alg.name.to_string(),
+                    variant: alg.variant.to_string(),
                     size_bytes: *size as u64,
                     threads: concurrency as u32,
                     mean_ns: stats.mean_ns,

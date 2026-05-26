@@ -1,6 +1,6 @@
 //! BLAKE2 family (RFC 7693).
 
-use crate::registry::{Algorithm, Category, OutputBits, Runner};
+use crate::registry::{always_available, Algorithm, Category, OutputBits, Runner};
 use blake2::Digest;
 use std::hint::black_box;
 
@@ -30,27 +30,33 @@ pub fn algorithms() -> Vec<Algorithm> {
     vec![
         Algorithm {
             name: "BLAKE2b512",
+            variant: "sw",
             crate_name: "blake2",
             output: OutputBits::Fixed(512),
             category: Category::Cryptographic,
             notes: "RFC 7693; used by WireGuard, Argon2",
             runner: Runner::SingleStream(blake2b512),
+            available: always_available,
         },
         Algorithm {
             name: "BLAKE2b256",
+            variant: "sw",
             crate_name: "blake2",
             output: OutputBits::Fixed(256),
             category: Category::Cryptographic,
             notes: "RFC 7693",
             runner: Runner::SingleStream(blake2b256),
+            available: always_available,
         },
         Algorithm {
             name: "BLAKE2s256",
+            variant: "sw",
             crate_name: "blake2",
             output: OutputBits::Fixed(256),
             category: Category::Cryptographic,
             notes: "RFC 7693; used by WireGuard",
             runner: Runner::SingleStream(blake2s256),
+            available: always_available,
         },
     ]
 }

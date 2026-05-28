@@ -31,11 +31,27 @@ export interface PlatformInfo {
 	sizes: string[];
 }
 
+export interface AlgorithmMeta {
+	name: string;
+	variant: string;
+	crate: string;
+	output_bits: number;
+	output_kind: "fixed" | "xof";
+	category: "cryptographic" | "non-cryptographic";
+	internally_parallel: boolean;
+	keyed: boolean;
+	dos_resistant: boolean;
+	hardware_required: boolean;
+	hardware_features: string[];
+	notes: string;
+}
+
 export interface ReportData {
 	generated_at_unix_ms: number;
 	platforms: PlatformInfo[];
 	benchmarks: BenchmarkResult[];
-	categories: Record<string, string>;
+	/** Keyed by `<algorithm>|<variant>`. */
+	algorithms: Record<string, AlgorithmMeta>;
 }
 
 export type Metric = "throughput" | "latency";

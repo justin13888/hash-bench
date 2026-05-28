@@ -107,7 +107,7 @@ interface ReportData {
 	platforms: PlatformInfo[];
 	benchmarks: BenchmarkResult[];
 	/** Keyed by `<algorithm>|<variant>` (matches the join key emitted below). */
-	categories: Record<string, string>;
+	algorithms: Record<string, AlgorithmMeta>;
 }
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -142,9 +142,9 @@ async function compileSchema(ajv: Ajv2020, file: string) {
 
 // ── Load + validate the algorithm catalogue ──────────────────────────────────
 
-async function loadCategories(
+async function loadAlgorithmMeta(
 	ajv: Ajv2020,
-): Promise<Record<string, string>> {
+): Promise<Record<string, AlgorithmMeta>> {
 	const validate = await compileSchema(ajv, "algorithms.v3.schema.json");
 
 	if (!(await exists(ALGORITHMS_FILE))) {
@@ -162,11 +162,11 @@ async function loadCategories(
 		);
 	}
 
-	const categories: Record<string, string> = {};
+	const algorithms: Record<string, AlgorithmMeta> = {};
 	for (const alg of report.algorithms) {
-		categories[`${alg.name}|${alg.variant}`] = alg.category;
+		algorithms[`${alg.name}|${alg.variant}`] = alg;
 	}
-	return categories;
+	return algorithms;
 }
 
 // ── Load + validate per-platform benchmark reports ───────────────────────────
@@ -202,7 +202,7 @@ async function loadReports(ajv: Ajv2020): Promise<ResultsReport[]> {
 
 function buildReportData(
 	reports: ResultsReport[],
-	categories: Record<string, string>,
+	algorithms: Record<string, AlgorithmMeta>,
 ): ReportData {
 	const benchmarks: BenchmarkResult[] = [];
 	const platforms: PlatformInfo[] = [];
@@ -261,17 +261,17 @@ function buildReportData(
 		generated_at_unix_ms: Date.now(),
 		platforms,
 		benchmarks,
-		categories,
+		algorithms,
 	};
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 const ajv = new Ajv2020({ allErrors: true });
-const categories = await loadCategories(ajv);
+const algorithmMeta = await loadAlgorithmMeta(ajv);
 const reports = await loadReports(ajv);
 
-const reportData = buildReportData(reports, categories);
+const reportData = buildReportData(reports, algorithmMeta);
 console.log(
 	`Loaded ${reportData.benchmarks.length} benchmark results from ${reportData.platforms.length} platform(s).`,
 );

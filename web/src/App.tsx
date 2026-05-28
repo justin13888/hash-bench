@@ -47,7 +47,7 @@ export default function App() {
 				b.threads === filters.threadCount &&
 				b.size === filters.size &&
 				(filters.category === "all" ||
-					data.categories[algoKey(b.algorithm, b.variant)] ===
+					data.algorithms[algoKey(b.algorithm, b.variant)]?.category ===
 						filters.category),
 		);
 	}, [data, filters]);
@@ -125,14 +125,14 @@ export default function App() {
 
 				<BenchmarkChart
 					benchmarks={filtered}
-					categories={data.categories}
+					algorithms={data.algorithms}
 					platformMap={platformMap}
 					filters={filters}
 				/>
 
 				<DataTable
 					benchmarks={filtered}
-					categories={data.categories}
+					algorithms={data.algorithms}
 					platformMap={platformMap}
 				/>
 

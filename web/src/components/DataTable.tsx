@@ -1,10 +1,10 @@
 import { useCallback, useMemo, useState } from "react";
 import { algoKey, displayName, formatBytes, formatNs } from "../lib/format";
-import type { BenchmarkResult } from "../types";
+import type { AlgorithmMeta, BenchmarkResult } from "../types";
 
 interface Props {
 	benchmarks: BenchmarkResult[];
-	categories: Record<string, string>;
+	algorithms: Record<string, AlgorithmMeta>;
 	platformMap: Map<string, string>;
 }
 
@@ -18,7 +18,7 @@ type SortKey =
 
 export default function DataTable({
 	benchmarks,
-	categories,
+	algorithms,
 	platformMap,
 }: Props) {
 	const [sortKey, setSortKey] = useState<SortKey>("throughput_bps");
@@ -39,7 +39,8 @@ export default function DataTable({
 	const sorted = useMemo(() => {
 		const rows = benchmarks.map((b) => ({
 			...b,
-			category: categories[algoKey(b.algorithm, b.variant)] ?? "unknown",
+			category:
+				algorithms[algoKey(b.algorithm, b.variant)]?.category ?? "unknown",
 			display: displayName(b.algorithm, b.variant),
 			platform_name: platformMap.get(b.platform) ?? b.platform,
 		}));
@@ -83,7 +84,7 @@ export default function DataTable({
 		});
 
 		return rows;
-	}, [benchmarks, categories, platformMap, sortKey, sortAsc]);
+	}, [benchmarks, algorithms, platformMap, sortKey, sortAsc]);
 
 	const arrow = (key: SortKey) =>
 		sortKey === key ? (sortAsc ? " \u25B2" : " \u25BC") : "";

@@ -5,15 +5,17 @@ pub mod harness;
 pub mod report;
 
 use std::hint::black_box;
+use std::io::IsTerminal;
 use std::time::Duration;
 
+use owo_colors::OwoColorize;
 use rand::{Rng, SeedableRng};
 use rayon::prelude::*;
 use rayon::ThreadPool;
 
 use crate::registry::{Algorithm, Runner};
 use harness::{measure, HarnessConfig, Stats};
-use report::{build_report, Report, ResultRow};
+use report::{build_report, Report, ResultRow, SkippedVariant};
 
 /// Fixed seed for reproducible benchmark data across runs and platforms.
 const RNG_SEED: u64 = 0xDEAD_BEEF_CAFE_BABE;
@@ -91,13 +93,15 @@ fn measure_cell(
 /// Run the full benchmark matrix and return a standardized report.
 pub fn run_benchmarks(cfg: &BenchConfig) -> Report {
     let filter = cfg.filter.as_ref().map(|f| f.to_lowercase());
-    let algorithms: Vec<Algorithm> = crate::registry()
+    let (kept, skipped_alg) = crate::registry_with_skipped();
+    let algorithms: Vec<Algorithm> = kept
         .into_iter()
         .filter(|a| match &filter {
             Some(f) => a.name.to_lowercase().contains(f),
             None => true,
         })
         .collect();
+    let skipped_variants = report_skipped(&skipped_alg);
 
     let datasets: Vec<(usize, Vec<u8>)> = cfg
         .sizes
@@ -118,6 +122,7 @@ pub fn run_benchmarks(cfg: &BenchConfig) -> Report {
         cfg.concurrency.len(),
         total_cells,
     );
+    print_skip_notices(&skipped_variants);
 
     let mut results: Vec<ResultRow> = Vec::new();
     let mut cell = 0usize;
@@ -154,5 +159,52 @@ pub fn run_benchmarks(cfg: &BenchConfig) -> Report {
         }
     }
 
-    build_report(cfg, results)
+    build_report(cfg, results, skipped_variants)
+}
+
+/// Convert the filtered-out registry entries into `SkippedVariant` records.
+fn report_skipped(skipped: &[Algorithm]) -> Vec<SkippedVariant> {
+    skipped
+        .iter()
+        .map(|a| SkippedVariant {
+            algorithm: a.name.to_string(),
+            variant: a.variant.to_string(),
+            crate_name: a.crate_name.to_string(),
+            reason: skip_reason(a),
+            hardware_features: a.hardware_features.iter().map(|s| s.to_string()).collect(),
+        })
+        .collect()
+}
+
+fn skip_reason(a: &Algorithm) -> String {
+    if a.hardware_required && !a.hardware_features.is_empty() {
+        format!(
+            "host CPU lacks required feature(s): {}",
+            a.hardware_features.join(", ")
+        )
+    } else {
+        "available() predicate returned false".to_string()
+    }
+}
+
+/// Print one colored `[SKIPPED]` line per filtered variant. Plain text when
+/// stderr isn't a TTY (CI logs, pipes) so grep stays clean.
+fn print_skip_notices(skipped: &[SkippedVariant]) {
+    if skipped.is_empty() {
+        return;
+    }
+    let color = std::io::stderr().is_terminal();
+    for s in skipped {
+        if color {
+            eprintln!(
+                "{} {} [{}] — {}",
+                "[SKIPPED]".bright_yellow().bold(),
+                s.algorithm.bright_yellow().bold(),
+                s.variant.bright_yellow(),
+                s.reason,
+            );
+        } else {
+            eprintln!("[SKIPPED] {} [{}] — {}", s.algorithm, s.variant, s.reason,);
+        }
+    }
 }

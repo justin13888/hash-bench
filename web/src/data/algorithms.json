@@ -88,7 +88,7 @@
     {
       "name": "SHA-1",
       "variant": "sha-ext",
-      "crate": "ring",
+      "crate": "hash-bench",
       "output_bits": 160,
       "output_kind": "fixed",
       "category": "cryptographic",
@@ -99,7 +99,7 @@
       "hardware_features": [
         "sha-ni"
       ],
-      "notes": "x86 SHA-NI / ARMv8 SHA1 via `ring`"
+      "notes": "x86 SHA-NI / ARMv8 SHA1 via in-tree intrinsics"
     },
     {
       "name": "SHA-224",
@@ -713,7 +713,7 @@
     },
     {
       "name": "AHash",
-      "variant": "aes-ext",
+      "variant": "sw",
       "crate": "ahash",
       "output_bits": 64,
       "output_kind": "fixed",
@@ -721,10 +721,8 @@
       "internally_parallel": false,
       "keyed": true,
       "dos_resistant": true,
-      "hardware_required": true,
-      "hardware_features": [
-        "aes-ni"
-      ],
+      "hardware_required": false,
+      "hardware_features": [],
       "notes": "Rust hashbrown default; AES-NI / ARMv8 AES when target_feature=\"aes\""
     },
     {

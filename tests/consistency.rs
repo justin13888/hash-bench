@@ -52,10 +52,11 @@ fn digest(name: &str, variant: &str, data: &[u8]) -> Vec<u8> {
             use sha1::{Digest, Sha1};
             Sha1::digest(data).to_vec()
         }
-        #[cfg(feature = "sha-hw")]
-        ("SHA-1", "sha-ext") => ring::digest::digest(&ring::digest::SHA1_FOR_LEGACY_USE_ONLY, data)
-            .as_ref()
-            .to_vec(),
+        #[cfg(all(
+            feature = "sha-hw",
+            any(target_arch = "x86_64", target_arch = "aarch64")
+        ))]
+        ("SHA-1", "sha-ext") => hash_bench::algorithms::sha1::sha_ext::sha1_hw(data).to_vec(),
         #[cfg(feature = "sha2")]
         ("SHA-256", "sw") => {
             use sha2::{Digest, Sha256};
@@ -128,7 +129,11 @@ fn digest(name: &str, variant: &str, data: &[u8]) -> Vec<u8> {
 fn pairs() -> Vec<(&'static str, &'static str, &'static str, &'static str)> {
     #[allow(unused_mut)]
     let mut v: Vec<(&'static str, &'static str, &'static str, &'static str)> = Vec::new();
-    #[cfg(all(feature = "sha1", feature = "sha-hw"))]
+    #[cfg(all(
+        feature = "sha1",
+        feature = "sha-hw",
+        any(target_arch = "x86_64", target_arch = "aarch64")
+    ))]
     v.push(("SHA-1", "sw", "SHA-1", "sha-ext"));
     #[cfg(all(feature = "sha2", feature = "sha-hw"))]
     v.push(("SHA-256", "sw", "SHA-256", "sha-ext"));
@@ -167,8 +172,12 @@ fn manifest() -> Vec<(&'static str, &'static str, &'static str)> {
     }
     #[cfg(feature = "sha1")]
     v.push(("SHA-1", "sw", "sha1"));
-    #[cfg(all(feature = "sha1", feature = "sha-hw"))]
-    v.push(("SHA-1", "sha-ext", "ring"));
+    #[cfg(all(
+        feature = "sha1",
+        feature = "sha-hw",
+        any(target_arch = "x86_64", target_arch = "aarch64")
+    ))]
+    v.push(("SHA-1", "sha-ext", "hash-bench"));
     #[cfg(feature = "sha2")]
     {
         v.push(("SHA-224", "sw", "sha2"));

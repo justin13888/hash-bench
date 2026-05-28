@@ -19,7 +19,7 @@ use std::path::{Path, PathBuf};
 
 use serde::Deserialize;
 
-/// The subset of `schema/results.v2.schema.json` needed for verification.
+/// The subset of `schema/results.v3.schema.json` needed for verification.
 #[derive(Deserialize)]
 struct ResultsFile {
     platform: Platform,

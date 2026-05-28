@@ -31,6 +31,20 @@ jobs:
         run: cargo check --all-targets
       - name: Build minimal feature set
         run: cargo build --no-default-features --features sha2
+      # Release-build the binary and confirm the hand-rolled SHA-1 sha-ext
+      # path actually emits SHA-NI opcodes. Catches regressions where a future
+      # refactor silently replaces the intrinsics with a generic fallback.
+      - name: Verify SHA-NI opcodes present in release binary
+        run: |
+          cargo build --release --bin hash-bench
+          if ! objdump -d target/release/hash-bench \
+              | grep -Eq '\b(sha1rnds4|sha1nexte|sha1msg1|sha1msg2)\b'; then
+            echo "::error::SHA-NI opcodes missing from target/release/hash-bench — the sha-ext path was likely lost"
+            exit 1
+          fi
+          objdump -d target/release/hash-bench \
+            | grep -E '\b(sha1rnds4|sha1nexte|sha1msg1|sha1msg2)\b' \
+            | head -n 4
       - name: Verify algorithms.json is up to date
         run: |
           cargo run --quiet -- metadata --output web/src/data/algorithms.json

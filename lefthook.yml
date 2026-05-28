@@ -1,13 +1,24 @@
 pre-commit:
-  parallel: true
+  piped: true
   commands:
-    rust-fmt:
-      glob: "*.rs"
-      run: cargo fmt -- --check
-    rust-lint:
-      glob: "*.rs"
-      run: cargo clippy --all-targets --all-features -- -D warnings
-    web-check:
-      root: "web/"
-      glob: "src/**/*.{ts,tsx}"
-      run: bunx biome check {staged_files}
+    fmt:
+      priority: 1
+      run: just fmt
+    clippy-fix:
+      priority: 2
+      run: just clippy-fix
+    clippy:
+      priority: 3
+      run: just clippy
+    check-modified:
+      priority: 4
+      run: git diff --exit-code || { echo "Auto-fixes were applied. Stage the changes and re-commit."; exit 1; }
+
+pre-push:
+  commands:
+    fmt:
+      run: just fmt-check
+    clippy:
+      run: just clippy
+    test:
+      run: just test

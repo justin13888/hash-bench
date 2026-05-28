@@ -51,11 +51,15 @@ check:
     cargo check --all-targets
 
 # Run clippy lints (all targets, all features)
-lint:
+clippy:
     cargo clippy --all-targets --all-features -- -D warnings
 
+# Auto-apply clippy fixes to staged + unstaged changes
+clippy-fix:
+    cargo clippy --fix --all-targets --all-features --allow-dirty --allow-staged
+
 # Run clippy with no default features (verifies the minimal build)
-lint-no-default:
+clippy-no-default:
     cargo clippy --no-default-features --all-targets -- -D warnings
 
 # Verify a few single-family feature subsets compile in isolation
@@ -80,7 +84,7 @@ clean:
     cargo clean
 
 # Run all checks (Rust fmt, clippy, web lint + typecheck)
-check-all: fmt-check lint
+check-all: fmt-check clippy
     cd web && bun run check && bun run typecheck
 
 # Run web lint and format checks (Biome)

@@ -136,7 +136,7 @@ just gen-metadata                  # Regenerate web/src/data/algorithms.json
 just dev                           # Start web dashboard dev server
 just build-web                     # Build the web dashboard
 just check                         # Check the project compiles
-just lint                          # Run clippy lints
+just clippy                        # Run clippy lints
 just fmt                           # Format code
 just clean                         # Clean build artifacts
 ```
@@ -171,15 +171,18 @@ This project uses [lefthook](https://github.com/evilmartians/lefthook) for pre-c
 lefthook install
 ```
 
-The pre-commit hook runs in parallel:
-- **Rust**: `cargo fmt --check` and `cargo clippy`
-- **Web**: `biome check` on staged TypeScript/TSX files
+The pre-commit hook runs sequentially: `just fmt`, `just clippy-fix`, `just clippy`,
+then a `git diff --exit-code` check that aborts the commit if the auto-fixes
+modified any tracked files (so you can review and re-stage).
+
+The pre-push hook runs `just fmt-check`, `just clippy`, and `just test`.
 
 ### Lint & Format
 
 ```bash
 just fmt-check      # Check Rust formatting
-just lint           # Run clippy
+just clippy         # Run clippy
+just clippy-fix     # Auto-apply clippy fixes
 just lint-web       # Run Biome lint + format check on web
 just fmt            # Format Rust code
 just fmt-web        # Format web source with Biome

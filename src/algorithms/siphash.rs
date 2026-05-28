@@ -29,6 +29,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "Used by Python's dict default hasher",
             runner: Runner::SingleStream(siphash13),
             available: always_available,
+            keyed: true,
+            dos_resistant: true,
+            hardware_required: false,
+            hardware_features: &[],
         },
         Algorithm {
             name: "SipHash-2-4",
@@ -39,6 +43,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "Rust HashMap default (via DefaultHasher)",
             runner: Runner::SingleStream(siphash24),
             available: always_available,
+            keyed: true,
+            dos_resistant: true,
+            hardware_required: false,
+            hardware_features: &[],
         },
     ]
 }

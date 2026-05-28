@@ -42,6 +42,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "IEEE polynomial; table-based pure-Rust",
             runner: Runner::SingleStream(crc32),
             available: always_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: false,
+            hardware_features: &[],
         },
         Algorithm {
             name: "CRC32C",
@@ -52,6 +56,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "Castagnoli polynomial; table-based pure-Rust",
             runner: Runner::SingleStream(crc32c),
             available: always_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: false,
+            hardware_features: &[],
         },
         Algorithm {
             name: "CRC64",
@@ -62,6 +70,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "CRC-64/XZ (ECMA-182 polynomial, reflected); table-based pure-Rust",
             runner: Runner::SingleStream(crc64),
             available: always_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: false,
+            hardware_features: &[],
         },
     ]
 }

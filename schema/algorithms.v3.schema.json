@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/justin13888/hash-bench/schema/algorithms.v3.schema.json",
+  "title": "hash-bench algorithm catalogue (v3)",
+  "description": "The algorithm metadata catalogue emitted by `hash-bench metadata`. v3 adds structured use-case tags: keyed, dos_resistant, hardware_required, hardware_features.",
+  "type": "object",
+  "required": ["schema_version", "algorithms"],
+  "properties": {
+    "schema_version": {
+      "description": "Algorithms format version. Currently 3.",
+      "type": "integer",
+      "const": 3
+    },
+    "algorithms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "variant",
+          "crate",
+          "output_bits",
+          "output_kind",
+          "category",
+          "internally_parallel",
+          "keyed",
+          "dos_resistant",
+          "hardware_required",
+          "hardware_features",
+          "notes"
+        ],
+        "properties": {
+          "name": {
+            "description": "Algorithm display name; joins with benchmark results together with `variant`.",
+            "type": "string"
+          },
+          "variant": {
+            "description": "Implementation tag — e.g. \"sw\", \"sha-ext\", \"aes-ext\", \"clmul\", \"crc-ext\". `(name, variant)` is the unique catalogue key.",
+            "type": "string"
+          },
+          "crate": {
+            "description": "Backing crate as published on crates.io.",
+            "type": "string"
+          },
+          "output_bits": {
+            "description": "Digest width in bits (the benchmarked width for XOFs).",
+            "type": "integer",
+            "minimum": 1
+          },
+          "output_kind": {
+            "type": "string",
+            "enum": ["fixed", "xof"]
+          },
+          "category": {
+            "type": "string",
+            "enum": ["cryptographic", "non-cryptographic"]
+          },
+          "internally_parallel": {
+            "description": "Whether the algorithm parallelises a single stream internally.",
+            "type": "boolean"
+          },
+          "keyed": {
+            "description": "Whether the benchmarked entry consumes a key.",
+            "type": "boolean"
+          },
+          "dos_resistant": {
+            "description": "Whether the entry is a keyed hash with documented HashDoS hardening. Implies `keyed = true`.",
+            "type": "boolean"
+          },
+          "hardware_required": {
+            "description": "Whether this variant requires a specific ISA feature to execute.",
+            "type": "boolean"
+          },
+          "hardware_features": {
+            "description": "ISA feature labels this variant relies on (e.g. `sha-ni`, `pclmulqdq`). Empty for `sw`.",
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "notes": { "type": "string" }
+        }
+      }
+    }
+  }
+}

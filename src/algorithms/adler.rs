@@ -20,5 +20,9 @@ pub fn algorithms() -> Vec<Algorithm> {
         notes: "Checksum used by zlib/gzip — included for reference",
         runner: Runner::SingleStream(adler32),
         available: always_available,
+        keyed: false,
+        dos_resistant: false,
+        hardware_required: false,
+        hardware_features: &[],
     }]
 }

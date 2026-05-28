@@ -29,6 +29,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "Russian standard (GOST R 34.11-2012)",
             runner: Runner::SingleStream(streebog256),
             available: always_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: false,
+            hardware_features: &[],
         },
         Algorithm {
             name: "Streebog-512",
@@ -39,6 +43,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "Russian standard (GOST R 34.11-2012)",
             runner: Runner::SingleStream(streebog512),
             available: always_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: false,
+            hardware_features: &[],
         },
     ]
 }

@@ -18,5 +18,9 @@ pub fn algorithms() -> Vec<Algorithm> {
         notes: "Used by Go runtime (maphash), Zig",
         runner: Runner::SingleStream(wyhash),
         available: always_available,
+        keyed: false,
+        dos_resistant: false,
+        hardware_required: false,
+        hardware_features: &[],
     }]
 }

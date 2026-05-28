@@ -61,6 +61,10 @@ interface AlgorithmMeta {
 	output_kind: string;
 	category: string;
 	internally_parallel: boolean;
+	keyed: boolean;
+	dos_resistant: boolean;
+	hardware_required: boolean;
+	hardware_features: string[];
 	notes: string;
 }
 
@@ -141,7 +145,7 @@ async function compileSchema(ajv: Ajv2020, file: string) {
 async function loadCategories(
 	ajv: Ajv2020,
 ): Promise<Record<string, string>> {
-	const validate = await compileSchema(ajv, "algorithms.v2.schema.json");
+	const validate = await compileSchema(ajv, "algorithms.v3.schema.json");
 
 	if (!(await exists(ALGORITHMS_FILE))) {
 		throw new Error(

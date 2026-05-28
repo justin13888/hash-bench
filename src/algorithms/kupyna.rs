@@ -43,6 +43,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "Ukrainian national standard (DSTU 7564:2014)",
             runner: Runner::SingleStream(kupyna224),
             available: always_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: false,
+            hardware_features: &[],
         },
         Algorithm {
             name: "Kupyna-256",
@@ -53,6 +57,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "Ukrainian national standard (DSTU 7564:2014)",
             runner: Runner::SingleStream(kupyna256),
             available: always_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: false,
+            hardware_features: &[],
         },
         Algorithm {
             name: "Kupyna-384",
@@ -63,6 +71,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "Ukrainian national standard (DSTU 7564:2014)",
             runner: Runner::SingleStream(kupyna384),
             available: always_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: false,
+            hardware_features: &[],
         },
         Algorithm {
             name: "Kupyna-512",
@@ -73,6 +85,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "Ukrainian national standard (DSTU 7564:2014)",
             runner: Runner::SingleStream(kupyna512),
             available: always_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: false,
+            hardware_features: &[],
         },
     ]
 }

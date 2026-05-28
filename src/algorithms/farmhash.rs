@@ -18,5 +18,9 @@ pub fn algorithms() -> Vec<Algorithm> {
         notes: "Used by Google internally, TensorFlow",
         runner: Runner::SingleStream(farmhash),
         available: always_available,
+        keyed: false,
+        dos_resistant: false,
+        hardware_required: false,
+        hardware_features: &[],
     }]
 }

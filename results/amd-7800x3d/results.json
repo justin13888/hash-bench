@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "generated_at_unix_ms": 1779769981509,
   "tool": {
     "name": "hash-bench",

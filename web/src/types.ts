@@ -59,6 +59,12 @@ export type CategoryFilter = "all" | "cryptographic" | "non-cryptographic";
 export type HwAccelFilter = "all" | "hw-only" | "sw-only";
 export type OutputKindFilter = "all" | "fixed" | "xof";
 export type TernaryFilter = "all" | "yes" | "no";
+export type ViewKind =
+	| "bar"
+	| "heatmap"
+	| "threads-line"
+	| "hw-vs-sw"
+	| "winners-summary";
 
 export interface FilterState {
 	selectedPlatforms: Set<string>;
@@ -80,4 +86,5 @@ export interface FilterState {
 
 	/** When true, the data table groups rows whose 95% CIs overlap into tiers. */
 	ciTieGrouping: boolean;
+	view: ViewKind;
 }

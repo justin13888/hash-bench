@@ -2,6 +2,10 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import BenchmarkChart from "./components/BenchmarkChart";
 import Controls from "./components/Controls";
 import DataTable from "./components/DataTable";
+import HwVsSwChart from "./components/HwVsSwChart";
+import ThreadScalingChart from "./components/ThreadScalingChart";
+import WinnersHeatmap from "./components/WinnersHeatmap";
+import WinnersSummary from "./components/WinnersSummary";
 import { applyFilters } from "./lib/filter";
 import type { BenchmarkResult, FilterState, ReportData } from "./types";
 
@@ -42,6 +46,7 @@ export default function App() {
 					keyedOnly: false,
 					dosResistantOnly: false,
 					ciTieGrouping: true,
+					view: "bar",
 				});
 			})
 			.catch((e) => setError(e.message));
@@ -137,12 +142,43 @@ export default function App() {
 					}}
 				/>
 
-				<BenchmarkChart
-					benchmarks={filtered}
-					algorithms={data.algorithms}
-					platformMap={platformMap}
-					filters={filters}
-				/>
+				{filters.view === "bar" && (
+					<BenchmarkChart
+						benchmarks={filtered}
+						algorithms={data.algorithms}
+						platformMap={platformMap}
+						filters={filters}
+					/>
+				)}
+				{filters.view === "heatmap" && (
+					<WinnersHeatmap
+						benchmarks={data.benchmarks}
+						algorithms={data.algorithms}
+						filters={filters}
+					/>
+				)}
+				{filters.view === "threads-line" && (
+					<ThreadScalingChart
+						benchmarks={data.benchmarks}
+						algorithms={data.algorithms}
+						filters={filters}
+					/>
+				)}
+				{filters.view === "hw-vs-sw" && (
+					<HwVsSwChart
+						benchmarks={data.benchmarks}
+						algorithms={data.algorithms}
+						filters={filters}
+					/>
+				)}
+				{filters.view === "winners-summary" && (
+					<WinnersSummary
+						benchmarks={data.benchmarks}
+						algorithms={data.algorithms}
+						platformMap={platformMap}
+						filters={filters}
+					/>
+				)}
 
 				<DataTable
 					benchmarks={filtered}

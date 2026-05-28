@@ -7,7 +7,16 @@ import type {
 	OutputKindFilter,
 	PlatformInfo,
 	TernaryFilter,
+	ViewKind,
 } from "../types";
+
+const VIEWS: Array<[ViewKind, string]> = [
+	["bar", "Bar"],
+	["heatmap", "Heatmap"],
+	["threads-line", "Thread scaling"],
+	["hw-vs-sw", "HW vs SW"],
+	["winners-summary", "Winners summary"],
+];
 
 interface Props {
 	platforms: PlatformInfo[];
@@ -50,6 +59,24 @@ export default function Controls({
 
 	return (
 		<div className="mb-4 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-gray-900">
+			{/* View switcher */}
+			<div className="mb-3 flex flex-wrap items-center gap-0.5">
+				{VIEWS.map(([v, label]) => (
+					<button
+						type="button"
+						key={v}
+						onClick={() => onFilterChange("view", v)}
+						className={`rounded px-3 py-1.5 text-sm font-medium ${
+							filters.view === v
+								? "bg-blue-500 text-white"
+								: "border border-gray-300 bg-white text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
+						}`}
+					>
+						{label}
+					</button>
+				))}
+			</div>
+
 			<div className="flex flex-wrap items-end gap-4">
 				{/* Platforms */}
 				<div className="flex flex-col gap-1">

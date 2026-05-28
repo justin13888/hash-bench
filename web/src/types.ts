@@ -56,6 +56,9 @@ export interface ReportData {
 
 export type Metric = "throughput" | "latency";
 export type CategoryFilter = "all" | "cryptographic" | "non-cryptographic";
+export type HwAccelFilter = "all" | "hw-only" | "sw-only";
+export type OutputKindFilter = "all" | "fixed" | "xof";
+export type TernaryFilter = "all" | "yes" | "no";
 
 export interface FilterState {
 	selectedPlatforms: Set<string>;
@@ -64,4 +67,14 @@ export interface FilterState {
 	category: CategoryFilter;
 	metric: Metric;
 	logScale: boolean;
+
+	/** Empty set = all variants permitted. */
+	variants: Set<string>;
+	hwAcceleration: HwAccelFilter;
+	/** Empty set = all output widths permitted. */
+	outputBits: Set<number>;
+	outputKind: OutputKindFilter;
+	internallyParallel: TernaryFilter;
+	keyedOnly: boolean;
+	dosResistantOnly: boolean;
 }

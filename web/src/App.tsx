@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import BenchmarkChart from "./components/BenchmarkChart";
 import Controls from "./components/Controls";
 import DataTable from "./components/DataTable";
-import { algoKey } from "./lib/format";
+import { applyFilters } from "./lib/filter";
 import type { BenchmarkResult, FilterState, ReportData } from "./types";
 
 export default function App() {
@@ -34,6 +34,13 @@ export default function App() {
 					category: "all",
 					metric: "throughput",
 					logScale: true,
+					variants: new Set(),
+					hwAcceleration: "all",
+					outputBits: new Set(),
+					outputKind: "all",
+					internallyParallel: "all",
+					keyedOnly: false,
+					dosResistantOnly: false,
 				});
 			})
 			.catch((e) => setError(e.message));
@@ -41,16 +48,20 @@ export default function App() {
 
 	const filtered = useMemo<BenchmarkResult[]>(() => {
 		if (!data || !filters) return [];
-		return data.benchmarks.filter(
-			(b) =>
-				filters.selectedPlatforms.has(b.platform) &&
-				b.threads === filters.threadCount &&
-				b.size === filters.size &&
-				(filters.category === "all" ||
-					data.algorithms[algoKey(b.algorithm, b.variant)]?.category ===
-						filters.category),
-		);
+		return applyFilters(data.benchmarks, data.algorithms, filters);
 	}, [data, filters]);
+
+	const availableVariants = useMemo(() => {
+		if (!data) return [] as string[];
+		return [...new Set(data.benchmarks.map((b) => b.variant))].sort();
+	}, [data]);
+
+	const availableOutputBits = useMemo(() => {
+		if (!data) return [] as number[];
+		return [
+			...new Set(Object.values(data.algorithms).map((a) => a.output_bits)),
+		].sort((a, b) => a - b);
+	}, [data]);
 
 	const platformMap = useMemo(() => {
 		if (!data) return new Map<string, string>();
@@ -110,6 +121,8 @@ export default function App() {
 					filters={filters}
 					allThreadCounts={allThreads}
 					allSizes={allSizes}
+					allVariants={availableVariants}
+					allOutputBits={availableOutputBits}
 					onFilterChange={updateFilter}
 					onPlatformToggle={(id) => {
 						const next = new Set(filters.selectedPlatforms);

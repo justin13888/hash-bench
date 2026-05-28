@@ -1,5 +1,5 @@
 //! The standardized benchmark report — the cross-language contract with the
-//! web dashboard. See `schema/results.v1.schema.json`.
+//! web dashboard. See `schema/results.v3.schema.json`.
 
 use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -9,10 +9,10 @@ use super::BenchConfig;
 
 /// Version of the results JSON format. Bump on breaking changes.
 ///
-/// v2 added the per-row `variant` discriminator (e.g. `"sw"`, `"sha-ext"`)
-/// alongside `algorithm`, so multiple implementations of the same algorithm
-/// can coexist in one report.
-pub const SCHEMA_VERSION: u32 = 2;
+/// v3 added the optional `skipped_variants` array so consumers can distinguish
+/// variants that were compiled in but filtered out at runtime (e.g. SHA-1
+/// `[sha-ext]` on a host lacking SHA-NI) from variants that were never built.
+pub const SCHEMA_VERSION: u32 = 3;
 
 /// A complete per-platform benchmark report.
 #[derive(Serialize)]
@@ -24,6 +24,10 @@ pub struct Report {
     pub platform: PlatformInfo,
     pub config: ReportConfig,
     pub results: Vec<ResultRow>,
+    /// Variants compiled in but excluded from this run (e.g. CPU lacks the
+    /// advertised hardware feature). Empty when nothing was skipped.
+    #[serde(skip_serializing_if = "Vec::is_empty", default)]
+    pub skipped_variants: Vec<SkippedVariant>,
 }
 
 /// Identifies the binary that produced the report.
@@ -76,8 +80,26 @@ pub struct ResultRow {
     pub samples: u32,
 }
 
+/// One variant that was filtered out before the matrix ran.
+#[derive(Serialize, Clone)]
+pub struct SkippedVariant {
+    pub algorithm: String,
+    pub variant: String,
+    pub crate_name: String,
+    /// Human-readable explanation, e.g.
+    /// `"host CPU lacks required feature(s): sha-ni"`.
+    pub reason: String,
+    /// ISA feature labels the skipped variant relies on.
+    #[serde(skip_serializing_if = "Vec::is_empty", default)]
+    pub hardware_features: Vec<String>,
+}
+
 /// Assemble a [`Report`] from a finished run's config and measured rows.
-pub fn build_report(cfg: &BenchConfig, results: Vec<ResultRow>) -> Report {
+pub fn build_report(
+    cfg: &BenchConfig,
+    results: Vec<ResultRow>,
+    skipped_variants: Vec<SkippedVariant>,
+) -> Report {
     let generated_at_unix_ms = SystemTime::now()
         .duration_since(UNIX_EPOCH)
         .map(|d| d.as_millis() as u64)
@@ -105,5 +127,6 @@ pub fn build_report(cfg: &BenchConfig, results: Vec<ResultRow>) -> Report {
             sample_count: cfg.sample_count as u32,
         },
         results,
+        skipped_variants,
     }
 }

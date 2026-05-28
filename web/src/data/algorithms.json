@@ -88,7 +88,7 @@
     {
       "name": "SHA-1",
       "variant": "sha-ext",
-      "crate": "ring",
+      "crate": "hash-bench",
       "output_bits": 160,
       "output_kind": "fixed",
       "category": "cryptographic",
@@ -99,7 +99,7 @@
       "hardware_features": [
         "sha-ni"
       ],
-      "notes": "x86 SHA-NI / ARMv8 SHA1 via `ring`"
+      "notes": "x86 SHA-NI / ARMv8 SHA1 via in-tree intrinsics"
     },
     {
       "name": "SHA-224",

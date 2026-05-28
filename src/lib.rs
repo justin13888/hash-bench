@@ -23,6 +23,14 @@ pub use registry::{Algorithm, Category, OutputBits, Runner};
 /// runtime are filtered out so labels like `[sha-ext]` always reflect what
 /// actually ran.
 pub fn registry() -> Vec<Algorithm> {
+    registry_with_skipped().0
+}
+
+/// Same as [`registry`] but also returns the entries that were filtered out
+/// because their `available()` predicate returned false. The benchmark engine
+/// uses this to report skipped hardware variants to stdout and to the results
+/// JSON, so a missing `[sha-ext]` row is distinguishable from "never compiled".
+pub fn registry_with_skipped() -> (Vec<Algorithm>, Vec<Algorithm>) {
     // `mut` is unused when the crate is built with no algorithm families enabled.
     #[allow(unused_mut)]
     let mut algs: Vec<Algorithm> = Vec::new();
@@ -77,6 +85,14 @@ pub fn registry() -> Vec<Algorithm> {
     #[cfg(feature = "adler")]
     algs.extend(algorithms::adler::algorithms());
 
-    algs.retain(|a| (a.available)());
-    algs
+    let mut kept = Vec::with_capacity(algs.len());
+    let mut skipped = Vec::new();
+    for a in algs {
+        if (a.available)() {
+            kept.push(a);
+        } else {
+            skipped.push(a);
+        }
+    }
+    (kept, skipped)
 }

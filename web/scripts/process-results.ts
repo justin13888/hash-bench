@@ -172,7 +172,7 @@ async function loadAlgorithmMeta(
 // ── Load + validate per-platform benchmark reports ───────────────────────────
 
 async function loadReports(ajv: Ajv2020): Promise<ResultsReport[]> {
-	const validate = await compileSchema(ajv, "results.v2.schema.json");
+	const validate = await compileSchema(ajv, "results.v3.schema.json");
 	const reports: ResultsReport[] = [];
 
 	if (!(await exists(RESULTS_DIR))) {

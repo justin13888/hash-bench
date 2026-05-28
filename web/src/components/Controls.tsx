@@ -330,6 +330,17 @@ export default function Controls({
 									/>
 									DoS-resistant only
 								</label>
+								<label className="flex cursor-pointer items-center gap-1.5">
+									<input
+										type="checkbox"
+										checked={filters.ciTieGrouping}
+										onChange={(e) =>
+											onFilterChange("ciTieGrouping", e.target.checked)
+										}
+										className="accent-blue-500"
+									/>
+									CI-tie grouping
+								</label>
 							</div>
 						</div>
 					</div>

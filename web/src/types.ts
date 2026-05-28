@@ -77,4 +77,7 @@ export interface FilterState {
 	internallyParallel: TernaryFilter;
 	keyedOnly: boolean;
 	dosResistantOnly: boolean;
+
+	/** When true, the data table groups rows whose 95% CIs overlap into tiers. */
+	ciTieGrouping: boolean;
 }

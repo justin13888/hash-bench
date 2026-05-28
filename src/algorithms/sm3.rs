@@ -21,5 +21,9 @@ pub fn algorithms() -> Vec<Algorithm> {
         notes: "Chinese national standard (GB/T 32905-2016)",
         runner: Runner::SingleStream(sm3),
         available: always_available,
+        keyed: false,
+        dos_resistant: false,
+        hardware_required: false,
+        hardware_features: &[],
     }]
 }

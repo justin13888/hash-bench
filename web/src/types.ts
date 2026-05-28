@@ -31,15 +31,40 @@ export interface PlatformInfo {
 	sizes: string[];
 }
 
+export interface AlgorithmMeta {
+	name: string;
+	variant: string;
+	crate: string;
+	output_bits: number;
+	output_kind: "fixed" | "xof";
+	category: "cryptographic" | "non-cryptographic";
+	internally_parallel: boolean;
+	keyed: boolean;
+	dos_resistant: boolean;
+	hardware_required: boolean;
+	hardware_features: string[];
+	notes: string;
+}
+
 export interface ReportData {
 	generated_at_unix_ms: number;
 	platforms: PlatformInfo[];
 	benchmarks: BenchmarkResult[];
-	categories: Record<string, string>;
+	/** Keyed by `<algorithm>|<variant>`. */
+	algorithms: Record<string, AlgorithmMeta>;
 }
 
 export type Metric = "throughput" | "latency";
 export type CategoryFilter = "all" | "cryptographic" | "non-cryptographic";
+export type HwAccelFilter = "all" | "hw-only" | "sw-only";
+export type OutputKindFilter = "all" | "fixed" | "xof";
+export type TernaryFilter = "all" | "yes" | "no";
+export type ViewKind =
+	| "bar"
+	| "heatmap"
+	| "threads-line"
+	| "hw-vs-sw"
+	| "winners-summary";
 
 export interface FilterState {
 	selectedPlatforms: Set<string>;
@@ -48,4 +73,18 @@ export interface FilterState {
 	category: CategoryFilter;
 	metric: Metric;
 	logScale: boolean;
+
+	/** Empty set = all variants permitted. */
+	variants: Set<string>;
+	hwAcceleration: HwAccelFilter;
+	/** Empty set = all output widths permitted. */
+	outputBits: Set<number>;
+	outputKind: OutputKindFilter;
+	internallyParallel: TernaryFilter;
+	keyedOnly: boolean;
+	dosResistantOnly: boolean;
+
+	/** When true, the data table groups rows whose 95% CIs overlap into tiers. */
+	ciTieGrouping: boolean;
+	view: ViewKind;
 }

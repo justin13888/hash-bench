@@ -52,6 +52,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "NIST FIPS 180-4; pure-Rust (force-soft)",
             runner: Runner::SingleStream(sha224),
             available: always_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: false,
+            hardware_features: &[],
         },
         Algorithm {
             name: "SHA-256",
@@ -62,6 +66,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "NIST FIPS 180-4; used by Bitcoin, TLS; pure-Rust (force-soft)",
             runner: Runner::SingleStream(sha256),
             available: always_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: false,
+            hardware_features: &[],
         },
         Algorithm {
             name: "SHA-384",
@@ -72,6 +80,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "NIST FIPS 180-4; used by TLS; pure-Rust (force-soft)",
             runner: Runner::SingleStream(sha384),
             available: always_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: false,
+            hardware_features: &[],
         },
         Algorithm {
             name: "SHA-512",
@@ -82,6 +94,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "NIST FIPS 180-4; pure-Rust (force-soft)",
             runner: Runner::SingleStream(sha512),
             available: always_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: false,
+            hardware_features: &[],
         },
         Algorithm {
             name: "SHA-512/224",
@@ -92,6 +108,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "NIST FIPS 180-4; pure-Rust (force-soft)",
             runner: Runner::SingleStream(sha512_224),
             available: always_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: false,
+            hardware_features: &[],
         },
         Algorithm {
             name: "SHA-512/256",
@@ -102,6 +122,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "NIST FIPS 180-4; pure-Rust (force-soft)",
             runner: Runner::SingleStream(sha512_256),
             available: always_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: false,
+            hardware_features: &[],
         },
     ]
 }

@@ -23,5 +23,9 @@ pub fn algorithms() -> Vec<Algorithm> {
         notes: "NIST SP 800-232 lightweight standard",
         runner: Runner::SingleStream(ascon256),
         available: always_available,
+        keyed: false,
+        dos_resistant: false,
+        hardware_required: false,
+        hardware_features: &[],
     }]
 }

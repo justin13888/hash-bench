@@ -20,7 +20,7 @@ import {
 	formatNs,
 	formatValue,
 } from "../lib/format";
-import type { BenchmarkResult, FilterState } from "../types";
+import type { AlgorithmMeta, BenchmarkResult, FilterState } from "../types";
 
 echarts.use([
 	BarChart,
@@ -33,7 +33,7 @@ echarts.use([
 
 interface Props {
 	benchmarks: BenchmarkResult[];
-	categories: Record<string, string>;
+	algorithms: Record<string, AlgorithmMeta>;
 	platformMap: Map<string, string>;
 	filters: FilterState;
 }
@@ -44,7 +44,7 @@ function getValue(b: BenchmarkResult, metric: "throughput" | "latency") {
 
 export default function BenchmarkChart({
 	benchmarks,
-	categories,
+	algorithms,
 	platformMap,
 	filters,
 }: Props) {
@@ -56,13 +56,13 @@ export default function BenchmarkChart({
 		if (multiPlatform) {
 			return buildComparisonOption(
 				benchmarks,
-				categories,
+				algorithms,
 				platformMap,
 				filters,
 			);
 		}
-		return buildSingleOption(benchmarks, categories, filters);
-	}, [benchmarks, categories, platformMap, filters, multiPlatform]);
+		return buildSingleOption(benchmarks, algorithms, filters);
+	}, [benchmarks, algorithms, platformMap, filters, multiPlatform]);
 
 	const chartHeight = useMemo(() => {
 		const uniqueAlgos = new Set(
@@ -95,7 +95,7 @@ export default function BenchmarkChart({
 
 function buildSingleOption(
 	benchmarks: BenchmarkResult[],
-	categories: Record<string, string>,
+	algorithms: Record<string, AlgorithmMeta>,
 	filters: FilterState,
 ) {
 	// Deduplicate by (algorithm, variant) — one row per implementation per platform.
@@ -111,10 +111,10 @@ function buildSingleOption(
 		entries.sort((a, b) => b.mean_ns - a.mean_ns);
 	}
 
-	const algorithms = entries.map((e) => displayName(e.algorithm, e.variant));
+	const labels = entries.map((e) => displayName(e.algorithm, e.variant));
 	const values = entries.map((e) => getValue(e, filters.metric));
 	const colors = entries.map((e) =>
-		categories[algoKey(e.algorithm, e.variant)] === "cryptographic"
+		algorithms[algoKey(e.algorithm, e.variant)]?.category === "cryptographic"
 			? CRYPTO_COLOR
 			: NONCRYPTO_COLOR,
 	);
@@ -136,7 +136,8 @@ function buildSingleOption(
 			formatter(params: Array<{ dataIndex: number }>) {
 				const idx = params[0].dataIndex;
 				const b = entries[idx];
-				const cat = categories[algoKey(b.algorithm, b.variant)] ?? "unknown";
+				const cat =
+					algorithms[algoKey(b.algorithm, b.variant)]?.category ?? "unknown";
 				return (
 					`<b>${displayName(b.algorithm, b.variant)}</b><br/>` +
 					`Category: ${cat}<br/>` +
@@ -159,7 +160,7 @@ function buildSingleOption(
 		},
 		yAxis: {
 			type: "category" as const,
-			data: algorithms,
+			data: labels,
 			axisLabel: { fontSize: 11 },
 			axisTick: { show: false },
 		},
@@ -240,7 +241,7 @@ function buildSingleOption(
 
 function buildComparisonOption(
 	benchmarks: BenchmarkResult[],
-	categories: Record<string, string>,
+	algorithms: Record<string, AlgorithmMeta>,
 	platformMap: Map<string, string>,
 	filters: FilterState,
 ) {
@@ -254,10 +255,10 @@ function buildComparisonOption(
 	}
 
 	const platformIds = [...filters.selectedPlatforms];
-	const algorithms = [...algoMap.keys()];
+	const keys = [...algoMap.keys()];
 
 	if (filters.metric === "throughput") {
-		algorithms.sort((a, b) => {
+		keys.sort((a, b) => {
 			const aAvg =
 				platformIds.reduce(
 					(s, p) => s + (algoMap.get(a)?.get(p)?.throughput_bps ?? 0),
@@ -271,7 +272,7 @@ function buildComparisonOption(
 			return aAvg - bAvg;
 		});
 	} else {
-		algorithms.sort((a, b) => {
+		keys.sort((a, b) => {
 			const aAvg =
 				platformIds.reduce(
 					(s, p) => s + (algoMap.get(a)?.get(p)?.mean_ns ?? 0),
@@ -289,7 +290,7 @@ function buildComparisonOption(
 	const series = platformIds.map((pid, pi) => ({
 		name: platformMap.get(pid) ?? pid,
 		type: "bar" as const,
-		data: algorithms.map((algo) => {
+		data: keys.map((algo) => {
 			const b = algoMap.get(algo)?.get(pid);
 			return b ? getValue(b, filters.metric) : 0;
 		}),
@@ -319,7 +320,7 @@ function buildComparisonOption(
 				const key = params[0].name;
 				const [algo, variant] = key.split("|");
 				let html = `<b>${displayName(algo, variant)}</b> (${
-					categories[key] ?? "unknown"
+					algorithms[key]?.category ?? "unknown"
 				})<br/>`;
 				for (const p of params) {
 					if (p.value > 0) {
@@ -342,7 +343,7 @@ function buildComparisonOption(
 		},
 		yAxis: {
 			type: "category" as const,
-			data: algorithms,
+			data: keys,
 			axisLabel: {
 				fontSize: 11,
 				formatter: (key: string) => {

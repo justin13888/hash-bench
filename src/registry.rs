@@ -91,6 +91,22 @@ pub struct Algorithm {
     /// variants on machines whose CPU lacks the relevant instruction set so
     /// the variant label stays truthful. SW entries return `true`.
     pub available: fn() -> bool,
+    /// Whether the benchmarked entry consumes a key. Describes what was
+    /// measured, not what the algorithm can theoretically support: e.g.
+    /// BLAKE3's keyed mode exists but the benchmarked entry uses the unkeyed
+    /// hash, so it stays `false`.
+    pub keyed: bool,
+    /// Whether the benchmarked entry is a keyed hash designed with documented
+    /// HashDoS / adversarial-input hardening (SipHash, AHash, HighwayHash).
+    /// Implies [`Self::keyed`].
+    pub dos_resistant: bool,
+    /// Whether this variant cannot execute without a specific CPU feature.
+    /// `true` for `sha-ext` / `aes-ext` / `clmul` / `crc-ext` rows; `false` for
+    /// `sw` rows even when they perform runtime SIMD dispatch internally.
+    pub hardware_required: bool,
+    /// ISA feature labels this variant relies on (e.g. `["sha-ni"]`,
+    /// `["pclmulqdq"]`). Empty for `sw` rows.
+    pub hardware_features: &'static [&'static str],
 }
 
 impl Algorithm {

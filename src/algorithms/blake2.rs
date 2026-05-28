@@ -37,6 +37,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "RFC 7693; used by WireGuard, Argon2",
             runner: Runner::SingleStream(blake2b512),
             available: always_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: false,
+            hardware_features: &[],
         },
         Algorithm {
             name: "BLAKE2b256",
@@ -47,6 +51,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "RFC 7693",
             runner: Runner::SingleStream(blake2b256),
             available: always_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: false,
+            hardware_features: &[],
         },
         Algorithm {
             name: "BLAKE2s256",
@@ -57,6 +65,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "RFC 7693; used by WireGuard",
             runner: Runner::SingleStream(blake2s256),
             available: always_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: false,
+            hardware_features: &[],
         },
     ]
 }

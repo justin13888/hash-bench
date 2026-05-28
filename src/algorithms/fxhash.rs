@@ -21,5 +21,9 @@ pub fn algorithms() -> Vec<Algorithm> {
         notes: "Used internally by rustc",
         runner: Runner::SingleStream(fxhash),
         available: always_available,
+        keyed: false,
+        dos_resistant: false,
+        hardware_required: false,
+        hardware_features: &[],
     }]
 }

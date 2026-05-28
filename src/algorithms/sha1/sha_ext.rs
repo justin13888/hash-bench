@@ -8,6 +8,11 @@ use crate::algorithms::cpu::sha_ext_available;
 use crate::registry::{Algorithm, Category, OutputBits, Runner};
 use std::hint::black_box;
 
+#[cfg(target_arch = "aarch64")]
+const HW_FEATURES: &[&str] = &["armv8-sha1"];
+#[cfg(not(target_arch = "aarch64"))]
+const HW_FEATURES: &[&str] = &["sha-ni"];
+
 fn sha1(data: &[u8]) {
     black_box(ring::digest::digest(
         &ring::digest::SHA1_FOR_LEGACY_USE_ONLY,
@@ -25,5 +30,9 @@ pub fn algorithms() -> Vec<Algorithm> {
         notes: "x86 SHA-NI / ARMv8 SHA1 via `ring`",
         runner: Runner::SingleStream(sha1),
         available: sha_ext_available,
+        keyed: false,
+        dos_resistant: false,
+        hardware_required: true,
+        hardware_features: HW_FEATURES,
     }]
 }

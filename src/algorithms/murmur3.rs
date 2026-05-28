@@ -22,5 +22,9 @@ pub fn algorithms() -> Vec<Algorithm> {
         notes: "x64 128-bit variant; used by Cassandra, Elasticsearch",
         runner: Runner::SingleStream(murmur3),
         available: always_available,
+        keyed: false,
+        dos_resistant: false,
+        hardware_required: false,
+        hardware_features: &[],
     }]
 }

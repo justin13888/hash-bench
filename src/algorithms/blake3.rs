@@ -32,6 +32,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "Single-stream; runtime SIMD dispatch (SSE2/SSE4.1/AVX2/AVX-512/NEON)",
             runner: Runner::SingleStream(blake3),
             available: always_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: false,
+            hardware_features: &[],
         },
         Algorithm {
             name: "BLAKE3 (rayon)",
@@ -42,6 +46,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "Multi-threaded single stream via update_rayon",
             runner: Runner::ParallelStream(blake3_rayon),
             available: always_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: false,
+            hardware_features: &[],
         },
     ]
 }

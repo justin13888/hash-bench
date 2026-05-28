@@ -21,5 +21,9 @@ pub fn algorithms() -> Vec<Algorithm> {
         notes: "Broken — included for reference only; pure-Rust (force-soft)",
         runner: Runner::SingleStream(sha1),
         available: always_available,
+        keyed: false,
+        dos_resistant: false,
+        hardware_required: false,
+        hardware_features: &[],
     }]
 }

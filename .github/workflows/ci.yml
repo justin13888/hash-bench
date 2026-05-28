@@ -10,6 +10,12 @@ jobs:
   rust-checks:
     name: Rust (fmt + lint + features)
     runs-on: ubuntu-latest
+    # +aes makes the ahash crate select its AES-NI hasher so the variant
+    # registers as [aes-ext]. Without it, ahash falls back to [sw] and the
+    # `verify` step diverges from results files generated on machines with
+    # target_feature=aes enabled.
+    env:
+      RUSTFLAGS: "-C target-feature=+aes"
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@master

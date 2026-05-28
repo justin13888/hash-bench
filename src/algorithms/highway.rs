@@ -32,6 +32,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "Google; SipHash alternative",
             runner: Runner::SingleStream(highway64),
             available: always_available,
+            keyed: true,
+            dos_resistant: true,
+            hardware_required: false,
+            hardware_features: &[],
         },
         Algorithm {
             name: "HighwayHash-128",
@@ -42,6 +46,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "",
             runner: Runner::SingleStream(highway128),
             available: always_available,
+            keyed: true,
+            dos_resistant: true,
+            hardware_required: false,
+            hardware_features: &[],
         },
         Algorithm {
             name: "HighwayHash-256",
@@ -52,6 +60,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "",
             runner: Runner::SingleStream(highway256),
             available: always_available,
+            keyed: true,
+            dos_resistant: true,
+            hardware_required: false,
+            hardware_features: &[],
         },
     ]
 }

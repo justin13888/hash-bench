@@ -1,13 +1,13 @@
 //! Algorithm catalogue export — the single source of truth for the web
-//! dashboard's category/metadata tables. See `schema/algorithms.v1.schema.json`.
+//! dashboard's category/metadata tables. See `schema/algorithms.v3.schema.json`.
 
 use serde::Serialize;
 
 /// Version of the algorithms JSON format. Bump on breaking changes.
 ///
-/// v2 added the per-entry `variant` discriminator so multiple implementations
-/// of the same algorithm (e.g. SW vs SHA-NI) can be enumerated separately.
-pub const SCHEMA_VERSION: u32 = 2;
+/// v3 added structured use-case tags: `keyed`, `dos_resistant`,
+/// `hardware_required`, `hardware_features`.
+pub const SCHEMA_VERSION: u32 = 3;
 
 /// The full algorithm catalogue for the enabled feature set.
 #[derive(Serialize)]
@@ -33,6 +33,15 @@ pub struct AlgorithmMeta {
     pub category: String,
     /// Whether the algorithm parallelises a single stream internally.
     pub internally_parallel: bool,
+    /// Whether the benchmarked entry consumes a key.
+    pub keyed: bool,
+    /// Whether the entry is a keyed hash with documented HashDoS hardening.
+    /// Implies `keyed = true`.
+    pub dos_resistant: bool,
+    /// Whether this variant requires a specific ISA feature to run.
+    pub hardware_required: bool,
+    /// ISA feature labels this variant relies on (empty for `sw`).
+    pub hardware_features: Vec<String>,
     pub notes: String,
 }
 
@@ -48,6 +57,10 @@ pub fn metadata_report() -> MetadataReport {
             output_kind: a.output.kind().to_string(),
             category: a.category.as_str().to_string(),
             internally_parallel: a.internally_parallel(),
+            keyed: a.keyed,
+            dos_resistant: a.dos_resistant,
+            hardware_required: a.hardware_required,
+            hardware_features: a.hardware_features.iter().map(|s| s.to_string()).collect(),
             notes: a.notes.to_string(),
         })
         .collect();

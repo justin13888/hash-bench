@@ -43,6 +43,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "ISO/IEC 10118-3",
             runner: Runner::SingleStream(ripemd128),
             available: always_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: false,
+            hardware_features: &[],
         },
         Algorithm {
             name: "RIPEMD-160",
@@ -53,6 +57,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "ISO/IEC 10118-3; used by Bitcoin",
             runner: Runner::SingleStream(ripemd160),
             available: always_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: false,
+            hardware_features: &[],
         },
         Algorithm {
             name: "RIPEMD-256",
@@ -63,6 +71,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "ISO/IEC 10118-3",
             runner: Runner::SingleStream(ripemd256),
             available: always_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: false,
+            hardware_features: &[],
         },
         Algorithm {
             name: "RIPEMD-320",
@@ -73,6 +85,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "ISO/IEC 10118-3",
             runner: Runner::SingleStream(ripemd320),
             available: always_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: false,
+            hardware_features: &[],
         },
     ]
 }

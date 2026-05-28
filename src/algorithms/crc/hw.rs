@@ -15,6 +15,16 @@ use crate::algorithms::cpu::{clmul_available, crc_ext_available};
 use crate::registry::{Algorithm, Category, OutputBits, Runner};
 use std::hint::black_box;
 
+#[cfg(target_arch = "aarch64")]
+const CLMUL_FEATURES: &[&str] = &["pmull"];
+#[cfg(not(target_arch = "aarch64"))]
+const CLMUL_FEATURES: &[&str] = &["pclmulqdq"];
+
+#[cfg(target_arch = "aarch64")]
+const CRC_EXT_FEATURES: &[&str] = &["armv8-crc"];
+#[cfg(not(target_arch = "aarch64"))]
+const CRC_EXT_FEATURES: &[&str] = &["sse4.2-crc32"];
+
 fn crc32(data: &[u8]) {
     let mut hasher = crc32fast::Hasher::new();
     hasher.update(data);
@@ -42,6 +52,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "IEEE polynomial; x86 PCLMULQDQ / ARMv8 `crc32` via `crc32fast`",
             runner: Runner::SingleStream(crc32),
             available: clmul_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: true,
+            hardware_features: CLMUL_FEATURES,
         },
         Algorithm {
             name: "CRC32C",
@@ -52,6 +66,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "Castagnoli polynomial; x86 SSE4.2 `crc32` / ARMv8 `crc32c` via `crc32c`",
             runner: Runner::SingleStream(crc32c),
             available: crc_ext_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: true,
+            hardware_features: CRC_EXT_FEATURES,
         },
         Algorithm {
             name: "CRC64",
@@ -62,6 +80,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "CRC-64/XZ (ECMA-182 polynomial, reflected); x86 PCLMULQDQ / ARMv8 PMULL via `crc64fast`",
             runner: Runner::SingleStream(crc64),
             available: clmul_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: true,
+            hardware_features: CLMUL_FEATURES,
         },
     ]
 }

@@ -34,6 +34,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "",
             runner: Runner::SingleStream(xxh32),
             available: always_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: false,
+            hardware_features: &[],
         },
         Algorithm {
             name: "XXH64",
@@ -44,6 +48,10 @@ pub fn algorithms() -> Vec<Algorithm> {
             notes: "",
             runner: Runner::SingleStream(xxh64),
             available: always_available,
+            keyed: false,
+            dos_resistant: false,
+            hardware_required: false,
+            hardware_features: &[],
         },
         Algorithm {
             name: "XXH3_64",
@@ -51,9 +59,14 @@ pub fn algorithms() -> Vec<Algorithm> {
             crate_name: "xxhash-rust",
             output: OutputBits::Fixed(64),
             category: Category::NonCryptographic,
-            notes: "Used by Linux kernel, rsync",
+            notes:
+                "Used by Linux kernel, rsync; supports a secret/seed but not adversarially hardened",
             runner: Runner::SingleStream(xxh3_64),
             available: always_available,
+            keyed: true,
+            dos_resistant: false,
+            hardware_required: false,
+            hardware_features: &[],
         },
         Algorithm {
             name: "XXH3_128",
@@ -61,9 +74,13 @@ pub fn algorithms() -> Vec<Algorithm> {
             crate_name: "xxhash-rust",
             output: OutputBits::Fixed(128),
             category: Category::NonCryptographic,
-            notes: "",
+            notes: "Supports a secret/seed but not adversarially hardened",
             runner: Runner::SingleStream(xxh3_128),
             available: always_available,
+            keyed: true,
+            dos_resistant: false,
+            hardware_required: false,
+            hardware_features: &[],
         },
     ]
 }

@@ -21,5 +21,9 @@ pub fn algorithms() -> Vec<Algorithm> {
         notes: "Go hash/fnv standard library",
         runner: Runner::SingleStream(fnv1a),
         available: always_available,
+        keyed: false,
+        dos_resistant: false,
+        hardware_required: false,
+        hardware_features: &[],
     }]
 }

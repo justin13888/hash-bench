@@ -1,0 +1,61 @@
+[package]
+name = "hash-bench-mobile"
+version = "0.1.0"
+description = "Thin iOS/Android wrapper that runs the hash-bench suite and exports a results.json"
+authors = ["Justin Chung"]
+license = "MIT"
+edition = "2021"
+
+# Tauri mobile links the app's Rust as a static lib (iOS) / shared lib (Android);
+# the plain `lib` is used by the desktop dev shim (`main.rs`).
+[lib]
+name = "hash_bench_mobile_lib"
+crate-type = ["staticlib", "cdylib", "lib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+# Native share sheet (Android Sharesheet / iOS Share Pane / desktop fallback).
+tauri-plugin-sharekit = "0.3"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+# Matches hash-bench's own logical/physical core detection for the Full preset.
+num_cpus = "1"
+
+# The benchmark engine (package `hash-bench`, imported in Rust as `hash_bench`).
+# Pull every algorithm family so the generated results.json matches the desktop
+# registry that `just verify` checks against; drop `cli` (no clap/binary needed —
+# we call the library directly).
+hash-bench = { path = "../..", default-features = false, features = [
+    "blake3",
+    "blake2",
+    "sha1",
+    "sha2",
+    "sha3",
+    "sha-hw",
+    "md5",
+    "ripemd",
+    "sm3",
+    "streebog",
+    "kupyna",
+    "whirlpool",
+    "ascon",
+    "crc",
+    "crc-sw",
+    "xxhash",
+    "siphash",
+    "ahash",
+    "wyhash",
+    "fxhash",
+    "farmhash",
+    "murmur3",
+    "highway",
+    "fnv",
+    "adler",
+] }
+
+# This crate is its own workspace root so it does not get pulled into the root
+# hash-bench package's build, and keeps an independent Cargo.lock.
+[workspace]

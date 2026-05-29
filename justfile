@@ -102,3 +102,41 @@ dev:
 # Build the web app (processes results + Vite build)
 build-web:
     cd web && bun run build
+
+# --- Mobile app (Tauri 2) ---
+
+# Add the Rust std targets for Android (4) and iOS (3, macOS-only builds)
+mobile-targets:
+    rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
+    rustup target add aarch64-apple-ios aarch64-apple-ios-sim x86_64-apple-ios
+
+# One-time setup: install JS deps and generate the native android/ios projects.
+# Requires the Android SDK/NDK (and, for ios, macOS + Xcode). See README.
+mobile-init:
+    cd mobile && bun install
+    cd mobile && bun run tauri android init
+    cd mobile && bun run tauri ios init
+
+# Run on a connected Android device or a running emulator (works on Linux)
+mobile-android-dev:
+    cd mobile && bun run tauri android dev
+
+# Build Android APK/AAB artifacts
+mobile-android-build:
+    cd mobile && bun run tauri android build
+
+# Run on the iOS simulator or device (macOS + Xcode only)
+mobile-ios-dev:
+    cd mobile && bun run tauri ios dev
+
+# Build the iOS app (macOS + Xcode only)
+mobile-ios-build:
+    cd mobile && bun run tauri ios build
+
+# Lint the mobile frontend (Biome), consistent with the web app
+lint-mobile:
+    cd mobile && bun run check
+
+# Format the mobile frontend with Biome
+fmt-mobile:
+    cd mobile && bun run format

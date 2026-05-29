@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Core defaults plus native share-sheet access for exporting results.json.",
+  "windows": ["main"],
+  "permissions": ["core:default", "sharekit:default"]
+}

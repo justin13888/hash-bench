@@ -115,6 +115,11 @@ web dashboard at the link above is automatically deployed when results are updat
   [`web/src/data/algorithms.json`](web/src/data/algorithms.json), which the web
   dashboard consumes for categories and labels.
 
+Two thin consumers live alongside the core: [`web/`](web/) is the results
+dashboard, and [`mobile/`](mobile/) is a [Tauri 2](https://v2.tauri.app/) app
+(one codebase for iOS + Android) that runs the suite on-device — see
+[Mobile app](#mobile-app-tauri-2). Both consume the same `results.json` schema.
+
 ## Running the benchmark
 
 ### Prerequisites
@@ -161,6 +166,54 @@ Run `cargo run --release -- run --help` for the full list of flags.
    combination, and is run in CI on every pull request
 3. Push — the web dashboard redeploys automatically via CI
 
+Files exported from the [mobile app](#mobile-app-tauri-2) work the same way: drop
+the shared file into `results/<machine-id>/results.json`. Use the **Full** preset
+— `just verify` requires the complete algorithm matrix, and only Full runs the
+whole registry.
+
+## Mobile app (Tauri 2)
+
+The [`mobile/`](mobile/) directory is a thin [Tauri 2](https://v2.tauri.app/)
+wrapper that runs the same engine on a phone and exports a schema-compatible
+`results.json` through the native share sheet. It is not a re-implementation — a
+single `#[tauri::command]` calls the `hash_bench` library directly.
+
+### Prerequisites
+
+- The Rust toolchain (pinned in [`rust-toolchain.toml`](rust-toolchain.toml)) and
+  [Bun](https://bun.sh/), as for the rest of the repo.
+- Mobile Rust targets: `just mobile-targets`.
+- **Android** (buildable on Linux/macOS/Windows): a JDK (17+), the Android SDK,
+  and NDK r28+, with `JAVA_HOME`, `ANDROID_HOME`, and `NDK_HOME` set.
+- **iOS** (macOS only): Xcode and its command line tools. iOS cannot be built on
+  Linux — it is validated only in CI on a macOS runner.
+
+### Commands
+
+```bash
+just mobile-init           # bun install + generate the native android/ios projects
+just mobile-android-dev    # run on a connected Android device / emulator
+just mobile-android-build  # build Android APK/AAB artifacts
+just mobile-ios-dev        # run on the iOS simulator / device (macOS only)
+just mobile-ios-build      # build the iOS app (macOS only)
+just lint-mobile           # Biome lint of the mobile frontend
+```
+
+### Presets
+
+The app offers two presets so a phone isn't forced through the full desktop matrix:
+
+- **Quick** — small inputs (1 KiB–1 MiB), single thread, 10 samples. Fast and
+  noisy; for on-device exploration and sharing only.
+- **Full** — the complete algorithm matrix at 64 B–10 MiB across 1/physical/logical
+  threads, 30 samples. Use this for a file you intend to commit to
+  [`results/`](results/); it satisfies `just verify`. (100 MiB is dropped on mobile
+  to avoid out-of-memory kills.)
+
+Enter a machine id (e.g. `pixel-8`) and an optional CPU model, tap **Run &
+Export**, then share the generated `<machine-id>-results.json` somewhere you can
+retrieve it from.
+
 ## Development
 
 ### Git Hooks (lefthook)
@@ -184,6 +237,7 @@ just fmt-check      # Check Rust formatting
 just clippy         # Run clippy
 just clippy-fix     # Auto-apply clippy fixes
 just lint-web       # Run Biome lint + format check on web
+just lint-mobile    # Run Biome lint + format check on the mobile frontend
 just fmt            # Format Rust code
 just fmt-web        # Format web source with Biome
 just check-all      # Run all checks (Rust + web)
@@ -196,12 +250,18 @@ All pushes to `master` and pull requests run the [CI workflow](.github/workflows
   no-default-features build, and that `algorithms.json` is in sync with the registry
 - Web: `biome check`, schema validation of results, TypeScript type checking
 
+Changes under `mobile/` additionally trigger the
+[Mobile workflow](.github/workflows/mobile.yml): it lint/typechecks the frontend,
+builds the Android app (the real cross-compile gate), and cross-compiles the iOS
+core on a macOS runner (experimental — iOS can't build on Linux).
+
 ## Limitations
 
 - **Single-machine results**: Benchmarks reflect the specific hardware they were run on. Results are not directly comparable across machines due to differences in CPU microarchitecture, cache sizes, and available instruction sets (e.g. AES-NI, AVX2).
 - **Throughput only**: The benchmark measures raw hashing throughput on pre-loaded heap memory. It does not capture latency for small/single-use hashes, memory allocation overhead, or streaming use cases.
 - **Pure Rust implementations**: Results depend on the quality of each crate's implementation. Some algorithms may have faster implementations in C/C++ or via hardware intrinsics not yet exposed in their Rust crates.
 - **No collision/security testing**: This benchmark is purely for performance. It does not evaluate collision resistance, cryptographic strength, or suitability for any particular security use case.
+- **Mobile thermal throttling**: Phones throttle under sustained load, so results from the mobile app (especially the Full preset over larger inputs) can vary run-to-run and may understate peak throughput. This is inherent to the hardware, not a measurement bug.
 
 ## Contributions
 

@@ -1,10 +1,11 @@
 # hash-bench
 
 This benchmark compares the runtime performance of various hashing algorithms in Rust. This was originally created for analyzing different hashing algorithms to choose the best one for the [Beam](https://github.com/justin13888/beam) project.
+Portable mobile wrappers were later added for testing hardware-accelerated hash algorithms required by [Capsule](https://github.com/Capsulsaurus/Capsule).
 
 > Notes:
-> - All implementations are use the best **Rust** implementations which usually are well-optimized for each platform and use platform-specific intrinsics when available. but equivalently, it is limited by the Rust implementation used.
-> - If you are looking for the fastest cryptographic hash algorithm given limited power budget and for general use, you are probably looking for hardware-accelerated algorithms which basically leaves the SHA-2 family (and SHA-3 if your target devices have instructions for Keccak like via ARM v8.2).
+> - All implementations are use the best **Rust** implementations which usually are well-optimized for each platform and use platform-specific intrinsics when available. But equivalently, it is limited by the Rust implementation used.
+> - Not sure which algorithm to reach for? See [Choosing an algorithm](#choosing-an-algorithm).
 
 ## Testing Methodology
 
@@ -97,6 +98,26 @@ Raw benchmark data is stored in the [`results/`](results/) directory, one
 ([`schema/results.v2.schema.json`](schema/results.v2.schema.json)), so the format
 is consistent across platforms and machine-parseable without any hardcoding. The
 web dashboard at the link above is automatically deployed when results are updated.
+
+## Choosing an algorithm
+
+A faster hash is only useful if it's the right *kind* of hash. In practice, the
+choice is less about raw throughput than about whether you need cryptographic
+guarantees — and, separately, whether you need a *standardized* algorithm:
+
+- **Cryptographic + security-sensitive:** prefer a NIST-standardized
+  (SHA-2 / SHA-3) hash. Both are hardware-accelerated on modern CPUs and fast
+  enough for almost all workloads, and standardization tends to matter for
+  audits, compliance, and interop. BLAKE3 is faster still and shines when you
+  can exploit its internal multi-threading on large inputs, but single-stream
+  SHA-2/SHA-3 is usually sufficient and avoids the standardization question.
+- **Non-cryptographic (hash maps, checksums, dedup, sharding):** the XXH3
+  family (XXH3_64 / XXH3_128) is an excellent default with essentially no
+  downside, barring strict latency constraints on tiny keys or a need to match
+  an existing on-disk/wire format.
+
+This is general engineering guidance, not a conclusion drawn from these
+benchmarks — see [Limitations](#limitations).
 
 ## Project layout
 

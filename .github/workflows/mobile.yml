@@ -50,7 +50,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: nightly-2025-10-17
-          targets: aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android
+          targets: aarch64-linux-android,x86_64-linux-android
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: mobile/src-tauri -> target
@@ -63,8 +63,12 @@ jobs:
         run: cd mobile && bun run tauri android init --ci
         env:
           NDK_HOME: ${{ steps.ndk.outputs.ndk-path }}
+      # Build only the arm64 + x86_64 ABIs. The 32-bit i686 ABI is skipped because
+      # crc64fast (pulled in by hash-bench's `crc` feature) uses the x86-64-only
+      # `_mm_extract_epi64` intrinsic and fails to compile for i686; no current
+      # device needs a 32-bit build.
       - name: Build Android APK
-        run: cd mobile && bun run tauri android build --apk
+        run: cd mobile && bun run tauri android build --apk --target aarch64 x86_64
         env:
           NDK_HOME: ${{ steps.ndk.outputs.ndk-path }}
       - name: Upload APK artifact

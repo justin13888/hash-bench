@@ -105,9 +105,11 @@ build-web:
 
 # --- Mobile app (Tauri 2) ---
 
-# Add the Rust std targets for Android (4) and iOS (3, macOS-only builds)
+# Add the Rust std targets for Android (arm64 + x86_64) and iOS (3, macOS-only
+# builds). The 32-bit Android ABIs (armv7, i686) are intentionally omitted: no
+# current phone needs them, and `crc64fast` fails to compile for i686.
 mobile-targets:
-    rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
+    rustup target add aarch64-linux-android x86_64-linux-android
     rustup target add aarch64-apple-ios aarch64-apple-ios-sim x86_64-apple-ios
 
 # One-time setup: install JS deps and generate the native android/ios projects.
@@ -121,9 +123,10 @@ mobile-init:
 mobile-android-dev:
     cd mobile && bun run tauri android dev
 
-# Build Android APK/AAB artifacts
+# Build Android APK/AAB artifacts (arm64 + x86_64; 32-bit ABIs are skipped —
+# crc64fast does not build for i686).
 mobile-android-build:
-    cd mobile && bun run tauri android build
+    cd mobile && bun run tauri android build --target aarch64 x86_64
 
 # Run on the iOS simulator or device (macOS + Xcode only)
 mobile-ios-dev:
